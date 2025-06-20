@@ -16,3 +16,11 @@ class Usuario(db.Model):
     caracteristicas = db.relationship("Caracteristica_Usuario", backref='usuario')
     tarjetas = db.relationship('Tarjeta', secondary=usuario_tarjeta, back_populates='usuarios')
     
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre_completo": self.nombre_completo,
+            "correo_electronico": self.correo_electronico,
+            "telefono": self.telefono,
+            "fecha_nacimiento": self.fecha_nacimiento
+        }

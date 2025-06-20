@@ -10,3 +10,9 @@ class Transaccion(db.Model):
     id_plan = db.Column(db.Integer, db.ForeignKey('Plan.id', ondelete = "SET NULL"), nullable=True)
 
     caracteristicas_usuario = db.relationship('Caracteristica_Usuario', backref='transaccion')
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "fecha": self.fecha
+        }

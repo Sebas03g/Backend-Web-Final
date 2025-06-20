@@ -11,3 +11,12 @@ class Caracteristica(db.Model):
 
     caracteristicas_usuario = db.relationship("Caracteristica_Usuario", backref='caracteristica')
     caracteristicas_plan = db.relationship("Caracteristica_Plan", backref='caracteristica')
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "descripcion": self.descripcion,
+            "unidad_valor": self.unidad_valor,
+            "valor": self.valor,
+        }

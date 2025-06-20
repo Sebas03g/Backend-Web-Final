@@ -10,3 +10,11 @@ class Tarjeta(db.Model):
 
     transacciones = db.relationship("Transaccion", backref='tarjeta')
     usuarios = db.relationship('Usuario', secondary=usuario_tarjeta, back_populates='tarjetas')
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "numero_tarjeta": self.numero_tarjeta,
+            "mes_expiracion": self.mes_expiracion,
+            "anio_expiracion": self.anio_expiracion
+        }

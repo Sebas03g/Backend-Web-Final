@@ -10,3 +10,11 @@ class Plan(db.Model):
 
     transacciones = db.relationship("Transaccion", backref='plan')
     caracteristicas = db.relationship("Catarestica_Plan", backref="plan")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "descripcion": self.descripcion,
+            "precio": self.precio
+        }
