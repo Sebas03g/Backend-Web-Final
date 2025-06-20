@@ -26,7 +26,7 @@ class BaseRepo:
             db.session.commit()
         return objeto
 
-    def delete(self, id,):
+    def delete(self, id):
         objeto = self.tipoObjeto.query.get(id)
         if objeto:
             db.session.delete(objeto)
