@@ -1,0 +1,123 @@
+@use '../colores' as colores;
+
+.dropdown-item{
+    animation:none;
+    transition: none !important;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 5vh;
+
+    &:active{
+        background-color: colores.$color-seleccionado;
+        color: black;
+    }
+}
+
+#menuDispositivos{
+    .seleccionado{
+        color: black !important;
+    }
+
+}
+
+#botonMenu{
+    margin-left: 2vw;
+    color: colores.$color-blanco !important;
+    
+    @media (min-width: 768px) {
+        margin-left: 1vw;
+    }
+}
+
+#contenedorMenu{
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: colores.$color-blanco;
+    position: fixed;
+    left: 0;
+    z-index: 3;
+    top: 10vh;
+    overflow-y: auto;
+    height: 90vh;
+    width: 20vw;
+
+    @media (min-width: 768px) and (max-width: 1023px) {
+        width: 40vw;
+    }
+    @media (max-width: 768px) {
+        width: 100vw;
+        height: 40vh;
+        top: 60vh;
+        bottom: 0;        
+    }
+
+    #listaDispositivos{
+        display: flex;
+        flex-direction: column;
+        justify-content:start;
+        width: 100%;
+        height: 100%;
+        list-style-type: none;         
+        padding: 0;
+        overflow-y: auto;
+        text-decoration: none;
+
+        
+
+        .elementoDispositivo{
+            height: 5vh;
+            width: 100%;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            color: black;
+            cursor: pointer;
+
+            .settingsDispositivo,.editarDispositivos{
+                display: none;
+            }
+            &:hover{
+                filter: brightness(95%);
+            }
+            label{
+                width: 100%;
+                text-align: center;
+                cursor: pointer;
+            }
+            
+        }
+        .seleccionado{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1vw;
+            .settingsDispositivo,.editarDispositivos{
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+
+    #btn-creacion{
+        background-color: colores.$color-secundario;
+        border-top: 0.1px solid lightgray;
+        height: 5vh;
+        &:hover{
+            color: black !important;
+            background-color: hsl(220, 6%, 92%);
+            ;
+        }
+    }
+
+}
+
+.mostrar{
+    display: flex !important;
+
+}

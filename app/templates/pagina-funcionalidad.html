@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="estilos/funcionalidad/menuDispositivos.css" rel="stylesheet">
+  <link href="estilos/funcionalidad/contenedor.css" rel="stylesheet">
+  <link href="estilos/funcionalidad/mapa.css" rel="stylesheet">
+  <link href="estilos/botones.css" rel="stylesheet">
+  <link href="estilos/funcionalidad/encabezado.css" rel="stylesheet">
+  <link href="estilos/funcionalidad/contenedorTelefono.css" rel="stylesheet">
+  <link href="estilos/mensajes.css" rel="stylesheet">
+  <link href="estilos/animaciones.css", rel="stylesheet">
+  <link href="estilos/funcionalidad/menuUbicaciones.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+
+  <!-- Bootstrap JS (al final del body) -->
+  <script defer src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script defer src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="scripts/funcionalidad/menuDispositivos.js"></script>
+  <script type="module" src="scripts/funcionalidad/scriptApiMapa.js"></script>
+  <script type="module" src="scripts/funcionalidad/contenedores.js"></script>
+  <script type="module" src="scripts/funcionalidad/cracionPersona.js"></script>
+  <script type="module" src="scripts/funcionalidad/funcionalidadMobil.js"></script>
+  <script type="module" src="scripts/funcionalidad/menuUbicaciones.js"></script>
+  
+</head>
+<body>
+
+<header>
+  <div id="regresar">
+    <button class="iconos">
+      <a href="/seleccionTipo.html">
+          <i class="bi bi-arrow-left"></i>
+          <label>Regresar</label>
+      </a>
+    </button>
+  </div>
+  
+
+  <div id="opcionesEncabezado">
+    <section id="dropMenuDispositivos">
+      <div id="menuDispositivos">
+
+        <button id="botonMenu" class="iconos btn" type="button"><i class="bi bi-list"></i></button>
+
+        <div id="contenedorMenu" class="slide-right">
+          <ul id="listaDispositivos">
+            <li>
+              <div class="elementoDispositivo" data-id-dispositivo="1">
+                <button class="settingsDispositivo iconos"><i class="bi bi-gear"></i></button>
+                <label>Sophia</label>
+                <button  class="editarDispositivos iconos"><i class="bi bi-pencil"></i></button>
+              </div>
+            </li>
+            <li>
+              <div class="elementoDispositivo" data-id-dispositivo="2">
+                <button class="settingsDispositivo iconos "><i class="bi bi-gear"></i></button>
+                <label>Kevin</label>
+                <button class="editarDispositivos iconos "><i class="bi bi-pencil"></i></button>
+              </div>
+            </li>
+          </ul>
+            <button class="btn agregar" id="btn-creacion">
+              <i class="bi bi-plus-circle"></i>
+            </button>
+        </div>
+      </div>
+
+      
+
+    </section>
+    <label id="tituloPagina">Funcionalidades</label>
+    <a href="./cuenta.html" id="enlaceInformacion" style="cursor: pointer; text-decoration: none; color: white;">
+      <i class="bi bi-person-circle"></i>
+    </a>
+  </div>
+  
+</header>
+
+<main>
+
+  <section id="mensajes">
+  </section>
+
+    <section id="apiMapa">
+        <div id="mapa">
+        </div>
+    </section>
+    <section id="contenedor" class="slide-up">
+      <button class="botonBajar btn"><i class="bi bi-chevron-compact-down"></i></button>
+      <nav class="navbar navbar-expand-lg ">
+        <div id="menuNavMobil" class ="d-block d-sm-none">
+          <div class="iconoMobil">
+            <i class="bi bi-list"></i>
+          </div>
+          <div class="linksNavMobil">
+            <ul class="navbar-nav">
+              <li class="nav-item seleccionado">
+                  <a class="nav-link" data-nombre-contenedor="contenedorInformacion" id="navInformacionMobil">                   
+                    <p class="texto-navbar">Informacion</p>
+                  </a> 
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-nombre-contenedor="contenedorPermisos" id="navPermisosMobil">
+                  <p class="texto-navbar">Permisos</p>
+                </a> 
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-nombre-contenedor="contenedorUbicacion" id="navUnicacionesMobil">
+                  <p class="texto-navbar">Ubicaciones</p>
+                </a> 
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-nombre-contenedor="contenedorRutas" id="navRutasMobil">
+                  <p class="texto-navbar">Rutas</p>
+                </a> 
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-nombre-contenedor="contenedorPersonas" id="navPersonasMobil">
+                  <p class="texto-navbar">Personas de Confianza</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-nombre-contenedor="contenedorEliminacion" id="navEliminarMobil">
+                  <p class="texto-navbar">Eliminar</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+          
+        </div>
+        <div class="container-fluid">
+          
+          <div class="collapse navbar-collapse" id="navbarNav" >
+
+            <ul class="navbar-nav" id="listaNavDispositivo">
+              <li class="nav-item d-none d-md-block">
+                  <a class="nav-link" data-nombre-contenedor="contenedorInformacion" id="navInformacion">
+                    <i class="icono-navbar seleccionado bi bi-info-circle"></i>
+                    <p class="texto-navbar">Informacion</p>
+                  </a> 
+              </li>
+              <li class="nav-item d-none d-md-block">
+                <a class="nav-link" data-nombre-contenedor="contenedorPermisos" id="navPermisos">
+                  <i class="icono-navbar bi bi-list-ul"></i>
+                  <p class="texto-navbar">Permisos</p>
+                </a> 
+              </li>
+              <li class="nav-item d-none d-md-block">
+                <a class="nav-link" data-nombre-contenedor="contenedorUbicacion" id="navUnicaciones">
+                  <i class="icono-navbar bi bi-geo-alt"></i>
+                  <p class="texto-navbar">Ubicaciones</p>
+                </a> 
+              </li>
+              <li class="nav-item d-none d-md-block">
+                <a class="nav-link" data-nombre-contenedor="contenedorRutas" id="navRutas">
+                  <i class="icono-navbar bi bi-map"></i>
+                  <p class="texto-navbar">Rutas</p>
+                </a> 
+              </li>
+              <li class="nav-item d-none d-md-block">
+                <a class="nav-link" data-nombre-contenedor="contenedorPersonas" id="navPersonas">
+                  <i class="icono-navbar bi bi-person"></i>
+                  <p class="texto-navbar">Personas de Confianza</p>
+                </a>
+              </li>
+              <li class="nav-item d-none d-md-block">
+                <a class="nav-link" data-nombre-contenedor="contenedorEliminacion" id="navEliminar">
+                  <i class="icono-navbar bi bi-trash"></i>
+                  <p class="texto-navbar">Eliminar</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div id="contenedores">
+        <div class="hijo informacion activo zoom-in" id="contenedorInformacion">
+          <div class ="informacionContenido">
+            <div class="container carta">
+              <!-- Carta -->
+              <div class="card" >
+                  <!-- Contenido de la carta -->
+                  <div class="card-body">
+                    <div class="iconoMobil d-block d-sm-none">
+                      <i class="icono-navbar bi bi-info-circle" id="iconoDispositivoMobil"></i>
+                    </div>
+                      <h5 class="card-title" >Informacion dispositivo</h5>
+                      <div class="card-text">
+                          <p id="nombreDispositivo">Nombre del dispositivo</p>
+                          <p id="nombrePersonaDispositivo">Nombre Persona</p>
+                          <p id="cedulaDispositivo">Cedula</p>
+                          <p id="correoDispositivo">Cedula</p>
+                          <p id="telefonoDispositivo">Cedula</p>
+                          <p id="estadoDispositivo">Estado</p>
+                          <p id="conectadoDispositivo">Última vez conectado</p>
+                          <p id="timpoViajeDispositivo">Tiempo de viaje</p>
+                      </div>
+          
+                  </div>
+                  <a href="#" class="btn btnModificar fs-6 fs-md-5 fs-lg-4" id="modificarDispositivo">Modificar</a>
+        
+              </div>
+              <div class="container interaccionUsuario">
+
+                <div class ="contendorCodigo">
+                  <h6>Codigo:</h6>
+                  <div id="codigo">
+                    <p id="codigoUsuario">A7F4K9X2M8B6</p>
+                    <i class="bi bi-arrow-repeat"></i>
+                  </div>
+                </div>
+                <div class="contenedorMensaje">
+                  <form class="mb-3">
+                    <label for="comentario" class="form-label">Mensaje</label>
+                    <textarea class="form-control" id="mensajeUsuario" rows="4" placeholder="Escribe el mensaje aquí..."></textarea>
+                    <input type="" class="btn btn-secondary" value="Enviar" readonly>
+                  </form>
+                  <!--<div class="mb-3">
+                    
+                  </div>-->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="dispositivo">
+            <img id="imagenPersona" src="/imagenes/placeholder.png" alt="Imagen Usuario">
+            <i class="bi bi-bell d-block d-sm-none fs-4"></i>
+            <i class="bi bi-bell d-none d-sm-block fs-1"></i> 
+            <button class="btn btn-danger" id="botonPerdida">Modo Perdida</button>
+          </div>
+        </div>
+        <div class="hijo contenido permisos zoom-in" id="contenedorPermisos">
+          <div class="container busqueda">
+            <ul class="list-group " id="listaPermisos">
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div class="container carta informacionContenido">
+            <div class="card" >
+                <div class="card-body">
+                  <div class="iconoMobil d-block d-sm-none">
+                    <i class="icono-navbar bi bi-info-circle-fill "></i>
+                    <i class="icono-navbar bi bi-search" id="iconoMobilBusquedaPermisos"></i>
+                  </div>
+                    <i class="bi bi-info-circle-fill d-none d-md-block"></i>
+                    <h5 class="card-title" id="nombrePermiso">Nombre Permiso</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" id="nivelPermiso">Subtítulo</h6>
+                    <p class="card-text" id="descripcionPermiso">Este es un texto de ejemplo para una carta en Bootstrap. Puedes agregar más contenido aquí, como detalles o una breve descripción.</p>
+                </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="hijo contenido ubicacion zoom-in" id="contenedorUbicacion">
+          <div class="container busqueda">
+            <div class="mb-3">
+                <label for="busquedaUbicacion" class="form-label">Ubicacion</label>
+                <input type="text" class="form-control input-busqueda" id="busquedaUbicacion" data-id-lista = "listaUbicaciones"placeholder="Escriba aquí">
+            </div>
+            <ul class="list-group" id="listaUbicaciones">
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+            </ul>
+            <button class="btn agregar" id="crearUbicacion">
+              <i class="bi bi-plus-circle"></i>
+            </button>
+          </div>
+          <form class="container carta informacionContenido">
+            <div class="card" >
+                <div id="mapaUbicacion">
+                </div>
+                <div class="card-body">
+                  <div class="iconoMobil d-block d-sm-none">
+                    <i class="icono-navbar bi bi-geo-alt" id="iconoMobilUbicacion"></i>
+                    <i class="icono-navbar bi bi-search" id="iconoMobilBusquedaUbicacion"></i>
+                  </div>
+                    <h5 class="card-title">Ubicaciones</h5>
+                    <div class="mb-3">
+                      <label for="nombre" class="form-label">Nombre</label>
+                      <input type="text" class="form-control" id="nombreUbicacion" placeholder="Nombre Ubicación">
+                    </div>
+                    <div class="mb-3">
+                      <label for="comentario" class="form-label">Descripcion</label>
+                      <textarea class="form-control" id="descripcionUbicacion" rows="4" placeholder="Escribe la descripcion de la ubicacion aquí..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                      <label for="miComboboxSeguridad" class="form-label">Seleccione el Tipo:</label>
+                      <select class="form-select" id="miComboboxSeguridad">
+                        <option value = "" selected disabled>Elige una opción</option>
+                        <option value="green">Seguro</option>
+                        <option value="red">Inseguro</option>
+                      </select>
+                    </div>
+                    <input type="" class="btn btnModificar" value="Aceptar" readonly>
+                    <input type="" class="btn eliminados" id="botonEliminarUbicacion" value="Eliminar" readonly>
+                </div>
+                
+            </div>
+          </form>
+        </div>
+        <div class="hijo contenido ubicacion zoom-in" id="contenedorRutas">
+          <div class="container busqueda">
+            <div class="mb-3">
+                <label for="busquedaRuta" class="form-label">Ruta</label>
+                <input type="text" class="form-control input-busqueda" id="busquedaRuta" data-id-lista = "listaRutas"placeholder="Escriba aquí">
+            </div>
+            <ul class="list-group" id="listaRutas">
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+            </ul>
+          </div>
+          <form class="container carta informacionContenido">
+            <div class="card" >
+                <div id="mapaRuta">
+                </div>
+                <div class="card-body">
+                  <div class="iconoMobil d-block d-sm-none">
+                    <i class="icono-navbar bi bi-geo-alt" id="iconoMobilRuta"></i>
+                    <i class="icono-navbar bi bi-search" id="iconoMobilBusquedaRuta"></i>
+                  </div>
+                    <h5 class="card-title">Rutas</h5>
+                    <div class="mb-3">
+                      <label for="nombre" class="form-label">Nombre</label>
+                      <input type="text" class="form-control" id="nombreRuta" placeholder="Nombre Ruta">
+                    </div>
+                    <div class="mb-3">
+                      <label for="nombre" class="form-label">Hora Inicial</label>
+                      <input type="text" class="form-control" id="puntoInicialRuta" placeholder="00:00">
+                      <label for="nombre" class="form-label">Hora Final</label>
+                      <input type="text" class="form-control" id="puntoFinalRuta" placeholder="00:00">
+                    </div>
+                    <input type="" class="btn btnModificar" value="Aceptar" readonly>
+                    <input type="" class="btn eliminados" id="botonEliminarRuta" value="Eliminar" readonly>
+                </div>
+                
+            </div>
+          </form>
+        </div>
+        <div class="hijo contenido personas zoom-in" id="contenedorPersonas">
+          <div class="container busqueda">
+            <div class="mb-3">
+                <label for="busquedaPC" class="form-label">Personas de Confianza</label>
+                <input type="text" class="form-control input-busqueda" id="busquedaPC" data-id-lista = "listaPersonas" placeholder="Escriba aquí">
+            </div>
+            <ul class="list-group" id="listaPersonas">
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+            </ul>
+            <button class="btn agregar" id="crearPC">
+              <i class="bi bi-plus-circle"></i>
+            </button>
+          </div>
+          <form class="container carta informacionContenido">
+            <div class="card" >
+                <img src="./imagenes/placeholder.png" class="card-img" alt="Imagen de carta" id="imgConfianza">
+                <input type="file" id="inputImagenPC" accept="image/*" style="display: none;" />
+                <div class="card-body">
+                  <div class="iconoMobil d-block d-sm-none">
+                    <i class="bi bi-image-fill" id="iconoMobilPersona"></i>
+                    <i class="icono-navbar bi bi-search" id="iconoMobilBusquedaPersona"></i>
+                  </div>
+                    <h5 class="card-title">Personas</h5>
+                    <div class="mb-3">
+                      <label for="nombre" class="form-label">Nombre</label>
+                      <input type="text" class="form-control" id="nombrePersona" placeholder="Nombre Persona">
+                    </div>
+                    <div class="mb-3">
+                      <label for="telefono" class="form-label">Telefono</label>
+                      <input type="tel" class="form-control" id="telefonoPersona" placeholder="000 000 000">
+                    </div>
+                    <div class="mb-3">
+                      <label for="comentario" class="form-label">Descripcion</label>
+                      <textarea class="form-control" id="descripcionPersona" rows="4" placeholder="Escribe la descripcion de la persona aquí..."></textarea>
+                    </div>
+                    <input type="" class="btn btnModificar" value="Aceptar" readonly>
+                    <input type="" class="btn eliminados" id="botonEliminarPC" value="Eliminar" readonly>
+                </div>
+            </div>
+          </form>
+          <!--<div class="container carta informacionContenido">
+            
+          </div>-->
+        </div>
+        <div class="hijo contenido eliminacion zoom-in" id="contenedorEliminacion">
+          <form class ="contenedorEliminar">
+            <div class="container carta">
+              <!-- Carta -->
+              <div class="card" >
+                  <!-- Contenido de la carta -->
+                  <div class="card-body">
+                      <h5 class="card-title">Eliminar dispositivo</h5>
+                      <p class="card-text">¿Estás seguro de que deseas eliminar este dispositivo?<br>
+                        <br>
+                        Esta acción desvinculará permanentemente el dispositivo de tu cuenta.<br>
+                        <br>
+                        Ya no podrás rastrearlo, enviar alertas ni acceder a su historial de ubicaciones.<br>
+                        <br>
+                        Información que perderás:<br>
+                        <ul>
+                          <li>Ubicación en tiempo real</li>
+                          <li>Historial de rutas</li>
+                          <li>Acceso al micrófono y alertas</li>
+                          <li>Reportes asociados</li>
+                        </ul>
+                        </p>
+                      <input type="" class="btn eliminados" id="btnEliminarDispositivo" value="Eliminar" readonly>
+                  </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <section id="seccionPersona" class="">
+      <div id="modificarPersona" class="contenedor-dispositivo slide-up">
+        <button class="botonCerrarDispositivo iconos">
+          <i class="bi bi-x-circle"></i>
+        </button>
+        <form>
+          <div class="formulario">
+            <h4>Modificar Datos</h4>
+            <div class="mb-2">
+              <label for="nombreDispositivoModificar" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombreDispositivoModificar" placeholder="Nombre Persona">
+            </div>
+            <div class="mb-2">
+              <label for="cedulaDispositivoModificar" class="form-label">Cédula</label>
+              <input type="text" class="form-control" id="cedulaDispositivoModificar" placeholder="Cédula">
+            </div>
+            <div class="mb-2">
+              <label for="correoDispositivoModificar" class="form-label">Correo electrónico</label>
+              <input type="email" class="form-control" id="correoDispositivoModificar" placeholder="Correo electrónico">
+            </div>
+            <div class="mb-2">
+              <label for="telefonoDispositivoModificar" class="form-label">Teléfono</label>
+              <input type="tel" class="form-control" id="telefonoDispositivoModificar" placeholder="Número de teléfono">
+            </div>
+            <input type="" class="btn btn-primary" value = "Modificar" readonly>
+            <input type="" class="btn btn-primary" value = "Crear" readonly>
+          </div>
+        </form>
+
+      </div>
+
+      <div id="creacionPersona" class="contenedor-dispositivo slide-up">
+        <button class="botonCerrarDispositivo iconos">
+          <i class="bi bi-x-circle"></i>
+        </button>
+        <form>
+          <div class="formulario">
+          <h4>Creacion Persona</h4>
+          <div class="mb-2">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombreDispositivoCrear" placeholder="Nombre Persona">
+          </div>
+          <div class="mb-2">
+            <label for="telefono" class="form-label">Cedula</label>
+            <input type="text" class="form-control" name="cedula" inputmode="numeric" pattern="[0-9]*" id="cedulaDispositivoCrear" placeholder="Cédula">
+          </div>
+          <div class="mb-2">
+            <label for="telefono" class="form-label">Mail</label>
+            <input type="email" class="form-control" name="correo" id="correoDispositivoCrear" placeholder="Correo electrónico">
+          </div>
+          <div class="mb-2">
+            <label for="telefono" class="form-label">Telefono</label>
+            <input type="tel" class="form-control" name="telefono" id="telefonoDispositivoCrear" placeholder="Número de teléfono">
+          </div>
+          <input type="" class="btn btn-primary" value = "Crear" readonly>
+        </div>
+        </form>
+        
+      </div>
+    </section>
+    <section id="menuUbicaciones">
+        <div class="contenido ubicacion slide-up" id="contenedorUbicacionesGenerales">
+          <div class="container busqueda">
+            <div class="mb-3">
+                <label for="busquedaUbicacionGeneral" class="form-label">Ubicacion</label>
+                <input type="text" class="form-control input-busqueda" id="busquedaUbicacionGeneral" data-id-lista = "listaUbicacionesGenerales"placeholder="Escriba aquí">
+            </div>
+            <ul class="list-group" id="listaUbicacionesGenerales">
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+              <li>
+                <button class="elementoLista">
+                  Permiso 1
+                </button>
+              </li>
+            </ul>
+            <button class="btn agregar" id="crearUbicacionGeneral">
+              <i class="bi bi-plus-circle"></i>
+            </button>
+          </div>
+          <form class="container carta informacionContenido">
+            <div class="card" >
+                <div id="mapaUbicacionGeneral">
+                  
+                </div>
+                <div class="card-body">
+                  <div id="cerrarMenu">
+                    <i class="bi bi-x-circle-fill"></i>
+                  </div>
+                  
+                  <div class="iconoMobil d-block d-sm-none">
+                    <i class="icono-navbar bi bi-geo-alt" id="iconoMobilUbicacionGeneral"></i>
+                    <i class="icono-navbar bi bi-search" id="iconoMobilBusquedaUbicacionGeneral"></i>
+                  </div>
+                  
+                    <h5 class="card-title">Ubicaciones Generales</h5>
+                    <div class="mb-3">
+                      <label for="nombre" class="form-label">Nombre</label>
+                      <input type="text" class="form-control" id="nombreUbicacionGeneral" placeholder="Nombre Ubicación">
+                    </div>
+                    <div class="mb-3">
+                      <label for="comentario" class="form-label">Descripcion</label>
+                      <textarea class="form-control" id="descripcionUbicacionGeneral" rows="4" placeholder="Escribe la descripcion de la ubicacion aquí..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                      <label for="miCombobox" class="form-label">Seleccione el Tipo:</label>
+                      <select class="form-select" id="miComboboxSeguridadGeneral">
+                        <option selected disabled>Elige una opción</option>
+                        <option value="green">Seguro</option>
+                        <option value="red">Inseguro</option>
+                      </select>
+                    </div>
+                    <input type="" class="btn btnModificar" value="Aceptar" readonly>
+                    <input type="" class="btn eliminados" id="botonEliminarUbicacionGeneral" value="Eliminar" readonly>
+                </div>
+                
+            </div>
+          </form>
+        </div>
+        
+
+        <button id="botonListaUbicaciones">
+          <i class="bi bi-list-ul"></i>
+        </button>
+    </section>
+</main>
+
+</body>
+</html>

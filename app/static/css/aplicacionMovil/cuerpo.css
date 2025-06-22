@@ -1,0 +1,133 @@
+@import url("https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap");
+html, body {
+  font-family: "National Park", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.bi-x-lg {
+  cursor: pointer;
+}
+
+body {
+  display: grid;
+  grid-template-areas: "encabezado" "icono" "imgUsuario" "opciones" "botonEmergencia";
+  grid-template-rows: 12vh 40px 20vh 50vh 10vh;
+  overflow-y: hidden;
+}
+
+#encabezado {
+  grid-area: encabezado;
+  background-color: #2E6A2F; /* O usa una variable si usas SASS */
+  height: 12vh;
+  display: flex;
+  justify-content: left;
+}
+#encabezado a {
+  color: white;
+  text-decoration: none;
+  opacity: 0.5;
+}
+#encabezado a:hover {
+  opacity: 1;
+}
+
+#menuUsuario {
+  display: none;
+  position: absolute;
+  right: 1vw;
+  top: calc(12vh + 35px);
+  z-index: 995;
+  height: max-content;
+}
+#menuUsuario .card {
+  height: max-content;
+  background-color: #f9f7f6;
+}
+#menuUsuario .card-body {
+  display: flex;
+  justify-content: space-between;
+  height: max-content;
+  flex-direction: column;
+  height: fit-content;
+}
+#menuUsuario .card-body .btn {
+  border: 0.1px solid black;
+  background-color: #ffffff;
+}
+#menuUsuario .card-body #btnSalir {
+  margin-top: 10px;
+  background-color: transparent;
+  border: none;
+}
+#menuUsuario .card-body #btnSalir a {
+  color: #C32F27;
+}
+#menuUsuario input {
+  border: 0.1px solid lightgray;
+  margin: 5px 0;
+}
+
+#opcionesUsuario .icono {
+  height: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+#opcionesUsuario .icono i {
+  font-size: 20px;
+  height: fit-content;
+  border-radius: 5px;
+  padding: 0 5px;
+}
+#opcionesUsuario #imgUsuario {
+  grid-area: imgUsuario;
+  height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#opcionesUsuario #imgUsuario #agregarIMG {
+  height: fit-content;
+  width: fit-content;
+  border: none;
+  background-color: transparent;
+}
+#opcionesUsuario #imgUsuario #agregarIMG img {
+  height: 10vh;
+  width: auto;
+}
+#opcionesUsuario #imgUsuario i {
+  font-size: 80px;
+}
+#opcionesUsuario #opciones {
+  grid-area: opciones;
+  height: 50vh;
+}
+#opcionesUsuario #opciones button {
+  height: 8vh;
+  border-radius: 0;
+  border: 1px solid black;
+}
+#opcionesUsuario #botonEmergencia {
+  grid-area: botonEmergencia;
+  height: 15vh;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+#opcionesUsuario #botonEmergencia button {
+  width: 100%;
+  height: 8vh;
+  border-radius: 0;
+  position: absolute;
+  bottom: 0;
+}
+
+/*# sourceMappingURL=cuerpo.css.map */

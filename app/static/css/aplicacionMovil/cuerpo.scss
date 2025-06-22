@@ -1,0 +1,149 @@
+@use '../colores' as colores;
+
+@use "../fuentes";
+
+html, body {
+    @extend %font-normal;
+    height: 100%;
+    margin: 0;
+    
+
+}
+
+.bi-x-lg{
+    cursor: pointer;
+}
+
+body {
+    display: grid;
+    grid-template-areas: 
+        "encabezado"
+        "icono"
+        "imgUsuario"
+        "opciones"
+        "botonEmergencia";
+    grid-template-rows: 12vh 40px 20vh 50vh 10vh;
+    overflow-y:hidden;
+}
+
+#encabezado {
+    grid-area: encabezado;
+    background-color: colores.$color-verde-primario; /* O usa una variable si usas SASS */
+    height: 12vh;
+    display: flex;
+    justify-content: left;
+    a{
+        color: white; 
+        text-decoration: none;
+        opacity: 0.5;
+        &:hover{
+            opacity: 1;
+        }
+    }
+}
+
+#menuUsuario{
+    display: none;
+    position: absolute;
+    right: 1vw;
+    top: calc(12vh + 35px);
+    z-index: 995;
+    height: max-content;
+    .card{
+        height: max-content;
+        background-color: colores.$color-secundario;
+    }
+    .card-body{
+        display: flex;
+        justify-content: space-between;
+        height: max-content;
+        flex-direction: column;
+        height: fit-content;
+        .btn{
+            border: 0.1px solid black;
+            background-color: colores.$color-blanco;
+        }
+
+        #btnSalir{
+            margin-top: 10px;
+            background-color: transparent;
+            border: none;
+            a{
+                color: colores.$color-rojo;
+            }
+            
+
+        }
+    }
+    input{
+        border: 0.1px solid lightgray;
+        margin: 5px 0;
+    }
+}
+
+#opcionesUsuario{
+
+    .icono{
+        height: 40px;
+        width: 100%;
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        
+        i{
+            font-size: 20px;
+            height: fit-content;
+            border-radius: 5px;
+            padding: 0 5px;
+            
+        }
+        
+    }
+
+    #imgUsuario {
+        grid-area: imgUsuario;
+        height: 20vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        #agregarIMG{
+            height: fit-content;
+            width: fit-content;
+            border: none;
+            background-color: transparent;
+    
+            img{
+                height: 10vh;
+                width: auto;
+            }
+        }
+        i{
+            font-size: 80px;
+        }
+    }
+    
+    #opciones {
+        grid-area: opciones;
+        height: 50vh;
+        button{
+            height: 8vh;
+            border-radius: 0;
+            border: 1px solid black;
+        }
+    }
+    
+    #botonEmergencia {
+        grid-area: botonEmergencia;
+        height: 15vh;
+        margin-bottom: 0;
+        padding-bottom: 0;
+        button{
+            width: 100%;
+            height: 8vh;
+            border-radius: 0;
+            position: absolute;
+            bottom: 0;
+        }
+    }
+
+}

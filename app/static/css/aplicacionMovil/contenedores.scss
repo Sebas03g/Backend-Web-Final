@@ -1,0 +1,128 @@
+@use '../colores' as colores;
+
+
+#contenedoresOpciones{
+    .contenedor{
+        display: none;
+        justify-content: center;
+        align-items: end;
+        height: 60vh;
+        width: 100vw;
+        background-color: colores.$color-secundario;
+        position: absolute;
+        border-top: 0.1px solid lightgray;
+        border-top-right-radius: 20px;
+        border-top-left-radius: 20px;
+        bottom: 9vh;
+        overflow-y: auto;
+        .botonBajar{
+            width: 100%;
+            position: inherit;
+            top: 0;
+            z-index: 950;
+            height: 4vh;
+            border-radius: 0;
+
+            &:active{
+                border: none;
+            }
+
+        }
+        .mb-3{
+            width: 100%;
+            position: inherit;
+            top: 4vh;
+            z-index: 960;
+            height: 75px;
+            label{
+                font-size: 15px;
+                margin-left: 5px;
+            }
+        }
+        .list-group{
+            width: 100%;
+            position: inherit;
+            top: calc(4vh + 70px);
+            z-index: 990;
+            height: calc(60vh - 4vh - 75px - 4vh);
+            overflow-y: auto;
+            margin-bottom: 4vh;
+            li{
+                display: flex;
+                justify-content: left;
+                align-items: center;
+                width: 100%;           
+                .elementoLista{
+                    width: 90%;
+                    text-align: left;
+                    height: 80px;
+                    border: none;
+                    background-color: colores.$color-secundario;
+                    z-index: 990;
+
+                }
+                input{
+                    width: 10%;
+                }
+
+            }
+        }
+        .agregar{
+            background-color: colores.$color-secundario;
+            z-index: 950;
+            width: 100%;
+            height: 4vh;
+            border-top: 0.1px solid lightgray;
+            border-radius: 0;
+        }
+    }
+    #contenedorMensaje{
+        display: none;
+        
+        height: 60vh;
+        width: 100%;
+        justify-content: center;
+        align-items: end;
+        overflow-y: auto;
+        .mb-3{
+            margin-top: 5px;
+            width: 60%;
+            height: 80%;
+            #miTextarea{
+                height: 80%;
+            }
+        }
+        #btnEnviarMensaje{
+            height: fit-content;
+            width: fit-content;
+            margin-top: 10px;
+            margin-bottom: 1%;
+            background-color: white;
+            border: 0.1px solid black;
+        }
+    }
+    #contenedorPermisos{
+        .list-group{
+            top: 5vh;
+            height: 90%;
+        }
+    }
+    #contenedorPCs{
+        .elementoLista{
+            width: 100%;    
+
+        }
+    }
+}
+
+.agregar{
+    &:active{
+        border: none;
+    }
+}
+
+.abierto{
+    display: flex !important;
+    
+}
+

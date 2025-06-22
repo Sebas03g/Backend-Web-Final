@@ -1,0 +1,54 @@
+@use '../colores' as colores;
+
+@use "../fuentes";
+
+html, body {
+    @extend %font-bold;
+    margin: 0;
+}
+
+header{
+    height: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    background-color: colores.$color-verde-primario;
+    color: colores.$color-blanco;
+    padding-bottom: 5px;
+
+    #tituloPagina{
+        @extend %font-bold;
+    }
+    #regresar{
+        display: inline;
+        
+        button{
+            cursor: default;
+        }
+        a{
+            color: white; 
+            text-decoration: none;
+            opacity: 0.5;
+            &:hover{
+                opacity: 1;
+            }
+        }
+        i,label {
+            cursor: pointer;
+        }
+    }
+}
+
+#opcionesEncabezado{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+
+#enlaceInformacion{
+    width: 6vh;
+}

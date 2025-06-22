@@ -1,0 +1,111 @@
+#contenedoresOpciones .contenedor {
+  display: none;
+  justify-content: center;
+  align-items: end;
+  height: 60vh;
+  width: 100vw;
+  background-color: #f9f7f6;
+  position: absolute;
+  border-top: 0.1px solid lightgray;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  bottom: 9vh;
+  overflow-y: auto;
+}
+#contenedoresOpciones .contenedor .botonBajar {
+  width: 100%;
+  position: inherit;
+  top: 0;
+  z-index: 950;
+  height: 4vh;
+  border-radius: 0;
+}
+#contenedoresOpciones .contenedor .botonBajar:active {
+  border: none;
+}
+#contenedoresOpciones .contenedor .mb-3 {
+  width: 100%;
+  position: inherit;
+  top: 4vh;
+  z-index: 960;
+  height: 75px;
+}
+#contenedoresOpciones .contenedor .mb-3 label {
+  font-size: 15px;
+  margin-left: 5px;
+}
+#contenedoresOpciones .contenedor .list-group {
+  width: 100%;
+  position: inherit;
+  top: calc(4vh + 70px);
+  z-index: 990;
+  height: calc(56vh - 75px - 4vh);
+  overflow-y: auto;
+  margin-bottom: 4vh;
+}
+#contenedoresOpciones .contenedor .list-group li {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+}
+#contenedoresOpciones .contenedor .list-group li .elementoLista {
+  width: 90%;
+  text-align: left;
+  height: 80px;
+  border: none;
+  background-color: #f9f7f6;
+  z-index: 990;
+}
+#contenedoresOpciones .contenedor .list-group li input {
+  width: 10%;
+}
+#contenedoresOpciones .contenedor .agregar {
+  background-color: #f9f7f6;
+  z-index: 950;
+  width: 100%;
+  height: 4vh;
+  border-top: 0.1px solid lightgray;
+  border-radius: 0;
+}
+#contenedoresOpciones #contenedorMensaje {
+  display: none;
+  height: 60vh;
+  width: 100%;
+  justify-content: center;
+  align-items: end;
+  overflow-y: auto;
+}
+#contenedoresOpciones #contenedorMensaje .mb-3 {
+  margin-top: 5px;
+  width: 60%;
+  height: 80%;
+}
+#contenedoresOpciones #contenedorMensaje .mb-3 #miTextarea {
+  height: 80%;
+}
+#contenedoresOpciones #contenedorMensaje #btnEnviarMensaje {
+  height: fit-content;
+  width: fit-content;
+  margin-top: 10px;
+  margin-bottom: 1%;
+  background-color: white;
+  border: 0.1px solid black;
+}
+#contenedoresOpciones #contenedorPermisos .list-group {
+  top: 5vh;
+  height: 90%;
+}
+#contenedoresOpciones #contenedorPCs .elementoLista {
+  width: 100%;
+}
+
+.agregar:active {
+  border: none;
+}
+
+.abierto {
+  display: flex !important;
+}
+
+/*# sourceMappingURL=contenedores.css.map */

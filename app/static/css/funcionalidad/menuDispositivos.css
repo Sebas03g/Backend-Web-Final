@@ -1,0 +1,113 @@
+.dropdown-item {
+  animation: none;
+  transition: none !important;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 5vh;
+}
+.dropdown-item:active {
+  background-color: #e8e9eb;
+  color: black;
+}
+
+#menuDispositivos .seleccionado {
+  color: black !important;
+}
+
+#botonMenu {
+  margin-left: 2vw;
+  color: #ffffff !important;
+}
+@media (min-width: 768px) {
+  #botonMenu {
+    margin-left: 1vw;
+  }
+}
+
+#contenedorMenu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #ffffff;
+  position: fixed;
+  left: 0;
+  z-index: 3;
+  top: 10vh;
+  overflow-y: auto;
+  height: 90vh;
+  width: 20vw;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  #contenedorMenu {
+    width: 40vw;
+  }
+}
+@media (max-width: 768px) {
+  #contenedorMenu {
+    width: 100vw;
+    height: 40vh;
+    top: 60vh;
+    bottom: 0;
+  }
+}
+#contenedorMenu #listaDispositivos {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 100%;
+  height: 100%;
+  list-style-type: none;
+  padding: 0;
+  overflow-y: auto;
+  text-decoration: none;
+}
+#contenedorMenu #listaDispositivos .elementoDispositivo {
+  height: 5vh;
+  width: 100%;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+#contenedorMenu #listaDispositivos .elementoDispositivo .settingsDispositivo, #contenedorMenu #listaDispositivos .elementoDispositivo .editarDispositivos {
+  display: none;
+}
+#contenedorMenu #listaDispositivos .elementoDispositivo:hover {
+  filter: brightness(95%);
+}
+#contenedorMenu #listaDispositivos .elementoDispositivo label {
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+#contenedorMenu #listaDispositivos .seleccionado {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1vw;
+}
+#contenedorMenu #listaDispositivos .seleccionado .settingsDispositivo, #contenedorMenu #listaDispositivos .seleccionado .editarDispositivos {
+  display: flex;
+  align-items: center;
+}
+#contenedorMenu #btn-creacion {
+  background-color: #f9f7f6;
+  border-top: 0.1px solid lightgray;
+  height: 5vh;
+}
+#contenedorMenu #btn-creacion:hover {
+  color: black !important;
+  background-color: hsl(220, 6%, 92%);
+}
+
+.mostrar {
+  display: flex !important;
+}
+
+/*# sourceMappingURL=menuDispositivos.css.map */

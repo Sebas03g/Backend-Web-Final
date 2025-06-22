@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicación Movil</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="estilos/aplicacionMovil/cuerpo.css", rel="stylesheet">
+    <link href="estilos/aplicacionMovil/contenedores.css", rel="stylesheet">
+    <link href="estilos/aplicacionMovil/datosContenedor.css", rel="stylesheet">
+    <link href="estilos/botones.css", rel="stylesheet">
+    <link href="estilos/mensajes.css", rel="stylesheet">
+    <link href="estilos/animaciones.css", rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    
+    <script defer src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script defer src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="scripts/aplicacionMovil/contenedores.js"></script>
+    <script type="module" src="scripts/aplicacionMovil/cuerpo.js"></script>
+    <script type="module" src="scripts/aplicacionMovil/datosContenedor.js"></script>
+
+</head>
+<body>
+    <header>
+        <section id="encabezado">
+                <button class="iconos" style="cursor: default;">
+                    <a href="/seleccionTipo.html">
+                        <i class="bi bi-arrow-left" style="cursor: pointer;"></i>
+                        <label style="cursor: pointer;">Regresar</label>
+                    </a>
+                </button>
+            
+        </section>
+        
+    </header>
+    <main>
+        <section id="mensajes">
+        </section>
+        <section id="menuUsuario">
+            <div class="card">
+                <div class="card-body">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombreUsuario" placeholder="Nombre"/>
+
+                    <label for="correo">Telefono</label>
+                    <input type="tel" id="telefonoUsuario" placeholder="Telefono"/>
+
+                    <label for="contrasena">Correo</label>
+                    <input type="email" id="correoUsuario" placeholder="Correo"/>
+
+                    <button class="btn">Aceptar</button>
+                    <button id="btnSalir">
+                        <a href="/seleccionTipo.html">
+                            <i class="bi bi-box-arrow-left"></i>
+                        </a>
+                        
+                    </button>
+                </div>
+            </div>
+
+        </section>
+        <section id="opcionesUsuario">
+            <div class="icono" id="iconoUsuario">
+                <i class="bi bi-person" style="cursor: pointer;"></i>
+            </div>
+            <div id="imgUsuario"> 
+                <button id="agregarIMG">
+                    <img src="/imagenes/agregarImagen.png"  alt="Imagen de Usuario">
+                </button>
+                <input type="file" id="inputImagenUsuario" accept="image/*" style="display: none;" />
+            </div>
+            <div class="d-flex flex-column" id="opciones">
+                <button type="button" class="btn btn-light mb-2" data-id-contenedor="contenedorGestores" id="botonGestores">Gestores</button>
+                <button type="button" class="btn btn-light mb-2" data-id-contenedor="contenedorPCs" id="botonPCs">Personas de Confianza</button>
+                <button type="button" class="btn btn-light mb-2" data-id-contenedor="contenedorMensaje" id="botonMensaje">Mensaje</button>
+                <button type="button" class="btn btn-light mb-2" data-id-contenedor="contenedorUbicaciones" id="botonUbicaciones">Ubicaciones</button>
+                <button type="button" class="btn btn-light mb-2" data-id-contenedor="contenedorPermisos" id="botonPermisos">Permisos</button>
+            </div>
+              
+            <div id="botonEmergencia">
+                <button type="button" class="btn btn-danger">Alarma</button>
+            </div>
+        </section>
+        <section id="contenedoresOpciones">
+            
+            <div id="contenedorGestores" class="contenedor slide-up">
+                <button class="botonBajar btn"><i class="bi bi-chevron-compact-down"></i></button>
+                <div class="mb-3">
+                    <label for="busquedaGestor" class="form-label">Gestor</label>
+                    <input type="text" class="form-control input-busqueda" id="busquedaGestor" data-id-lista = "listaGestores"placeholder="Escriba aquí">
+                </div>
+                <ul class="list-group" id="listaGestores">
+                </ul>
+                <button class="btn agregar" id="crearGestor">
+                    <i class="bi bi-plus-circle"></i>
+                </button>
+            </div>
+            <div id="contenedorPCs" class="contenedor slide-up">
+                <button class="botonBajar btn"><i class="bi bi-chevron-compact-down"></i></button>
+                <div class="mb-3">
+                    <label for="busquedaPC" class="form-label">Persona de Confianza</label>
+                    <input type="text" class="form-control input-busqueda" id="busquedaPC" data-id-lista = "listaPCs" placeholder="Escriba aquí">
+                </div>
+                <ul class="list-group" id="listaPCs">
+                </ul>
+                <button class="btn agregar" id="crearPC">
+                    <i class="bi bi-plus-circle"></i>
+                </button>
+            </div>
+            <div id="contenedorMensaje" class="contenedor slide-up">
+                <button class="botonBajar btn"><i class="bi bi-chevron-compact-down"></i></button>
+                <div class="mb-3">
+                    <label for="miTextarea" class="form-label">Escribe tu mensaje</label>
+                    <textarea class="form-control" id="miTextarea"  placeholder="Tu mensaje aquí..."></textarea>
+                </div>
+                <button type="button" class="btn btn-light" id="btnEnviarMensaje">Enviar</button>
+            </div>
+            <div id="contenedorUbicaciones" class="contenedor slide-up">
+                <button class="botonBajar btn"><i class="bi bi-chevron-compact-down"></i></button>
+                <div class="mb-3">
+                    <label for="busquedaUbicacion" class="form-label">Ubicaciones</label>
+                    <input type="text" class="form-control input-busqueda" id="busquedaUbicacion" data-id-lista = "listaUbicaciones" placeholder="Escriba aquí">
+                </div>
+                <ul class="list-group " id="listaUbicaciones">
+                </ul>
+                <button class="btn agregar" id="crearUbicacion">
+                    <i class="bi bi-plus-circle"></i>
+                </button>
+            </div>
+            <div id="contenedorPermisos" class="contenedor slide-up">
+                <button class="botonBajar btn"><i class="bi bi-chevron-compact-down"></i></button>
+                <ul class="list-group " id="listaPermisos">
+                </ul>
+                
+            </div>
+        </section>
+        <section id="datosContenedor">
+            <div class="datoContenedor zoom-in" id="dataGestor">
+                <div class="cabezaDato">
+                    <h5>Gestor</h5>
+                    <i class="bi bi-x-lg"></i>
+                </div>
+                <div id="contenedorGestor">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 id="nombreGestor">Nombre</h5>
+                      <p id="mailGestor">Email</p>
+                    </div>
+                  </div>
+                  <ul class="list-group " id="listaPermisosGestor">
+                  </ul>
+                  <button class="btnAceptar">
+                      Aceptar
+                  </button>
+                </div>
+            </div>
+            <div class="datoContenedor zoom-in" id="dataPermiso">
+                <div class="cabezaDato">
+                    <h5>Permiso</h5>
+                    <i class="bi bi-x-lg"></i>
+                </div>
+                <div id="contenedorPermiso">
+                      <div class="card" >
+                        <div class="card-body">
+                          <h5 class="card-title" id="nombrePermiso">Nombre</h5>
+                          <p class="card-text" id="descripcionPermiso">Esta es la descripción del permiso. Puedes incluir aquí instrucciones o contenido adicional.</p>
+                          
+                          <div class="mb-3">
+                            <label for="seleccionNivel" class="form-label">Nivel</label>
+                            <i class="bi bi-info-circle-fill"></i>
+                            <select class="form-select" id="seleccionNivel">
+                              <option value="0" selected>Desactivado</option>
+                              <option value="1">Nivel 1</option>
+                              <option value="2">Nivel 2</option>
+                              <option value="3">Nivel 3</option>
+                            </select>
+                          </div>
+
+                          <div class="mb-3">
+                            <label for="seleccionGestor" class="form-label">Gestor</label>
+                            <select class="form-select" id="seleccionGestor">
+                              <option value="0" selected>Seleccione</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <ul class="list-group" id="listaGestoresPermiso">
+                      </ul>
+                    <button class="btnAceptar" id="btnActivarPermiso">
+                      Aceptar
+                    </button>
+                </div>
+            </div>
+            <div class="datoContenedor zoom-in" id="dataPC">
+                <div class="cabezaDato">
+                    <h5>Pesona de Confinaza</h5>
+                    <i class="bi bi-x-lg"></i>
+                </div>
+                <div id="contenedorPC">
+                      <div class="card">
+                        <img src="/imagenes/placeholder.png" class="card-img-top" alt="Imagen de Persona" id="imgPersona">
+                        <div class="card-body">
+                          <h5 class="card-title" id="nombrePC">Nombre</h5>
+                          <p class="card-text" id="descripcionPC">Este es el texto descriptivo de la persona. Puedes colocar aquí cualquier contenido relevante.</p>
+                          <div class="text-end">
+                            <i class="bi bi-telephone-outbound"></i>
+                          </div>
+                        </div>
+                      </div>  
+                </div>
+            </div>
+            <div class="datoContenedor zoom-in" id="dataUbicacion">
+                <div class="cabezaDato">
+                    <h5>Ubicacion</h5>
+                    <i class="bi bi-x-lg"></i>
+                </div>
+                <div id="contenedorUbicacion">
+                      <div class="card">
+                        <div id="mapaUbicacion">
+                            
+                        </div>
+                        <div class="card-body">
+                          <h5 class="card-title" id="nombreUbicacion">Nombre</h5>
+                          <p class="card-text" id="descripcionUbicacion">Este es el texto descriptivo de la persona. Puedes colocar aquí cualquier contenido relevante.</p>
+                          <div class="mb-3">
+                            <label for="miComboboxSeguridad" class="form-label">Seleccione el Tipo:</label>
+                            <select class="form-select" id="miComboboxSeguridad" disabled>
+                                <option value = "" selected disabled>Elige una opción</option>
+                                <option value="green">Seguro</option>
+                                <option value="red">Inseguro</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>  
+                </div>
+            </div>
+        </section>
+        <section id="crearDatos">
+            <div id="crearDatoGestor" class="contenedor zoom-in">
+                <div class="cerrarContenedor">
+                    <i class="bi bi-x-lg"></i>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <label for="nombre">Email</label>
+                        <input type="text" id="emailGestor" placeholder="Ingrese el correo"/>
+
+                        <label for="correo">Codigo</label>
+                        <input type="email" id="codigoGestor" placeholder="Ingrese el codigo"/>
+
+                        <button class="btn" id="crearNuevoGestor">Crear</button>
+                    </div>
+                </div>
+            </div>
+            <div id="crearDatoPC" class="contenedor zoom-in">
+                <div class="cerrarContenedor">
+                    <i class="bi bi-x-lg"></i>
+                </div>
+                <div class="card">
+                    <button id="agregarIMGPC">
+                        <img src="/imagenes/agregarImagen.png" class="card-img-top" alt="Imagen de Persona" id="imgPC">
+                    </button>
+                    <input type="file" id="inputImagenPC" accept="image/*" style="display: none;" />
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="nombreCrearPC">Nombre:</label>
+                            <input type="text" id="nombreCrearPC" class="form-control" placeholder="Ingrese el nombre">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefonoCrearPC">Telefono:</label>
+                            <input type="tel" id="telCrearPC" class="form-control" placeholder="Ingrese el telefono">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descripcionCrearPC">Descripcion:</label>
+                            <textarea id="descripcionCrearPC" class="form-control" rows="4" placeholder="Escribe la descripcion aquí..." ></textarea>
+                        </div>
+
+                        <button class="btn" id="crearNuevoPC">Crear</button>
+                    </div>
+                </div>  
+            </div>
+            <div id="crearDatoUbicacion" class="contenedor zoom-in">
+                <div class="cerrarContenedor">
+                    <i class="bi bi-x-lg"></i>
+                </div>
+                <div class="card">
+                        <div id="mapaCrearUbicacion">
+                            
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="nombreCrearUbicacion">Nombre:</label>
+                                <input type="text" id="nombreCrearUbicacion" class="form-control" placeholder="Ingrese el nombre">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="descripcionCrearUbicacion">Descripcion:</label>
+                                <textarea id="descripcionCrearUbicacion" class="form-control" rows="4" placeholder="Escribe la descripcion aquí..." ></textarea>
+                            </div>
+                            <label for="miComboboxCrearSeguridad" class="form-label">Seleccione el Tipo:</label>
+                            <select class="form-select" id="miComboboxCrearSeguridad">
+                                <option value = "" selected disabled>Elige una opción</option>
+                                <option value="green">Seguro</option>
+                                <option value="red">Inseguro</option>
+                            </select>
+                          </div>
+                        </div>
+                 </div>  
+            </div>
+        </section>
+
+    </main>
+    
+</body>
+</html>
