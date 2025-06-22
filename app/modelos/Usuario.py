@@ -1,4 +1,5 @@
 from ..config.database import db
+from .Caracteristica_Usuario import Caracteristica_Usuario
 from .associations import usuario_tarjeta
 
 class Usuario(db.Model):
@@ -12,8 +13,8 @@ class Usuario(db.Model):
     monitoreo = db.Column(db.Boolean, nullable = False)
     es_monitoreo = db.Column(db.Boolean, nullable = False)
 
-    transacciones = db.relationship("Transaccion", backref='usuario')
-    caracteristicas = db.relationship("Caracteristica_Usuario", backref='usuario')
+    transacciones = db.relationship("Transaccion", back_populates='usuario')
+    caracteristicas_usuario = db.relationship("Caracteristica_Usuario", back_populates='usuario')
     tarjetas = db.relationship('Tarjeta', secondary=usuario_tarjeta, back_populates='usuarios')
     
     def to_dict(self):

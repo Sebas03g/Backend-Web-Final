@@ -9,8 +9,8 @@ class Caracteristica(db.Model):
     unidad_valor = db.Column(db.String(150), nullable = False)
     valor = db.Column(Numeric(10,2), nullable = False)
 
-    caracteristicas_usuario = db.relationship("Caracteristica_Usuario", backref='caracteristica')
-    caracteristicas_plan = db.relationship("Caracteristica_Plan", backref='caracteristica')
+    caracteristicas_usuario = db.relationship("Caracteristica_Usuario", back_populates='caracteristica')
+    caracteristicas_plan = db.relationship("Caracteristica_Plan", back_populates='caracteristica')
 
     def to_dict(self):
         return {
