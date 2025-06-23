@@ -1,0 +1,57 @@
+#mensajes {
+  display: none;
+  height: 100vh;
+  width: 100vw;
+  z-index: 1050;
+  position: absolute;
+  top: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+#mensajes .mensaje {
+  background-color: white;
+  height: fit-content;
+  width: fit-content;
+  max-width: 80vw;
+  border-radius: 20px;
+  padding: 2vh 2vw;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  #mensajes .mensaje {
+    padding: 1vh 4vw;
+    width: 70vw;
+    min-height: 20vh;
+  }
+}
+@media (max-width: 768px) {
+  #mensajes .mensaje {
+    padding: 1vh 6vw;
+  }
+}
+#mensajes .mensaje button {
+  border: 0.5px solid black;
+}
+#mensajes .mensaje i {
+  cursor: pointer;
+  position: relative;
+  left: 100%;
+}
+#mensajes .mensaje .eliminar {
+  background-color: #C32F27;
+  color: white;
+}
+#mensajes .mensaje .comunicacion {
+  background-color: #f9f7f6;
+  color: black;
+}
+#mensajes .mensaje .comunicacion:hover {
+  background-color: #e8e9eb;
+}
+
+.mostrar {
+  display: flex !important;
+}
+
+/*# sourceMappingURL=mensajes.css.map */

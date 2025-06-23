@@ -1,7 +1,7 @@
-import { validarCedulaBasica } from "../utilidades.js"
-import {esEmailValido} from  '../utilidades.js';
-import {esTelefonoValido} from  '../utilidades.js';
-import {validarVacio} from '../utilidades.js';
+import { validarCedulaBasica } from "../general/utilidades.js"
+import {esEmailValido} from  '../general/utilidades.js';
+import {esTelefonoValido} from  '../general/utilidades.js';
+import {validarVacio} from '../general/utilidades.js';
 
 export function validarDatosPersona(tipo){
 

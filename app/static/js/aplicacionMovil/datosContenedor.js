@@ -1,4 +1,4 @@
-import { funcionPanelMensaje } from '../mensajesUsuario.js';
+import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import * as validar from './validacion.js';
 
 let mapaUbicacion = null;

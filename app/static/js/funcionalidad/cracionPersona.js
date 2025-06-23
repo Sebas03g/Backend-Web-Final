@@ -1,13 +1,13 @@
-import { eliminarClase } from '../utilidades.js';
-import { esPantallaPequena } from '../utilidades.js';
-import { funcionPanelMensaje } from '../mensajesUsuario.js';
-import { slideDownElementos } from '../utilidades.js';
+import { eliminarClase } from '../general/utilidades.js';
+import { esPantallaPequena } from '../general/utilidades.js';
+import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
+import { slideDownElementos } from '../general/utilidades.js';
 import * as validar from './validacion.js';
 
 let idDispositivo = null;
 
 let listaDispositivos = [
-    {id:"1", nombre: "Sophia", correo: "sophia@gmail.com", telefono:"099000000", nombreDispositivo: "Samsung Sophia" , estado: "Activo",  cedula:" 01020123456", conectado:"Actual", tiempoViaje:"30 min", imagen:"../imagenes/Sophia.png", codigo: "A7F4K9X2M8B6", permisos:[
+    {id:"1", nombre: "Sophia", correo: "sophia@gmail.com", telefono:"099000000", nombreDispositivo: "Samsung Sophia" , estado: "Activo",  cedula:" 01020123456", conectado:"Actual", tiempoViaje:"30 min", imagen:"../../imagenes/Sophia.png", codigo: "A7F4K9X2M8B6", permisos:[
         {"id":1, "nivel":"1"},{"id":2, "nivel":"1"},{"id":3, "nivel":"1"},
         {"id":4, "nivel":"1"},{"id":5, "nivel":"1"},{"id":6, "nivel":"1"},
         {"id":7, "nivel":"1"},{"id":8, "nivel":"1"},{"id":9, "nivel":"1"}
@@ -15,24 +15,24 @@ let listaDispositivos = [
         {id:"1", idPersona:"1", punto:[-2.859448, -78.963261], nombre:"Casa", tipo:"green", descripcion:"Case de Sophia"},
         {id:"2", idPersona:"1",punto:[-2.8913363513451396, -78.97706831779115], nombre:"Casa ex-novio", tipo:"red", descripcion:"Casa del ex-novia abusivo."},
     ], personasConfianza: [
-        { id: "1", idPersona: "1", nombre: "Pedro", telefono: "099000226", descripcion: "Amigo", imagen: "../imagenes/placeholder.png" },
-        { id: "3", idPersona: "1", nombre: "Carlos", telefono: "099002233", descripcion: "Primo", imagen: "../imagenes/placeholder.png" },
-        { id: "5", idPersona: "1", nombre: "Luis", telefono: "099004455", descripcion: "Compañero de trabajo", imagen: "../imagenes/placeholder.png" },
-        { id: "7", idPersona: "1", nombre: "Jorge", telefono: "099006677", descripcion: "Amigo del colegio", imagen: "../imagenes/placeholder.png" },
-        { id: "9", idPersona: "1", nombre: "Andrés", telefono: "099008899", descripcion: "Hermano", imagen: "../imagenes/placeholder.png" }
+        { id: "1", idPersona: "1", nombre: "Pedro", telefono: "099000226", descripcion: "Amigo", imagen: "../../imagenes/placeholder.png" },
+        { id: "3", idPersona: "1", nombre: "Carlos", telefono: "099002233", descripcion: "Primo", imagen: "../../imagenes/placeholder.png" },
+        { id: "5", idPersona: "1", nombre: "Luis", telefono: "099004455", descripcion: "Compañero de trabajo", imagen: "../../imagenes/placeholder.png" },
+        { id: "7", idPersona: "1", nombre: "Jorge", telefono: "099006677", descripcion: "Amigo del colegio", imagen: "../../imagenes/placeholder.png" },
+        { id: "9", idPersona: "1", nombre: "Andrés", telefono: "099008899", descripcion: "Hermano", imagen: "../../imagenes/placeholder.png" }
 
     ]}, 
-    {id:"2", nombre:"Kevin", correo: "kevin@gmail.com", telefono:"098000000", nombreDispositivo: "iPhone Kevin" , estado: "Desactivo",  cedula:" 01020123465", conectado:"Hace 30 min", tiempoViaje:"10 min", imagen:"../imagenes/Kevin.png", codigo: "B8G7ASFSDAS", permisos:[
+    {id:"2", nombre:"Kevin", correo: "kevin@gmail.com", telefono:"098000000", nombreDispositivo: "iPhone Kevin" , estado: "Desactivo",  cedula:" 01020123465", conectado:"Hace 30 min", tiempoViaje:"10 min", imagen:"../../imagenes/Kevin.png", codigo: "B8G7ASFSDAS", permisos:[
         {"id":1, "nivel":"1"},{"id":2, "nivel":"1"},{"id":9, "nivel":"1"}
     ], ubicaciones: [
         {id:"3", idPersona:"2", punto:[-2.8913363513451396, -78.97706831779115], nombre:"Casa", tipo:"green", descripcion:"Case de Kevin"},
         {id:"4", idPersona:"2",punto:[-2.906395, -79.020527], nombre:"Casa padre", tipo:"red", descripcion:"Casa del padre abusivo."}
     ], personasConfianza: [
-        { id: "2", idPersona: "2", nombre: "María", telefono: "099001122", descripcion: "Hermana", imagen: "../imagenes/placeholder.png" },
-        { id: "4", idPersona: "2", nombre: "Ana", telefono: "099003344", descripcion: "Vecina", imagen: "../imagenes/placeholder.png" },
-        { id: "6", idPersona: "2", nombre: "Diana", telefono: "099005566", descripcion: "Cuñada", imagen: "../imagenes/placeholder.png"},
-        { id: "8", idPersona: "2", nombre: "Lucía", telefono: "099007788", descripcion: "Tía", imagen: "../imagenes/placeholder.png" },
-        { id: "10", idPersona: "2", nombre: "Paola", telefono: "099009900", descripcion: "Sobrina", imagen: "../imagenes/placeholder.png" }
+        { id: "2", idPersona: "2", nombre: "María", telefono: "099001122", descripcion: "Hermana", imagen: "../../imagenes/placeholder.png" },
+        { id: "4", idPersona: "2", nombre: "Ana", telefono: "099003344", descripcion: "Vecina", imagen: "../../imagenes/placeholder.png" },
+        { id: "6", idPersona: "2", nombre: "Diana", telefono: "099005566", descripcion: "Cuñada", imagen: "../../imagenes/placeholder.png"},
+        { id: "8", idPersona: "2", nombre: "Lucía", telefono: "099007788", descripcion: "Tía", imagen: "../../imagenes/placeholder.png" },
+        { id: "10", idPersona: "2", nombre: "Paola", telefono: "099009900", descripcion: "Sobrina", imagen: "../../imagenes/placeholder.png" }
 
     ]}
 ]

@@ -1,7 +1,7 @@
-import { eliminarClase } from '../utilidades.js'
-import { esPantallaPequena } from '../utilidades.js'
-import { funcionPanelMensaje } from '../mensajesUsuario.js';
-import { slideDownElementos } from '../utilidades.js';
+import { eliminarClase } from '../general/utilidades.js'
+import { esPantallaPequena } from '../general/utilidades.js'
+import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
+import { slideDownElementos } from '../general/utilidades.js';
 import * as validar from './validacion.js';
 
 let idDispositivo = null;

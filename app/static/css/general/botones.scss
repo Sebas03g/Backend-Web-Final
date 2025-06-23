@@ -1,0 +1,61 @@
+@use "colores" as colores;
+
+@keyframes seleccionado {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.seleccionado{
+    animation: seleccionado 1s ease-out;
+    background-color: colores.$color-seleccionado !important;
+    
+    &:hover{
+        filter: brightness(100%);
+        color: initial;
+    }
+}
+
+.eliminados{
+    background-color: colores.$color-blanco;
+    color: black;
+    &:hover{
+        background-color: colores.$color-rojo;
+        color: colores.$color-blanco;
+        border: none;
+    }
+}
+
+.modificar{
+    background-color: colores.$color-blanco;
+    &:hover{
+        background-color: colores.$color-seleccionado;
+        border: none;
+    }
+}
+
+.iconos{
+    padding: 0.1vh 2vw;
+    background-color: transparent;
+    border: none;
+    border-radius: 20px;
+    @media (min-width: 768px){
+        padding: 0.5vh 1vw;
+    }
+    
+}
+
+.btnModificar{
+    text-align: center;
+    width: fit-content;
+    height: fit-content;
+
+    background-color: colores.$color-blanco !important;
+
+    &:hover{
+        filter: brightness(95%);
+    }
+}

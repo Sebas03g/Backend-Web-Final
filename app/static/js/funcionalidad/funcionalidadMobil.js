@@ -1,4 +1,4 @@
-import { eliminarClase } from '../utilidades.js'
+import { eliminarClase } from '../general/utilidades.js'
 
 function agregarFuncionalidadNav(){
     const elemento = document.getElementById("menuNavMobil").querySelector("i");

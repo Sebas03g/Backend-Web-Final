@@ -1,5 +1,5 @@
-import { eliminarClase } from '../utilidades.js'
-import { funcionPanelMensaje } from '../mensajesUsuario.js';
+import { eliminarClase } from '../general/utilidades.js'
+import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 
 let gestores = [
     {id:1,nombre:"Diego", estado:true, permisos:[

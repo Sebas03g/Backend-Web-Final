@@ -1,0 +1,58 @@
+@keyframes seleccionado {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.seleccionado {
+  animation: seleccionado 1s ease-out;
+  background-color: #e8e9eb !important;
+}
+.seleccionado:hover {
+  filter: brightness(100%);
+  color: initial;
+}
+
+.eliminados {
+  background-color: #ffffff;
+  color: black;
+}
+.eliminados:hover {
+  background-color: #C32F27;
+  color: #ffffff;
+  border: none;
+}
+
+.modificar {
+  background-color: #ffffff;
+}
+.modificar:hover {
+  background-color: #e8e9eb;
+  border: none;
+}
+
+.iconos {
+  padding: 0.1vh 2vw;
+  background-color: transparent;
+  border: none;
+  border-radius: 20px;
+}
+@media (min-width: 768px) {
+  .iconos {
+    padding: 0.5vh 1vw;
+  }
+}
+
+.btnModificar {
+  text-align: center;
+  width: fit-content;
+  height: fit-content;
+  background-color: #ffffff !important;
+}
+.btnModificar:hover {
+  filter: brightness(95%);
+}
+
+/*# sourceMappingURL=botones.css.map */

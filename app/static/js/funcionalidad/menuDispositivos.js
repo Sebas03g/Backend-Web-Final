@@ -1,6 +1,6 @@
-import { eliminarClase } from '../utilidades.js';
-import { esPantallaPequena } from '../utilidades.js';
-import { slideLeftElementos } from '../utilidades.js';
+import { eliminarClase } from '../general/utilidades.js';
+import { esPantallaPequena } from '../general/utilidades.js';
+import { slideLeftElementos } from '../general/utilidades.js';
 
 var idDipositivo;
 

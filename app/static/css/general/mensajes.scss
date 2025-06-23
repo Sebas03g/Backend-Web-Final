@@ -1,0 +1,61 @@
+@use './colores' as colores;
+
+#mensajes {
+    display: none;
+    height: 100vh;
+    width: 100vw;
+    z-index: 1050;
+    position: absolute;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    .mensaje{
+        background-color: white;
+        height: fit-content;
+        width: fit-content;
+        max-width: 80vw;
+        border-radius: 20px;
+        padding: 2vh 2vw;
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            padding: 1vh 4vw;
+            width: 70vw;
+            min-height: 20vh;
+        }
+        
+        @media(max-width: 768px){
+            padding: 1vh 6vw;
+        }
+
+        button{
+            border: 0.5px solid black ;
+        }
+        i{
+            cursor: pointer;
+            position: relative;
+            left: 100%;
+        }
+        .eliminar{
+            background-color: colores.$color-rojo;
+            color: white;
+        }
+        .comunicacion{
+            background-color: colores.$color-secundario;
+            color: black;
+            &:hover{
+                background-color: colores.$color-seleccionado;
+            }
+            
+        }
+    }
+    
+}
+
+
+
+.mostrar{
+    display: flex !important;
+}

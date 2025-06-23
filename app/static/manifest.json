@@ -1,6 +1,6 @@
 {
-  "name": "Mi App Flask PWA",
-  "short_name": "MiApp",
+  "name": "Ubikame",
+  "short_name": "Ubik",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
