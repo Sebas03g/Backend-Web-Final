@@ -16,6 +16,12 @@ class Usuario(db.Model):
     transacciones = db.relationship("Transaccion", back_populates='usuario')
     caracteristicas_usuario = db.relationship("Caracteristica_Usuario", back_populates='usuario')
     tarjetas = db.relationship('Tarjeta', secondary=usuario_tarjeta, back_populates='usuarios')
+    ubicaciones = db.relationship('UbicacionUsuario', back_populates='usuario')
+    permisos_usuario = db.relationship('PermisoUsuario', back_populates='usuario')
+    permisos_gestionados = db.relationship('Permiso', back_populates='gestor')
+    ubicaciones_creadas = db.relationship('Ubicacion', back_populates='usuario')
+    rutas = db.relationship('Ruta', back_populates='usuario')
+    personas_confianza = db.relationship('PersonaConfianza', back_populates='usuario')
     
     def to_dict(self):
         return {
