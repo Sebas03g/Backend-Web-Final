@@ -10,3 +10,14 @@ class PersonaConfianza(db.Model):
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'))
 
     usuario = db.relationship('Usuario', back_populates='personas_confianza')
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "telefono": self.telefono,
+            "descripcion": self.descripcion,
+            "id_usuario": self.id_usuario,
+            "usuario": self.usuario.to_dict() if self.usuario else None
+        }
+

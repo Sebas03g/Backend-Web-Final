@@ -11,3 +11,17 @@ class Permiso(db.Model):
 
     permiso_usuario = db.relationship('PermisoUsuario', back_populates='permisos')
     gestor = db.relationship('Usuario', back_populates='permisos_gestionados')
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "descripcion": self.descripcion,
+            "id_permiso_usuario": self.id_permiso_usuario,
+            "id_gestor_permiso": self.id_gestor_permiso,
+            "permiso_usuario": self.permiso_usuario.to_dict() if self.permiso_usuario else None,
+            "gestor": {
+                "id": self.gestor.id,
+                "nombre_completo": self.gestor.nombre_completo
+            } if self.gestor else None
+        }

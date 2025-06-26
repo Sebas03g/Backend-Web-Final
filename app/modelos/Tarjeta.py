@@ -16,5 +16,7 @@ class Tarjeta(db.Model):
             "id": self.id,
             "numero_tarjeta": self.numero_tarjeta,
             "mes_expiracion": self.mes_expiracion,
-            "anio_expiracion": self.anio_expiracion
+            "anio_expiracion": self.anio_expiracion,
+            "transacciones": [t.to_dict() for t in self.transacciones],
+            "usuarios": [u.to_dict() for u in self.usuarios]
         }

@@ -17,5 +17,7 @@ class Plan(db.Model):
             "id": self.id,
             "nombre": self.nombre,
             "descripcion": self.descripcion,
-            "precio": float(self.precio)
+            "precio": float(self.precio),
+            "transacciones": [t.to_dict() for t in self.transacciones],
+            "caracteristicas_plan": [c.to_dict() for c in self.caracteristicas_plan]
         }

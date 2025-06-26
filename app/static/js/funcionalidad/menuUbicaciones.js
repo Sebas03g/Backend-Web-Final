@@ -6,6 +6,8 @@ import * as validar from './validacion.js';
 let mapaUbicacion = null;
 let marcadorSeleccionado = null;
 
+
+
 let areas = [
     {id:1, punto:[-2.8918931908671124, -79.03600936098859], nombre:"Zona Segura", descripcion:"Zona de bajo riesgo",tipo:"green"},
     {id:2, punto:[-2.9221155566716095, -79.0415370113893], nombre:"Zona Insegura", descripcion:"Zona con alto riesgo de secuestro",tipo:"red"}

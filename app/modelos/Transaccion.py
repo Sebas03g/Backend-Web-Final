@@ -16,5 +16,10 @@ class Transaccion(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "fecha": self.fecha
+            "id_usuario": self.id_usuario,
+            "id_tarjeta": self.id_tarjeta,
+            "id_plan": self.id_plan,
+            "fecha": self.fecha,
+            "usuario": self.usuario.to_dict() if self.usuario else None,
+            "caracteristicas_usuario": [c.to_dict() for c in self.caracteristicas_usuario],
         }

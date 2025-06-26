@@ -10,3 +10,13 @@ class UbicacionUsuario(db.Model):
 
     usuario = db.relationship('Usuario', back_populates='ubicaciones')
     punto = db.relationship('Punto', back_populates='ubicaciones_usuario')
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "id_usuario": self.id_usuario,
+            "id_punto": self.id_punto,
+            "fecha": self.fecha,
+            "usuario": self.usuario.to_dict() if self.usuario else None,
+            "punto": self.punto.to_dict() if self.punto else None
+        }

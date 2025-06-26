@@ -17,3 +17,16 @@ class Caracteristica_Usuario(db.Model):
     __table_args__ = (
         db.UniqueConstraint('id_caracteristica', 'id_usuario', name='uix_caracteristica_usuario'),
     )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "valor": float(self.valor),
+            "id_caracteristica": self.id_caracteristica,
+            "id_usuario": self.id_usuario,
+            "id_transaccion": self.id_transaccion,
+            "caracteristica": self.caracteristica.to_dict() if self.caracteristica else None,
+            "usuario": self.usuario.to_dict() if self.usuario else None,
+            "transaccion": self.transaccion.to_dict() if self.transaccion else None
+        }
+

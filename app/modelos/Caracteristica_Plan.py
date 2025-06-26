@@ -15,3 +15,15 @@ class Caracteristica_Plan(db.Model):
     __table_args__ = (
         db.UniqueConstraint('id_caracteristica', 'id_plan', name='uix_caracteristica_plan'),
     )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "valor": float(self.valor),
+            "id_caracteristica": self.id_caracteristica,
+            "id_plan": self.id_plan,
+            "caracteristica": self.caracteristica.to_dict() if self.caracteristica else None,
+            "plan": self.plan.to_dict() if self.plan else None
+        }
+
+

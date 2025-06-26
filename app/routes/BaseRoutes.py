@@ -11,8 +11,11 @@ class BaseRoutes:
         self.bp.add_url_rule('/<int:id>', methods=['PUT'], view_func=self.controller.update)
         self.bp.add_url_rule('/<int:id>', methods=['DELETE'], view_func=self.controller.delete)
 
-    def agregar_ruta_personalizada(self, url, method, funcion):
-        self.bp.add_url_rule(url, methods=[method], view_func=funcion)
+    def agregar_ruta_personalizada(self, url, methods, funcion):
+        if isinstance(methods, str):
+            methods = [methods]
+        self.bp.add_url_rule(url, methods=methods, view_func=funcion)
+
 
     def get_blueprint(self):
         return self.bp

@@ -19,4 +19,6 @@ class Caracteristica(db.Model):
             "descripcion": self.descripcion,
             "unidad_valor": self.unidad_valor,
             "valor": self.valor,
+            "caracteristicas_usuario": [c for c in self.caracteristicas_usuario],
+            "caracteristicas_plan": [c for c in self.caracteristicas_plan]
         }
