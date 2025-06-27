@@ -1,5 +1,6 @@
 from flask import Flask
 from app.config.database import create_db, db
+from app.config.mail import create_mail
 from app.routes.PlanRoute import plan_routes
 from app.routes.RutaRoute import ruta_routes
 from app.routes.PuntoRoute import punto_routes
@@ -16,12 +17,18 @@ from app.routes.UbicacionRoute import ubicacion_routes
 from app.routes.UsuarioRoute import usuario_routes
 from app.routes.PermisoRoute import permiso_routes
 from app.routes.TemplateRoutes import main_routes
+from app.routes.MailRoute import mail_routes
+
+from flask_mail import Mail
 
 from flask_migrate import Migrate
+mail = Mail()
 
 def create_app():
     app = Flask(__name__)
     db = create_db(app)
+
+    mail = create_mail(app)
 
     app.register_blueprint(ubicacion_routes.get_blueprint())
     app.register_blueprint(punto_routes.get_blueprint())
@@ -39,8 +46,11 @@ def create_app():
     app.register_blueprint(permiso_confianza_routes.get_blueprint())
     app.register_blueprint(ubicacion_usuario_routes.get_blueprint())
     app.register_blueprint(main_routes)
+    app.register_blueprint(mail_routes)
 
-    migrate = Migrate(app, db) 
+    migrate = Migrate(app, db)
+
+
 
     with app.app_context():
         db.create_all()
