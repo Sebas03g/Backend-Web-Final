@@ -4,18 +4,9 @@ import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import { slideDownElementos } from '../general/utilidades.js';
 import * as validar from './validacion.js';
 
+import { fetchUserData } from '../fetch/fetchUserData.js';
+
 let idDispositivo = null;
-
-function obtenerDataUsuarios(){
-    const id = localStorage.getItem("id_usuario");
-    const data = getDataById("usuario",id);
-    return data;
-}
-
-function obtenerPermisos(){
-    const data = getAllData('permiso');
-    return data;
-}
 
 let listaDispositivos = [
     {id:"1", nombre: "Sophia", correo: "sophia@gmail.com", telefono:"099000000", nombreDispositivo: "Samsung Sophia" , estado: "Activo",  cedula:" 01020123456", conectado:"Actual", tiempoViaje:"30 min", imagen:"../../imagenes/Sophia.png", codigo: "A7F4K9X2M8B6", permisos:[

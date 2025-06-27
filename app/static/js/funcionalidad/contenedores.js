@@ -5,19 +5,16 @@ import { slideDownElementos } from '../general/utilidades.js';
 import * as validar from './validacion.js';
 import {getAllData, getDataById} from '../fetch/sentenciasFetch.js'
 
+import { fetchUserData } from '../fetch/fetchUserData.js';
+
 let idDispositivo = null;
 let mapaUbicacion = null;
 let mapaRuta = null;
 let marcadorSeleccionado = null;
 
-function obtenerDataUsuarios(){
-    const id = localStorage.getItem("id_usuario");
-    const data = getDataById("usuario",id);
-    return data;
-}
 
-function obtenerPermisos(){
-    const data = getAllData('permiso');
+async function obtenerPermisos(){
+    const data = await getAllData('permiso');
     return data;
 }
 
