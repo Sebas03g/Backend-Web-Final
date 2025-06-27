@@ -1,7 +1,7 @@
 from ..config.database import db
 
 class Dispositivo(db.Model):
-    __tablename__ = 'dispositivo'
+    __tablename__ = 'Dispositivo'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre_completo = db.Column(db.String(150), nullable=False)

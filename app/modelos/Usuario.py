@@ -2,8 +2,6 @@ from ..config.database import db
 from sqlalchemy import Numeric
 from .associations import usuario_tarjeta
 
-
-
 class Usuario(db.Model):
     __tablename__ = 'Usuario'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

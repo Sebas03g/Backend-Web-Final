@@ -1,11 +1,11 @@
 from ..config.database import db
 
 class UbicacionUsuario(db.Model):
-    __tablename__ = 'ubicacion_usuario'
+    __tablename__ = 'Ubicacion_usuario'
 
     id = db.Column(db.Integer, primary_key=True)
-    id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
-    id_punto = db.Column(db.Integer, db.ForeignKey('punto.id'), nullable=False)
+    id_usuario = db.Column(db.Integer, db.ForeignKey('Usuario.id'), nullable=False)
+    id_punto = db.Column(db.Integer, db.ForeignKey('Punto.id'), nullable=False)
     fecha = db.Column(db.DateTime, nullable=False)
 
     usuario = db.relationship('Usuario', back_populates='ubicaciones')

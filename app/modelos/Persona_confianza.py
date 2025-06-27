@@ -7,7 +7,7 @@ class PersonaConfianza(db.Model):
     nombre = db.Column(db.String, nullable=False)
     telefono = db.Column(db.String)
     descripcion = db.Column(db.Text)
-    id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+    id_usuario = db.Column(db.Integer, db.ForeignKey('Usuario.id'))
     imagen = db.Column(db.String)
 
     usuario = db.relationship('Usuario', back_populates='personas_confianza')

@@ -1,10 +1,10 @@
 from ..config.database import db
 
 class PermisoUsuario(db.Model):
-    __tablename__ = 'permiso_usuario'
+    __tablename__ = 'Permiso_usuario'
 
     id = db.Column(db.Integer, primary_key=True)
-    id_dispositivo = db.Column(db.Integer, db.ForeignKey('dispositivo.id'), nullable=False)
+    id_dispositivo = db.Column(db.Integer, db.ForeignKey('Dispositivo.id'), nullable=False)
     nivel = db.Column(db.Integer, nullable=False)
 
     dispositivo = db.relationship('Dispositivo', back_populates='permisos_usuario')
