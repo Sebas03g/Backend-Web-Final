@@ -15,6 +15,8 @@ from app.routes.UbicacionUsuarioRoute import ubicacion_usuario_routes
 from app.routes.UbicacionRoute import ubicacion_routes
 from app.routes.UsuarioRoute import usuario_routes
 from app.routes.PermisoRoute import permiso_routes
+from app.routes.TemplateRoutes import main_routes
+
 from flask_migrate import Migrate
 
 def create_app():
@@ -36,6 +38,7 @@ def create_app():
     app.register_blueprint(permiso_usuario_routes.get_blueprint())
     app.register_blueprint(permiso_confianza_routes.get_blueprint())
     app.register_blueprint(ubicacion_usuario_routes.get_blueprint())
+    app.register_blueprint(main_routes)
 
     migrate = Migrate(app, db) 
 
