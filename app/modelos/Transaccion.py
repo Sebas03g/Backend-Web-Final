@@ -10,6 +10,7 @@ class Transaccion(db.Model):
     id_plan = db.Column(db.Integer, db.ForeignKey('Plan.id', ondelete='SET NULL'), nullable=True)
 
     usuario = db.relationship('Usuario', back_populates='transacciones')  # <-- Aquí la relación
+    plan = db.relationship('Plan', back_populates="transaccion")
 
     caracteristicas_usuario = db.relationship('Caracteristica_Usuario', back_populates='transaccion')
 

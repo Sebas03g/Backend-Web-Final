@@ -10,7 +10,6 @@ class Permiso(db.Model):
     id_gestor_permiso = db.Column(db.Integer, db.ForeignKey('usuario.id'))
 
     permiso_usuario = db.relationship('PermisoUsuario', back_populates='permisos')
-    gestor = db.relationship('Usuario', back_populates='permisos_gestionados')
 
     def to_dict(self):
         return {

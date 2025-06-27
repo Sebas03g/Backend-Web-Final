@@ -1,5 +1,4 @@
 from ..config.database import db
-from .Caracteristica_Plan import Caracteristica_Plan
 from sqlalchemy import Numeric
 
 class Plan(db.Model):
@@ -9,7 +8,7 @@ class Plan(db.Model):
     descripcion = db.Column(db.String(500), nullable = False)
     precio = db.Column(Numeric(10, 2), nullable = False)
 
-    transacciones = db.relationship("Transaccion", backref='plan')
+    transacciones = db.relationship("Transaccion", back_populates='plan')
     caracteristicas_plan = db.relationship("Caracteristica_Plan", back_populates="plan")
 
     def to_dict(self):

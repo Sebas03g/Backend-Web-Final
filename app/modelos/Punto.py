@@ -1,7 +1,5 @@
 from ..config.database import db
 
-from . import db
-
 class Punto(db.Model):
     __tablename__ = 'punto'
 

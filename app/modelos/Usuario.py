@@ -1,6 +1,8 @@
 from ..config.database import db
-from .Caracteristica_Usuario import Caracteristica_Usuario
+from sqlalchemy import Numeric
 from .associations import usuario_tarjeta
+
+
 
 class Usuario(db.Model):
     __tablename__ = 'Usuario'
