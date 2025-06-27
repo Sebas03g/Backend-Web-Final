@@ -1,5 +1,5 @@
-@use '../colores' as colores;
-@use '../imagenes' as imagenes;
+@use '../general/colores' as colores;
+@use '../general/imagenes' as imagenes;
 
 * {
     box-sizing: border-box;
@@ -363,7 +363,7 @@
         height: 60vh;
         width: auto;
         background-color: transparent;
-        background-image: url('../../imagenes/imagenCelular.png');
+        background-image: url('../static/images/imagenCelular.png');
         background-size: 100% 100%;
         background-position: center;
         background-repeat: no-repeat;

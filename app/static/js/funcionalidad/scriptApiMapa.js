@@ -8,7 +8,7 @@ let areasCreadas = [];
 
 function crearIcono(nombre){
   const icono = L.divIcon({
-    html:  `<img src='../../imagenes/imagenCelular.png' alt='${nombre}' width="20" height="40" style="filter: brightness(50%);">`,
+    html:  `<img src='../static/images/imagenCelular.png' alt='${nombre}' width="20" height="40" style="filter: brightness(50%);">`,
     className: '',
     iconSize: [30, 30],
     iconAnchor: [15, 30],  // punto que toca el suelo

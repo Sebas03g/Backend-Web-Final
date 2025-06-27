@@ -8,6 +8,7 @@ class PersonaConfianza(db.Model):
     telefono = db.Column(db.String)
     descripcion = db.Column(db.Text)
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+    imagen = db.Column(db.String)
 
     usuario = db.relationship('Usuario', back_populates='personas_confianza')
 
@@ -18,6 +19,7 @@ class PersonaConfianza(db.Model):
             "telefono": self.telefono,
             "descripcion": self.descripcion,
             "id_usuario": self.id_usuario,
-            "usuario": self.usuario.to_dict() if self.usuario else None
+            "usuario": self.usuario.to_dict() if self.usuario else None,
+            "imagen": self.imagen
         }
 

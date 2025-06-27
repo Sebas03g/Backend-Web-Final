@@ -12,6 +12,7 @@ class Usuario(db.Model):
     contrasena_hash = db.Column(db.String(150), nullable=False)
     monitoreo = db.Column(db.Boolean, nullable=False)
     es_monitoreo = db.Column(db.Boolean, nullable=False)
+    imagen = db.Column(db.String(150), nullable=False)
 
     transacciones = db.relationship("Transaccion", back_populates='usuario')
     caracteristicas_usuario = db.relationship("Caracteristica_Usuario", back_populates='usuario')

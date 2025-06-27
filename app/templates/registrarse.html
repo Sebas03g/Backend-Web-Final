@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="estilos/inicio/login.css" />
+</head>
+<body>
+    <div class="container">
+        <form class="form-signin">
+        <h1 class="h3 mb-3 font-weight-normal">Registrarse</h1>
+        
+        <h2 class="h5 mt-3 font-weight-normal">Nombre Completo</h2>
+        <input type="text" id="inputName" class="form-control" placeholder="Nombre Completo" required autofocus>
+        
+        <h2 class="h5 mt-3 font-weight-normal">Correo Electrónico</h2>
+        <input type="email" id="inputEmail" class="form-control" placeholder="Correo Electrónico" required>
+        
+        <h2 class="h5 mt-3 font-weight-normal">Teléfono</h2>
+        <input type="tel" id="inputPhone" class="form-control" placeholder="Teléfono" required>
+        
+        <h2 class="h5 mt-3 font-weight-normal">Fecha de Nacimiento</h2>
+        <input type="date" id="inputBirthdate" class="form-control" placeholder="Fecha de Nacimiento" required>
+        
+        <h2 class="h5 mt-3 font-weight-normal">Contraseña</h2>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña" required>
+        
+        <h2 class="h5 mt-3 font-weight-normal">Confirmar Contraseña</h2>
+        <input type="password" id="inputPasswordRepeat" class="form-control" placeholder="Confirmar Contraseña" required>
+        
+        <button class="btn btn-lg btn-green btn-block" type="submit" id="signup">Registrarse</button>
+        </form>
+    </div>  
+    <script src="scripts/inicio/registrarse.js"></script>
+  </body>
+</html>

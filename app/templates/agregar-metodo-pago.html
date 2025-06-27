@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Método de Pago</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="estilos/inicio/login.css" />
+</head>
+<body>
+    <div class="container">
+        <form class="form-signin">
+            <h1 class="h3 mb-3 font-weight-normal">Agregar método de pago</h1>
+            
+            <h2 class="h5 mt-3 font-weight-normal">Nombre en la Tarjeta</h2>
+            <input type="text" id="inputName" class="form-control" placeholder="Nombre en la Tarjeta" required autofocus>
+            
+            <h2 class="h5 mt-3 font-weight-normal">Número de Tarjeta</h2>
+            <input type="email" id="inputCardNumber" class="form-control" placeholder="Número de Tarjeta" required>
+            
+            <h2 class="h5 mt-3 font-weight-normal">Expiración</h2>
+            <input type="text" id="inputExpiration" class="form-control" placeholder="X/XX" required>
+            
+            <h2 class="h5 mt-3 font-weight-normal">CVV</h2>
+            <input type="text" id="inputcvv" class="form-control mb-5" placeholder="XXX" required>
+            
+            <button id="submit" class="btn btn-lg btn-green btn-block" type="submit">Agregar</button>
+        </form>
+    </div>  
+    <script src="scripts/inicio/agregar-metodo-pago.js"></script>
+  </body>
+</html>

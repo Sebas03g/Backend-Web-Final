@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Dashboard Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="estilos/inicio/cuenta.css" rel="stylesheet">
+    
+  </head>
+
+  <body>
+    <nav class="navbar navbar-dark sticky-top flex-md-nowrap p-0">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="pagina-inicio.html">Ubikme</a>
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="nav-link" href="pagina-inicio.html">Cerrar Sesión</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link active" href="#">
+                  <span data-feather="user"></span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="user"></span>
+                  Cuenta
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="metodos-pago.html">
+                  <span data-feather="credit-card"></span>
+                  Pago
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="planes.html">
+                  <span data-feather="list"></span>
+                  Planes
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="seleccionTipo.html">
+                  <span data-feather="clipboard"></span>
+                  Dashboard
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <main role="main" class=" right-space col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <h1 class="h2">Cuenta</h1>
+          </div>
+          <div class="container">
+            <div class="row pb-1">
+              <div class="col-2 font-weight-bold">
+                Nombre:
+              </div>
+              <div class="col-6">
+                <span id="name">John Doe</span>
+              </div>
+            </div>
+            <div class="row pb-1">
+              <div class="col-2 font-weight-bold">
+                Correo:
+              </div>
+              <div class="col-6">
+                <span id="email">john.doe@mail.com</span>
+              </div>
+            </div>
+            <div class="row pb-1">
+              <div class="col-2 font-weight-bold">
+                Teléfono:
+              </div>
+              <div class="col-6">
+                <span id="phone">0989745488</span> 
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-sm mt-3 btn-green" id="save" style="display:none;">Guardar</button>
+          <button class="btn btn-sm mt-3 btn-green" id="edit">Editar</button>
+          <button class="btn btn-sm mt-3 btn-green" id="change-pass">Cambiar Contraseña</button>  
+        </main>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../../../dist/js/bootstrap.min.js"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+    <script src="scripts/inicio/cuenta.js"></script>
+
+  </body>
+</html>
