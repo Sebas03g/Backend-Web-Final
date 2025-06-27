@@ -19,7 +19,6 @@ class Permiso(db.Model):
             "descripcion": self.descripcion,
             "id_permiso_usuario": self.id_permiso_usuario,
             "id_gestor_permiso": self.id_gestor_permiso,
-            "permiso_usuario": self.permiso_usuario.to_dict() if self.permiso_usuario else None,
             "gestor": {
                 "id": self.gestor.id,
                 "nombre_completo": self.gestor.nombre_completo

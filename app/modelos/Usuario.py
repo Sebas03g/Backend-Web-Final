@@ -17,8 +17,6 @@ class Usuario(db.Model):
     caracteristicas_usuario = db.relationship("Caracteristica_Usuario", back_populates='usuario')
     tarjetas = db.relationship('Tarjeta', secondary=usuario_tarjeta, back_populates='usuarios')
     ubicaciones = db.relationship('UbicacionUsuario', back_populates='usuario')
-    permisos_usuario = db.relationship('PermisoUsuario', back_populates='usuario')
-    permisos_gestionados = db.relationship('Permiso', back_populates='gestor')
     ubicaciones_creadas = db.relationship('Ubicacion', back_populates='usuario')
     rutas = db.relationship('Ruta', back_populates='usuario')
     personas_confianza = db.relationship('PersonaConfianza', back_populates='usuario')
@@ -39,7 +37,6 @@ class Usuario(db.Model):
             "caracteristicas_usuario": [c.to_dict() for c in self.caracteristicas_usuario],
             "tarjetas": [t.to_dict() for t in self.tarjetas],
             "ubicaciones": [u.to_dict() for u in self.ubicaciones],
-            "permisos_usuario": [p.to_dict() for p in self.permisos_usuario],
             "permisos_gestionados": [p.to_dict() for p in self.permisos_gestionados],
             "ubicaciones_creadas": [u.to_dict() for u in self.ubicaciones_creadas],
             "rutas": [r.to_dict() for r in self.rutas],

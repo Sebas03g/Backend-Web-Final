@@ -12,6 +12,8 @@ class Dispositivo(db.Model):
     id_usuario = db.Column(db.Integer, db.ForeignKey('Usuario.id'))  # Usuario al que se asigna
     id_gestor = db.Column(db.Integer, db.ForeignKey('Usuario.id'))   # Usuario que lo gestiona
 
+    permisos_usuario = db.relationship('PermisoUsuario', back_populates='dispositivo')
+
     usuario_asignado = db.relationship(
         'Usuario',
         back_populates='dispositivos_asignados',
@@ -32,5 +34,7 @@ class Dispositivo(db.Model):
             "telefono": self.telefono,
             "codigo": self.codigo,
             "usuario_asignado": self.usuario_asignado.to_dict_resumido() if self.usuario_asignado else None,
-            "gestor": self.gestor.to_dict_resumido() if self.gestor else None
+            "gestor": self.gestor.to_dict_resumido() if self.gestor else None,
+            "permisos_usuario": [p.to_dict() for p in self.permisos_usuario],
+            
         }
