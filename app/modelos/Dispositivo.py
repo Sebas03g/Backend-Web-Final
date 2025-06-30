@@ -5,6 +5,7 @@ class Dispositivo(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre_completo = db.Column(db.String(150), nullable=False)
+    cedula = db.Column(db.String(10), nullable=False)
     correo_electronico = db.Column(db.String(150), nullable=False)
     telefono = db.Column(db.String(10), nullable=False)
     codigo = db.Column(db.String(15), nullable=False)

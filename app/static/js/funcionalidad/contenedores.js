@@ -373,6 +373,7 @@ function crearUbicacion(listaBotones){
     eliminarClase(listaBotones, "seleccionado");
 
     document.getElementById("botonEliminarUbicacion").style.display = "none";
+    document.getElementById("botonAccionUbicacion").dataset.tipo = "create";
 
     if (mapaUbicacion) {
         mapaUbicacion.remove();
@@ -434,6 +435,8 @@ function crearCartaUbicacion(padre,elemento, elementoUbicacion){
     document.getElementById("miComboboxSeguridad").value = elementoUbicacion.tipo;
 
     document.getElementById("botonEliminarUbicacion").style.display = "inline";
+
+    document.getElementById("botonAccionUbicacion").dataset.tipo = "modify";
 
     document.getElementById("botonEliminarUbicacion").addEventListener("click",() => {
         funcionPanelMensaje("¿Estás seguro de que deseas eliminar esta ubicacion?", "Esta acción no se puede deshacer. Toda la información relacionada será permanentemente eliminada.", "eliminar", "Eliminar");

@@ -9,7 +9,7 @@ class BaseController:
         data = request.json
         try:
             nuevo_objeto = self.repositorio.create(data)
-            return jsonify({"id": nuevo_objeto.id, "mensaje": f"{self.tipoObjeto.__name__} creado"}), 201
+            return jsonify({"id": nuevo_objeto.id, "mensaje": f"{self.tipoObjeto.__name__} creado", "objeto": nuevo_objeto.to_dict() }), 201
         except Exception as e:
             return jsonify({"error": str(e)}), 400
         
@@ -29,7 +29,7 @@ class BaseController:
             objeto_modificado = self.repositorio.update(id, data)
             if not objeto_modificado:
                 return jsonify({"error": f"{self.tipoObjeto.__name__} no encontrado"}), 404
-            return jsonify({"id": objeto_modificado.id, "mensaje": f"{self.tipoObjeto.__name__} actualizado"}), 200
+            return jsonify({"id": objeto_modificado.id, "mensaje": f"{self.tipoObjeto.__name__} actualizado", "objeto": objeto_modificado.to_dict()}), 200
         except Exception as e:
             return jsonify({"error": str(e)}), 400
     

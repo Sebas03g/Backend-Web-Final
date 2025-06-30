@@ -6,8 +6,8 @@ class Punto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     lat = db.Column(db.Float, nullable=False)
     long = db.Column(db.Float, nullable=False)
-    hora = db.Column(db.DateTime, nullable=False)
-    id_ruta = db.Column(db.Integer, db.ForeignKey('Ruta.id'))
+    hora = db.Column(db.DateTime, nullable=True)
+    id_ruta = db.Column(db.Integer, db.ForeignKey('Ruta.id'), nullable=True)
 
     ruta = db.relationship('Ruta', back_populates='puntos')
     ubicaciones_usuario = db.relationship('UbicacionUsuario', back_populates='punto')

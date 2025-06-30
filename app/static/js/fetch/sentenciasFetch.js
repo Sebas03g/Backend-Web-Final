@@ -4,7 +4,7 @@ export async function createData(tipoElemento, data) {
     try {
         const response = await axios.post(`${BASE_URL}/${tipoElemento}`, data);
         console.log(response.data);
-        return response.data;
+        return response.data.objeto;
     } catch (error) {
         console.error("Error en createData:", error);
         throw error;
@@ -15,7 +15,7 @@ export async function updateData(tipoElemento, data, id) {
     try {
         const response = await axios.put(`${BASE_URL}/${tipoElemento}/${id}`, data);
         console.log(response.data);
-        return response.data;
+        return response.data.objeto;
     } catch (error) {
         console.error("Error en updateData:", error);
         throw error;

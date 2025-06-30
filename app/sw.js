@@ -5,6 +5,7 @@ const URLS_TO_CACHE = [
   '/static/css/aplicacionMovil/cuerpo.css',
   '/static/css/aplicacionMovil/datosContenedor.css',
   '/static/js/ubicacionActual.js',
+  '/manifest.json',
   '/static/js/setUpPWA.js'
 ];
 
