@@ -100,10 +100,11 @@ function cerrarDispositivo(botones){
 
 function agregarDispositvo(){
     document.getElementById("creacionPersona").querySelector(".btn-primary").addEventListener("click", () => {
-        console.log("Hola Mundo")
         if(validar.validarDatosPersona("Crear")){
+            document.getElementById("btnAccionPanel").onclick = null;
             funcionPanelMensaje("Dispositivo Creado", "El dispositivo se creó exitosamente y el usuario ha sido notificado. Solo falta que el usuario agregue al gestor.", "comunicacion", "Aceptar");
             slideDownElementos(document.getElementById("creacionPersona"));
+            document.getElementById("btnAccionPanel").onclick = gestionDispositivo();
         }else{
             funcionPanelMensaje("Datos invalidos", "Los datos ingresados son invalidos, ingrese nuevamente.", "comunicacion", "Aceptar");
         }
@@ -114,8 +115,10 @@ function agregarDispositvo(){
 function modificarDispositvo(){
     document.getElementById("modificarPersona").querySelector(".btn-primary").addEventListener("click", () => {
         if(validar.validarDatosPersona("Modificar")){
+            document.getElementById("btnAccionPanel").onclick = null;
             funcionPanelMensaje("Dispositivo Modificado", "El dispositivo ha sido modificado con exito.", "comunicacion", "Aceptar");
             slideDownElementos(document.getElementById("modificarPersona"));
+            document.getElementById("btnAccionPanel").onclick = gestionDispositivo(idDispositivo);
         }else{
             funcionPanelMensaje("Datos invalidos", "Los datos ingresados son invalidos, ingrese nuevamente.", "comunicacion", "Aceptar");
         }

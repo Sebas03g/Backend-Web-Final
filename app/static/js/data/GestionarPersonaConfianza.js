@@ -1,7 +1,7 @@
 import { createData } from "../fetch/sentenciasFetch";
 
 
-export async function gestorPersonaConfianza(punto, id=null){
+export async function gestorPersonaConfianza(id=null){
 
     const id_usuario = localStorage.getItem('idUsuario');
     const nivel = localStorage.getItem('nivel');

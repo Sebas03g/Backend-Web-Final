@@ -149,7 +149,9 @@ function crearContenedorUbicacion(){
 
     document.getElementById("contenedorUbicacionesGenerales").querySelector(".btnModificar").addEventListener("click", () => {
             if(validar.validarUbicacion(marcadorSeleccionado, "General")){
+                 document.getElementById("btnAccionPanel").onclick = null;
                  funcionPanelMensaje("¿Estás seguro de que deseas administrar esta Ubicacion?", "Esta informacion sera registrada de forma permamente para todos los usuarios.", "modificar", "Crear");
+                 document.getElementById("btnAccionPanel").onclick = gestorUbicacion(marcadorSeleccionado,1);
             }else{
                 funcionPanelMensaje("Datos invalidos", "Los datos ingresados son invalidos.", "modificar", "Aceptar");
             }

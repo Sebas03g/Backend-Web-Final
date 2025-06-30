@@ -7,7 +7,11 @@ import {getAllData, getDataById} from '../fetch/sentenciasFetch.js'
 
 import { fetchUserData } from '../fetch/fetchUserData.js';
 
+import { gestorPersonaConfianza } from '../data/GestionarPersonaConfianza.js';
+
 let idDispositivo = null;
+let idPC = null;
+let idUbicacion = null;
 let mapaUbicacion = null;
 let mapaRuta = null;
 let marcadorSeleccionado = null;
@@ -367,6 +371,8 @@ function crearContenedorUbicacion(){
 
 function crearUbicacion(listaBotones){
 
+    idUbicacion = null;
+
     document.getElementById("nombreUbicacion").value = "";
     document.getElementById("descripcionUbicacion").textContent = "";
     document.getElementById("miComboboxSeguridad").value = "";
@@ -422,6 +428,8 @@ function funcionalidadMapa(){
 }
 
 function crearCartaUbicacion(padre,elemento, elementoUbicacion){
+
+    idUbicacion = elementoUbicacion.id;
 
     let mapa = crearMapa(elementoUbicacion);
     eliminarClase(padre.querySelectorAll(".elementoLista"), "seleccionado");
@@ -613,11 +621,15 @@ function crearContenedorPersonas(){
 }
 
 function crearPC(listaBotones){
+
+    idPC = null;
+
     document.getElementById("nombrePersona").value = "";
     document.getElementById("telefonoPersona").value = "";
     document.getElementById("descripcionPersona").value = "";
 
     document.getElementById("botonEliminarPC").style.display = "none";
+    document.getElementById("botonAccionPC").addEventListener("click",  gestorPersonaConfianza())
 
     eliminarClase(listaBotones, "seleccionado");
 }
@@ -625,6 +637,9 @@ function crearPC(listaBotones){
 function crearCartaPC(padre,elemento, elementoPersonaConfianza){
     eliminarClase(padre.querySelectorAll(".elementoLista"), "seleccionado");
     elemento.classList.add("seleccionado");
+
+    idPC = elementoPersonaConfianza.id;
+
     document.getElementById("nombrePersona").value = elementoPersonaConfianza.nombre;
     document.getElementById("telefonoPersona").value = elementoPersonaConfianza.telefono;
     document.getElementById("descripcionPersona").value = elementoPersonaConfianza.descripcion;
@@ -647,7 +662,9 @@ function crearContenedores(){
 
     document.getElementById("contenedorUbicacion").querySelector(".btnModificar").addEventListener("click", () => {
         if(validar.validarUbicacion(marcadorSeleccionado)){
+             document.getElementById("btnAccionPanel").onclick = null;
              funcionPanelMensaje("¿Estás seguro de que deseas administrar esta Ubicacion?", "Esta informacion sera registrada y se le informara al usuario de la creacion de estos datos.", "modificar", "Crear");
+             document.getElementById("btnAccionPanel").onclick = gestorUbicacion(marcadorSeleccionado,idUbicacion);
         }else{
             funcionPanelMensaje("Datos invalidos", "Los datos ingresados son invalidos.", "modificar", "Aceptar");
         }
@@ -655,7 +672,9 @@ function crearContenedores(){
 
     document.getElementById("contenedorPersonas").querySelector(".btnModificar").addEventListener("click", () => {
         if(validar.validarDatosPC()){
+             document.getElementById("btnAccionPanel").onclick = null;
              funcionPanelMensaje("¿Estás seguro de que deseas administrar esta Persona?", "Esta informacion sera registrada y se le informara al usuario de la creacion de estos datos.", "modificar", "Crear");
+             document.getElementById("btnAccionPanel").onclick = gestorPersonaConfianza(idPC);
         }else{
             funcionPanelMensaje("Datos invalidos", "Los datos ingresados son invalidos.", "modificar", "Aceptar");
         }

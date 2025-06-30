@@ -1,4 +1,4 @@
-function crearMensaje(titulo, mensaje, clase, txtBtn) {
+function crearMensaje(titulo, mensaje, clase, txtBtn, funcion) {
     let contenedor = document.getElementById("mensajes");
     contenedor.classList.add("mostrar");
     contenedor.innerHTML = `
@@ -6,7 +6,7 @@ function crearMensaje(titulo, mensaje, clase, txtBtn) {
             <i class="bi bi-x-circle-fill"></i>
             <h4>${titulo}</h4>
             <p>${mensaje}</p>
-            <button class="btn" style="background-color: ${clase} !important;">${txtBtn}</button>
+            <button class="btn" id="btnAccionPanel" style="background-color: ${clase} !important'">${txtBtn}</button>
 
         </div>
     `;
