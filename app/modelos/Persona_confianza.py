@@ -12,6 +12,8 @@ class PersonaConfianza(db.Model):
 
     usuario = db.relationship('Usuario', back_populates='personas_confianza')
 
+    eliminado = db.Column(db.Boolean, default=False)
+
     def to_dict(self):
         return {
             "id": self.id,

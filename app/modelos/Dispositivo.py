@@ -27,6 +27,8 @@ class Dispositivo(db.Model):
         foreign_keys=[id_gestor]
     )
 
+    eliminado = db.Column(db.Boolean, default=False)
+
     def to_dict(self):
         return {
             "id": self.id,

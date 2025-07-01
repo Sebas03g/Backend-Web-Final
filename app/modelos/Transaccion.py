@@ -14,6 +14,8 @@ class Transaccion(db.Model):
 
     caracteristicas_usuario = db.relationship('Caracteristica_Usuario', back_populates='transaccion')
 
+    eliminado = db.Column(db.Boolean, default=False)
+
     def to_dict(self):
         return {
             "id": self.id,

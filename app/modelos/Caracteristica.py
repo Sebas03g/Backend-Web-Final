@@ -12,6 +12,8 @@ class Caracteristica(db.Model):
     caracteristicas_usuario = db.relationship("Caracteristica_Usuario", back_populates='caracteristica')
     caracteristicas_plan = db.relationship("Caracteristica_Plan", back_populates='caracteristica')
 
+    eliminado = db.Column(db.Boolean, default=False)
+
     def to_dict(self):
         return {
             "id": self.id,

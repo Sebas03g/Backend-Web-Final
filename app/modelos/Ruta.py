@@ -10,6 +10,8 @@ class Ruta(db.Model):
 
     usuario = db.relationship('Usuario', back_populates='rutas')
     puntos = db.relationship('Punto', back_populates='ruta')
+
+    eliminado = db.Column(db.Boolean, default=False)
     
     def to_dict(self):
         return {

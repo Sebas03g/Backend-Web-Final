@@ -11,6 +11,8 @@ class Plan(db.Model):
     transacciones = db.relationship("Transaccion", back_populates='plan')
     caracteristicas_plan = db.relationship("Caracteristica_Plan", back_populates="plan")
 
+    eliminado = db.Column(db.Boolean, default=False)
+
     def to_dict(self):
         return {
             "id": self.id,

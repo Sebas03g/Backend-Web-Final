@@ -14,6 +14,8 @@ class Ubicacion(db.Model):
     usuario = db.relationship('Usuario', back_populates='ubicaciones_creadas')
     punto = db.relationship('Punto', back_populates='ubicaciones')
 
+    eliminado = db.Column(db.Boolean, default=False)
+
     def to_dict(self):
         return {
             "id": self.id,

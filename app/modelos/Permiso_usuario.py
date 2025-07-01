@@ -10,6 +10,8 @@ class PermisoUsuario(db.Model):
     dispositivo = db.relationship('Dispositivo', back_populates='permisos_usuario')
     permisos = db.relationship('Permiso', back_populates='permiso_usuario')
 
+    eliminado = db.Column(db.Boolean, default=False)
+
     def to_dict(self):
         return {
             "id": self.id,

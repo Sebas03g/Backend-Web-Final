@@ -18,6 +18,8 @@ class Caracteristica_Usuario(db.Model):
         db.UniqueConstraint('id_caracteristica', 'id_usuario', name='uix_caracteristica_usuario'),
     )
 
+    eliminado = db.Column(db.Boolean, default=False)
+
     def to_dict(self):
         return {
             "id": self.id,

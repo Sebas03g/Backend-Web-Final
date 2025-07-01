@@ -24,6 +24,8 @@ class Usuario(db.Model):
     dispositivos_gestionados = db.relationship('Dispositivo', back_populates='gestor', foreign_keys='Dispositivo.id_gestor')
     dispositivos_asignados = db.relationship('Dispositivo', back_populates='usuario_asignado', foreign_keys='Dispositivo.id_usuario')
 
+    eliminado = db.Column(db.Boolean, default=False)
+    
     def to_dict(self):
         return {
             "id": self.id,

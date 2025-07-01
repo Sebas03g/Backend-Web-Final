@@ -11,6 +11,8 @@ class Tarjeta(db.Model):
     transacciones = db.relationship("Transaccion", backref='tarjeta')
     usuarios = db.relationship('Usuario', secondary=usuario_tarjeta, back_populates='tarjetas')
 
+    eliminado = db.Column(db.Boolean, default=False)
+
     def to_dict(self):
         return {
             "id": self.id,

@@ -49,7 +49,7 @@ class BaseRepo:
             objeto = self.tipoObjeto.query.get(id)
             if not objeto:
                 return None
-            db.session.delete(objeto)
+            setattr(objeto, "eliminado", True)
             db.session.commit()
             return objeto
         except SQLAlchemyError as e:
