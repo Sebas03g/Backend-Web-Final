@@ -1,4 +1,4 @@
-import { createData } from "../fetch/sentenciasFetch";
+import { createData } from "../fetch/sentenciasFetch.js";
 
 
 export async function gestorPersonaConfianza(id=null){

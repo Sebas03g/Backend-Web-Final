@@ -4,7 +4,6 @@ import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import { slideDownElementos } from '../general/utilidades.js';
 import * as validar from './validacion.js';
 import {getAllData, getDataById} from '../fetch/sentenciasFetch.js'
-
 import { fetchUserData } from '../fetch/fetchUserData.js';
 
 import { gestorPersonaConfianza } from '../data/GestionarPersonaConfianza.js';

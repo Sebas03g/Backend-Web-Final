@@ -6,7 +6,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseUpload
 
 image_routes = Blueprint('image', __name__)
-
+"""
 SERVICE_ACCOUNT_FILE = 'credentials.json'
 SCOPES = ['https://www.googleapis.com/auth/drive.file'] 
 credentials = service_account.Credentials.from_service_account_file(
@@ -33,3 +33,4 @@ def upload():
         file_url = f"https://drive.google.com/uc?id={file_id}"
         return {'success': True, 'url': file_url}
     return {'success': False}, 400
+"""

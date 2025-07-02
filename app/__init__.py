@@ -19,7 +19,7 @@ from app.routes.PermisoRoute import permiso_routes
 from app.routes.TemplateRoutes import main_routes
 from app.routes.MailRoute import mail_routes
 from app.routes.CodigoRoutes import codigo_routes
-from app.routes.UploadImageRoute import upload
+#from app.routes.UploadImageRoute import upload
 
 from flask_mail import Mail
 
@@ -50,7 +50,6 @@ def create_app():
     app.register_blueprint(main_routes)
     app.register_blueprint(mail_routes)
     app.register_blueprint(codigo_routes)
-    app.register_blueprint(app)
 
 
     migrate = Migrate(app, db)

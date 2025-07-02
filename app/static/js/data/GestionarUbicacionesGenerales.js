@@ -1,5 +1,5 @@
-import { crearPunto } from "./GestionarPunto";
-import { createData } from "../fetch/sentenciasFetch";
+import { crearPunto } from "./GestionarPunto.js";
+import { createData } from "../fetch/sentenciasFetch.js";
 
 
 export async function gestorUbicacionesGenerales(punto, id=null){
