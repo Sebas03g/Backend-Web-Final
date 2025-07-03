@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_jwt_extended import JWTManager
 from app.config.database import create_db, db
 from app.config.mail import create_mail
 from app.routes.PlanRoute import plan_routes
@@ -29,7 +30,8 @@ mail = Mail()
 def create_app():
     app = Flask(__name__)
     db = create_db(app)
-
+    app.config['JWT_SECRET_KEY'] = 'clave-secreta-super-segura'
+    jwt = JWTManager(app)
     mail = create_mail(app)
 
     app.register_blueprint(ubicacion_routes.get_blueprint())
