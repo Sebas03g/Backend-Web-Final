@@ -5,6 +5,6 @@ from app.repository.BaseRepo import BaseRepo
 from app.routes.BaseRoutes import BaseRoutes
 
 controller = BaseController(UbicacionUsuario, BaseRepo)
-ubicacion_usuario_routes = BaseRoutes('ubicacion_usuario', controller)
+ubicacion_usuario_routes = BaseRoutes('ubicacion-usuario', controller)
 
 bp = ubicacion_usuario_routes.get_blueprint()
