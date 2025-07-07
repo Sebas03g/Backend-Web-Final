@@ -1,0 +1,23 @@
+digraph "packages_Modelos" {
+rankdir=BT
+charset="utf-8"
+"app.modelos" [color="black", label=<app.modelos>, shape="box", style="solid"];
+"app.modelos.Caracteristica" [color="black", label=<app.modelos.Caracteristica>, shape="box", style="solid"];
+"app.modelos.Caracteristica_Plan" [color="black", label=<app.modelos.Caracteristica_Plan>, shape="box", style="solid"];
+"app.modelos.Caracteristica_Usuario" [color="black", label=<app.modelos.Caracteristica_Usuario>, shape="box", style="solid"];
+"app.modelos.Dispositivo" [color="black", label=<app.modelos.Dispositivo>, shape="box", style="solid"];
+"app.modelos.Permiso" [color="black", label=<app.modelos.Permiso>, shape="box", style="solid"];
+"app.modelos.Permiso_usuario" [color="black", label=<app.modelos.Permiso_usuario>, shape="box", style="solid"];
+"app.modelos.Persona_confianza" [color="black", label=<app.modelos.Persona_confianza>, shape="box", style="solid"];
+"app.modelos.Plan" [color="black", label=<app.modelos.Plan>, shape="box", style="solid"];
+"app.modelos.Punto" [color="black", label=<app.modelos.Punto>, shape="box", style="solid"];
+"app.modelos.Ruta" [color="black", label=<app.modelos.Ruta>, shape="box", style="solid"];
+"app.modelos.Tarjeta" [color="black", label=<app.modelos.Tarjeta>, shape="box", style="solid"];
+"app.modelos.Transaccion" [color="black", label=<app.modelos.Transaccion>, shape="box", style="solid"];
+"app.modelos.Ubicacion" [color="black", label=<app.modelos.Ubicacion>, shape="box", style="solid"];
+"app.modelos.Ubicacion_usuario" [color="black", label=<app.modelos.Ubicacion_usuario>, shape="box", style="solid"];
+"app.modelos.Usuario" [color="black", label=<app.modelos.Usuario>, shape="box", style="solid"];
+"app.modelos.associations" [color="black", label=<app.modelos.associations>, shape="box", style="solid"];
+"app.modelos.Tarjeta" -> "app.modelos.associations" [arrowhead="open", arrowtail="none"];
+"app.modelos.Usuario" -> "app.modelos.associations" [arrowhead="open", arrowtail="none"];
+}

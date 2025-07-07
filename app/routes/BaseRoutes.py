@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_jwt_extended import jwt_required
 
 class BaseRoutes:
-    def __init__(self, name, controller, url_prefix=None, protegido=True):
+    def __init__(self, name, controller, url_prefix=None, protegido=False):
         self.bp = Blueprint(name, __name__, url_prefix=url_prefix or f'/{name}')
         self.controller = controller
 

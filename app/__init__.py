@@ -53,10 +53,7 @@ def create_app():
     app.register_blueprint(mail_routes)
     app.register_blueprint(codigo_routes)
 
-
     migrate = Migrate(app, db)
-
-
 
     with app.app_context():
         db.create_all()
