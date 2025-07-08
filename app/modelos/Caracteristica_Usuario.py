@@ -29,6 +29,7 @@ class Caracteristica_Usuario(db.Model):
             "id_transaccion": self.id_transaccion,
             "caracteristica": self.caracteristica.to_dict() if self.caracteristica else None,
             "usuario": self.usuario.to_dict() if self.usuario else None,
-            "transaccion": self.transaccion.to_dict() if self.transaccion else None
+            "transaccion": self.transaccion.to_dict() if self.transaccion else None,
+            "eliminado": self.eliminado,
         }
 

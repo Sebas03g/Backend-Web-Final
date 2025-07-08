@@ -11,6 +11,7 @@ class Transaccion(db.Model):
 
     usuario = db.relationship('Usuario', back_populates='transacciones')  # <-- Aquí la relación
     plan = db.relationship('Plan', back_populates="transacciones")
+    tarjeta = db.relationship('Tarjeta', back_populates='transacciones')
 
     caracteristicas_usuario = db.relationship('Caracteristica_Usuario', back_populates='transaccion')
 
@@ -25,4 +26,5 @@ class Transaccion(db.Model):
             "fecha": self.fecha,
             "usuario": self.usuario.to_dict() if self.usuario else None,
             "caracteristicas_usuario": [c.to_dict() for c in self.caracteristicas_usuario],
+            "eliminado": self.eliminado,
         }

@@ -10,7 +10,7 @@ class Plan(db.Model):
 
     transacciones = db.relationship("Transaccion", back_populates='plan')
     caracteristicas_plan = db.relationship("Caracteristica_Plan", back_populates="plan")
-
+    usuarios = db.relationship("Usuario", back_populates='plan')
     eliminado = db.Column(db.Boolean, default=False)
 
     def to_dict(self):
@@ -20,5 +20,6 @@ class Plan(db.Model):
             "descripcion": self.descripcion,
             "precio": float(self.precio),
             "transacciones": [t.to_dict() for t in self.transacciones],
-            "caracteristicas_plan": [c.to_dict() for c in self.caracteristicas_plan]
+            "caracteristicas_plan": [c.to_dict() for c in self.caracteristicas_plan],
+            "eliminado": self.eliminado,
         }

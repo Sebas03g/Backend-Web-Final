@@ -7,7 +7,6 @@ class Permiso(db.Model):
     nombre = db.Column(db.String, nullable=False)
     descripcion = db.Column(db.Text)
     id_permiso_usuario = db.Column(db.Integer, db.ForeignKey('Permiso_usuario.id'))
-    id_gestor_permiso = db.Column(db.Integer, db.ForeignKey('Usuario.id'))
 
     permiso_usuario = db.relationship('PermisoUsuario', back_populates='permisos')
 
@@ -23,5 +22,6 @@ class Permiso(db.Model):
             "gestor": {
                 "id": self.gestor.id,
                 "nombre_completo": self.gestor.nombre_completo
-            } if self.gestor else None
+            } if self.gestor else None,
+            "eliminado": self.eliminado,
         }

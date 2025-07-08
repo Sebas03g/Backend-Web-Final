@@ -25,7 +25,8 @@ class Caracteristica_Plan(db.Model):
             "id_caracteristica": self.id_caracteristica,
             "id_plan": self.id_plan,
             "caracteristica": self.caracteristica.to_dict() if self.caracteristica else None,
-            "plan": self.plan.to_dict() if self.plan else None
+            "plan": self.plan.to_dict() if self.plan else None,
+            "eliminado": self.eliminado,
         }
 
 

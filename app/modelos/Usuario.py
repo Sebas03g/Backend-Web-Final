@@ -13,6 +13,8 @@ class Usuario(db.Model):
     monitoreo = db.Column(db.Boolean, nullable=False)
     es_monitoreo = db.Column(db.Boolean, nullable=False)
     imagen = db.Column(db.String(150), nullable=False)
+    eliminado = db.Column(db.Boolean, default=False)
+    id_plan = db.Column(db.Integer, db.ForeignKey('Plan.id', ondelete='SET NULL'), nullable=True)
 
     transacciones = db.relationship("Transaccion", back_populates='usuario')
     caracteristicas_usuario = db.relationship("Caracteristica_Usuario", back_populates='usuario')
@@ -23,15 +25,8 @@ class Usuario(db.Model):
     personas_confianza = db.relationship('PersonaConfianza', back_populates='usuario')
     dispositivos_gestionados = db.relationship('Dispositivo', back_populates='gestor', foreign_keys='Dispositivo.id_gestor')
     dispositivos_asignados = db.relationship('Dispositivo', back_populates='usuario_asignado', foreign_keys='Dispositivo.id_usuario')
-
-    permisos_gestionados = db.relationship(
-        'Permiso',
-        backref='gestor',
-        foreign_keys='Permiso.id_gestor_permiso'
-    )
-
-
-    eliminado = db.Column(db.Boolean, default=False)
+    permisos_gestionados = db.relationship('PermisoUsuario', back_populates='usuario')
+    plan = db.relationship('Plan', back_populates="usuarios")
 
     def to_dict(self):
         return {
@@ -43,6 +38,9 @@ class Usuario(db.Model):
             "contrasena_hash": self.contrasena_hash,
             "monitoreo": self.monitoreo,
             "es_monitoreo": self.es_monitoreo,
+            "imagen": self.imagen,
+            "eliminado": self.eliminado,
+            "id_plan": self.id_plan,
             "transacciones": [t.to_dict() for t in self.transacciones],
             "caracteristicas_usuario": [c.to_dict() for c in self.caracteristicas_usuario],
             "tarjetas": [t.to_dict() for t in self.tarjetas],
@@ -53,6 +51,8 @@ class Usuario(db.Model):
             "personas_confianza": [p.to_dict() for p in self.personas_confianza],
             "dispositivos_gestionados": [d.to_dict() for d in self.dispositivos_gestionados],
             "dispositivos_asignados": [d.to_dict() for d in self.dispositivos_asignados],
+            "plan": self.plan.to_dict() if self.plan else None,
+            "eliminado": self.eliminado,
         }
 
     def to_dict_resumido(self):
@@ -61,5 +61,6 @@ class Usuario(db.Model):
             "nombre_completo": self.nombre_completo,
             "correo_electronico": self.correo_electronico,
             "telefono": self.telefono,
-            "fecha_nacimiento": self.fecha_nacimiento.isoformat() if self.fecha_nacimiento else None
+            "fecha_nacimiento": self.fecha_nacimiento.isoformat() if self.fecha_nacimiento else None,
+            "eliminado": self.eliminado,
         }

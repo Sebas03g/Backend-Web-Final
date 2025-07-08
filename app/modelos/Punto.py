@@ -1,4 +1,5 @@
 from ..config.database import db
+from .associations import ruta_punto
 
 class Punto(db.Model):
     __tablename__ = 'Punto'
@@ -9,7 +10,7 @@ class Punto(db.Model):
     hora = db.Column(db.DateTime, nullable=True)
     id_ruta = db.Column(db.Integer, db.ForeignKey('Ruta.id'), nullable=True)
 
-    ruta = db.relationship('Ruta', back_populates='puntos')
+    rutas = db.relationship('Ruta', secondary=ruta_punto, back_populates='puntos')
     ubicaciones_usuario = db.relationship('UbicacionUsuario', back_populates='punto')
     ubicaciones = db.relationship('Ubicacion', back_populates='punto')
 
@@ -24,6 +25,7 @@ class Punto(db.Model):
             "id_ruta": self.id_ruta,
             "ruta": self.ruta.to_dict() if self.ruta else None,
             "ubicaciones_usuario": [u.to_dict() for u in self.ubicaciones_usuario],
-            "ubicaciones": [u.to_dict() for u in self.ubicaciones]
+            "ubicaciones": [u.to_dict() for u in self.ubicaciones],
+            "eliminado": self.eliminado,
         }
 

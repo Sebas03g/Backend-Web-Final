@@ -22,6 +22,7 @@ class PersonaConfianza(db.Model):
             "descripcion": self.descripcion,
             "id_usuario": self.id_usuario,
             "usuario": self.usuario.to_dict() if self.usuario else None,
-            "imagen": self.imagen
+            "imagen": self.imagen,
+            "eliminado": self.eliminado,
         }
 

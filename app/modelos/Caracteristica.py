@@ -22,5 +22,6 @@ class Caracteristica(db.Model):
             "unidad_valor": self.unidad_valor,
             "valor": self.valor,
             "caracteristicas_usuario": [c for c in self.caracteristicas_usuario],
-            "caracteristicas_plan": [c for c in self.caracteristicas_plan]
+            "caracteristicas_plan": [c for c in self.caracteristicas_plan],
+            "eliminado": self.eliminado,
         }
