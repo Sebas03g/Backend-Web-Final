@@ -21,7 +21,7 @@ def signup():
                     eliminado = data['eliminado'],
                     id_plan = data['id_plan'],
                    )
-    user.set_password(data['password'])
+    user.set_password(data['contrasena_hash'])
     db.session.add(user)
     db.session.commit()
     return jsonify({"message": "Usuario creado exitosamente"}), 201

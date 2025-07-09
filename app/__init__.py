@@ -24,13 +24,21 @@ from app.routes.authRoutes import auth
 #from app.routes.UploadImageRoute import upload
 
 from flask_mail import Mail
+from flask_cors import CORS
+from flask_talisman import Talisman
+import os
 
 from flask_migrate import Migrate
 mail = Mail()
 
 def create_app():
     app = Flask(__name__)
+
+    app.secret_key = os.urandom(24)
+
     db = create_db(app)
+    CORS(app)
+    talisman = Talisman(app)
     app.config['JWT_SECRET_KEY'] = 'clave-secreta-super-segura'
     jwt = JWTManager(app)
     mail = create_mail(app)

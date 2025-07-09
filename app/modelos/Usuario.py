@@ -29,20 +29,21 @@ class Usuario(db.Model):
     plan = db.relationship('Plan', back_populates="usuarios")
 
     def set_password(self, password):
-        self.password_hash = self.generate_password_hash(password)
+        self.contrasena_hash = self.generate_password_hash(password)
 
     def check_password(self, password):
-        return self.check_password_hash(self.password_hash, password)
+        return self.check_password_hash(self.contrasena_hash, password)
     
-    def generate_password_hash(self,password):
-        data = bytes(password)
+    def generate_password_hash(self, password):
+        data = bytes(password, 'utf-8')
         sha256_hash = hashlib.sha256(data).hexdigest()
         return sha256_hash
-    
+
     def check_password_hash(self, true_password, password):
-        data = bytes(password)
+        data = bytes(password, 'utf-8')
         sha256_hash = hashlib.sha256(data).hexdigest()
         return sha256_hash == true_password
+
 
     def to_dict(self):
         return {
