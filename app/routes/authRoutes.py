@@ -1,5 +1,7 @@
-from flask import Blueprint, request, jsonify, session
+import datetime
+from flask import Blueprint, request, jsonify, session, current_app
 from app import db
+import jwt
 from app.modelos.Usuario import Usuario
 
 auth = Blueprint('auth', __name__)
@@ -11,7 +13,7 @@ def signup():
         return jsonify({"message": "Correo ya registrado"}), 400
     user = Usuario(nombre_completo = data['nombre_completo'],
                     correo_electronico=data['correo_electronico'],
-                    telefono = data['correo_electronico'],
+                    telefono = data['telefono'],
                     fecha_nacimiento = data['fecha_nacimiento'],
                     monitoreo = data['monitoreo'],
                     es_monitoreo = data['es_monitoreo'],
@@ -30,5 +32,17 @@ def login():
     user = Usuario.query.filter_by(correo_electronico=data['correo_electronico']).first()
     if user and user.check_password(data['password']):
         session['user_id'] = user.id
-        return jsonify({"message": "Inicio de Sesión Exitoso"}), 200
+        clave = current_app.config['JWT_SECRET_KEY']
+
+        token = jwt.encode({
+            'id': user.id,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=10)
+        }, clave, algorithm='HS256')
+
+        return jsonify({
+            "message": "Inicio de Sesión Exitoso",
+            "token": token,
+            "usuario": user.to_dict_resumido()
+        }), 200
+
     return jsonify({"message": "Credenciales Inválidas"}), 401
