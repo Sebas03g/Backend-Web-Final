@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import verify_jwt_in_request
 
 class BaseRoutes:
     def __init__(self, name, controller, url_prefix=None, protegido=False):
@@ -7,8 +7,11 @@ class BaseRoutes:
         self.controller = controller
 
         if protegido:
-            self.bp.before_request(jwt_required())
+            @self.bp.before_request
+            def check_jwt():
+                verify_jwt_in_request()  # ✅ Valida JWT sin usar como decorador
 
+        # Rutas CRUD
         self.bp.add_url_rule('/', methods=['POST'], view_func=self.controller.create)
         self.bp.add_url_rule('/', methods=['GET'], view_func=self.controller.getAll)
         self.bp.add_url_rule('/<int:id>', methods=['GET'], view_func=self.controller.getById)
@@ -19,7 +22,6 @@ class BaseRoutes:
         if isinstance(methods, str):
             methods = [methods]
         self.bp.add_url_rule(url, methods=methods, view_func=funcion)
-
 
     def get_blueprint(self):
         return self.bp

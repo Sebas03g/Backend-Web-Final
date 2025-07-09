@@ -9,7 +9,7 @@ class Usuario(db.Model):
     correo_electronico = db.Column(db.String(150), nullable=False)
     telefono = db.Column(db.String(10), nullable=False)
     fecha_nacimiento = db.Column(db.DateTime, nullable=False)
-    contrasena_hash = db.Column(db.String(150), nullable=False)
+    contrasena_hash = db.Column(db.Text, nullable=False)
     monitoreo = db.Column(db.Boolean, nullable=False)
     es_monitoreo = db.Column(db.Boolean, nullable=False)
     imagen = db.Column(db.String(150), nullable=False)

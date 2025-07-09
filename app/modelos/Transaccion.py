@@ -24,7 +24,18 @@ class Transaccion(db.Model):
             "id_tarjeta": self.id_tarjeta,
             "id_plan": self.id_plan,
             "fecha": self.fecha,
-            "usuario": self.usuario.to_dict() if self.usuario else None,
-            "caracteristicas_usuario": [c.to_dict() for c in self.caracteristicas_usuario],
+            "usuario": self.usuario.to_dict_resumido() if self.usuario else None,
+            "caracteristicas_usuario": [c.to_dict_resumido() for c in self.caracteristicas_usuario],
+            "eliminado": self.eliminado,
+        }
+
+    def to_dict_resumido(self):
+        return {
+            "id": self.id,
+            "id_usuario": self.id_usuario,
+            "id_tarjeta": self.id_tarjeta,
+            "id_plan": self.id_plan,
+            "fecha": self.fecha,
+            "usuario": self.usuario.to_dict_resumido() if self.usuario else None,
             "eliminado": self.eliminado,
         }

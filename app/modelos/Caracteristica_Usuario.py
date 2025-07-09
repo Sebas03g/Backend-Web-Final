@@ -27,9 +27,22 @@ class Caracteristica_Usuario(db.Model):
             "id_caracteristica": self.id_caracteristica,
             "id_usuario": self.id_usuario,
             "id_transaccion": self.id_transaccion,
-            "caracteristica": self.caracteristica.to_dict() if self.caracteristica else None,
-            "usuario": self.usuario.to_dict() if self.usuario else None,
-            "transaccion": self.transaccion.to_dict() if self.transaccion else None,
+            "caracteristica": self.caracteristica.to_dict_resumido() if self.caracteristica else None,
+            "usuario": self.usuario.to_dict_resumido() if self.usuario else None,
+            "transaccion": self.transaccion.to_dict_resumido() if self.transaccion else None,
             "eliminado": self.eliminado,
         }
+
+    def to_dict_resumido(self):
+        return {
+            "id": self.id,
+            "valor": float(self.valor),
+            "id_caracteristica": self.id_caracteristica,
+            "id_usuario": self.id_usuario,
+            "id_transaccion": self.id_transaccion,
+            "caracteristica": self.caracteristica.to_dict_resumido() if self.caracteristica else None,
+            "usuario": self.usuario.to_dict_resumido() if self.usuario else None,
+            "eliminado": self.eliminado,
+        }
+        
 

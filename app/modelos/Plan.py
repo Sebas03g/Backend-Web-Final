@@ -23,3 +23,12 @@ class Plan(db.Model):
             "caracteristicas_plan": [c.to_dict() for c in self.caracteristicas_plan],
             "eliminado": self.eliminado,
         }
+    
+    def to_dict_resumido(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "descripcion": self.descripcion,
+            "precio": float(self.precio),
+            "eliminado": self.eliminado,
+        }

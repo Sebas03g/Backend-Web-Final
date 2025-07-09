@@ -27,12 +27,12 @@ def upgrade():
     with op.batch_alter_table('Caracteristica_Usuario', schema=None) as batch_op:
         batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
 
-    with op.batch_alter_table('Dispositivo', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('cedula', sa.String(length=10), nullable=False))
-        batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
+    #with op.batch_alter_table('Dispositivo', schema=None) as batch_op:
+        #batch_op.add_column(sa.Column('cedula', sa.String(length=10), nullable=False))
+        #batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
 
     with op.batch_alter_table('Permiso', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
+        #batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
         batch_op.drop_constraint('Permiso_id_gestor_permiso_fkey', type_='foreignkey')
         batch_op.drop_constraint('Permiso_id_permiso_usuario_fkey', type_='foreignkey')
         batch_op.drop_column('id_permiso_usuario')
@@ -41,7 +41,7 @@ def upgrade():
     with op.batch_alter_table('Permiso_usuario', schema=None) as batch_op:
         batch_op.add_column(sa.Column('id_usuario', sa.Integer(), nullable=False))
         batch_op.add_column(sa.Column('id_permiso', sa.Integer(), nullable=False))
-        batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
+        #batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
         batch_op.create_foreign_key(None, 'Usuario', ['id_usuario'], ['id'])
         batch_op.create_foreign_key(None, 'Permiso', ['id_permiso'], ['id'])
 
@@ -50,14 +50,14 @@ def upgrade():
 
     with op.batch_alter_table('Punto', schema=None) as batch_op:
         batch_op.add_column(sa.Column('lng', sa.Float(), nullable=False))
-        batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
+        #batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
         batch_op.alter_column('hora',
                existing_type=postgresql.TIMESTAMP(),
                nullable=True)
         batch_op.drop_column('long')
 
-    with op.batch_alter_table('Ruta', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
+    #with op.batch_alter_table('Ruta', schema=None) as batch_op:
+    #    batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
 
     with op.batch_alter_table('Tarjeta', schema=None) as batch_op:
         batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
@@ -65,19 +65,19 @@ def upgrade():
     with op.batch_alter_table('Transaccion', schema=None) as batch_op:
         batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
 
-    with op.batch_alter_table('Ubicacion', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
+    #with op.batch_alter_table('Ubicacion', schema=None) as batch_op:
+    #    batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
 
-    with op.batch_alter_table('Ubicacion_usuario', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
+    #with op.batch_alter_table('Ubicacion_usuario', schema=None) as batch_op:
+    #    batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
 
     with op.batch_alter_table('Usuario', schema=None) as batch_op:
         batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
         batch_op.add_column(sa.Column('id_plan', sa.Integer(), nullable=True))
         batch_op.create_foreign_key(None, 'Plan', ['id_plan'], ['id'], ondelete='SET NULL')
 
-    with op.batch_alter_table('persona_confianza', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
+    #with op.batch_alter_table('persona_confianza', schema=None) as batch_op:
+    #    batch_op.add_column(sa.Column('eliminado', sa.Boolean(), nullable=True))
 
     # ### end Alembic commands ###
 
