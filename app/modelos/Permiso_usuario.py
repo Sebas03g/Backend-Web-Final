@@ -5,14 +5,11 @@ class PermisoUsuario(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     id_dispositivo = db.Column(db.Integer, db.ForeignKey('Dispositivo.id'), nullable=False)
-    id_usuario = db.Column(db.Integer, db.ForeignKey('Usuario.id'), nullable=False)
     id_permiso = db.Column(db.Integer, db.ForeignKey('Permiso.id'), nullable=False)
     nivel = db.Column(db.Integer, nullable=False)
 
     dispositivo = db.relationship('Dispositivo', back_populates='permisos_usuario')
-    usuario = db.relationship('Usuario', back_populates='permisos_gestionados')
-    permisos = db.relationship('Permiso', back_populates='permiso_usuario')
-
+    permiso = db.relationship('Permiso', back_populates='permisos_usuario')
 
     eliminado = db.Column(db.Boolean, default=False)
 
@@ -21,8 +18,7 @@ class PermisoUsuario(db.Model):
             "id": self.id,
             "id_dispositivo": self.id_dispositivo,
             "nivel": self.nivel,
-            "dispositivo": self.dispositivo if self.dispositivo else None,
-            "usuario": self.usuario if self.usuario else None,
-            "permisos": [permiso.to_dict() for permiso in self.permisos],
+            "dispositivo": self.dispositivo.to_dict() if self.dispositivo else None,
+            "permiso": self.permiso.to_dict() if self.permiso else None,
             "eliminado": self.eliminado,
         }

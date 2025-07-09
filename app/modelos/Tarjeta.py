@@ -8,7 +8,7 @@ class Tarjeta(db.Model):
     mes_expiracion = db.Column(db.Integer, nullable = False)
     anio_expiracion = db.Column(db.Integer, nullable = False)
 
-    transacciones = db.relationship("Transaccion", backref='tarjeta')
+    transacciones = db.relationship("Transaccion", back_populates='tarjeta')
     usuarios = db.relationship('Usuario', secondary=usuario_tarjeta, back_populates='tarjetas')
 
     eliminado = db.Column(db.Boolean, default=False)

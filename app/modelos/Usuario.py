@@ -25,7 +25,6 @@ class Usuario(db.Model):
     personas_confianza = db.relationship('PersonaConfianza', back_populates='usuario')
     dispositivos_gestionados = db.relationship('Dispositivo', back_populates='gestor', foreign_keys='Dispositivo.id_gestor')
     dispositivos_asignados = db.relationship('Dispositivo', back_populates='usuario_asignado', foreign_keys='Dispositivo.id_usuario')
-    permisos_gestionados = db.relationship('PermisoUsuario', back_populates='usuario')
     plan = db.relationship('Plan', back_populates="usuarios")
 
     def to_dict(self):
