@@ -44,7 +44,6 @@ class Usuario(db.Model):
             "caracteristicas_usuario": [c.to_dict() for c in self.caracteristicas_usuario],
             "tarjetas": [t.to_dict() for t in self.tarjetas],
             "ubicaciones": [u.to_dict() for u in self.ubicaciones],
-            "permisos_gestionados": [p.to_dict() for p in self.permisos_gestionados],
             "ubicaciones_creadas": [u.to_dict() for u in self.ubicaciones_creadas],
             "rutas": [r.to_dict() for r in self.rutas],
             "personas_confianza": [p.to_dict() for p in self.personas_confianza],
