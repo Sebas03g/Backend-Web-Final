@@ -1,6 +1,7 @@
 from ..config.database import db
 from sqlalchemy import Numeric
 from .associations import usuario_tarjeta
+import hashlib
 
 class Usuario(db.Model):
     __tablename__ = 'Usuario'
@@ -26,6 +27,22 @@ class Usuario(db.Model):
     dispositivos_gestionados = db.relationship('Dispositivo', back_populates='gestor', foreign_keys='Dispositivo.id_gestor')
     dispositivos_asignados = db.relationship('Dispositivo', back_populates='usuario_asignado', foreign_keys='Dispositivo.id_usuario')
     plan = db.relationship('Plan', back_populates="usuarios")
+
+    def set_password(self, password):
+        self.password_hash = self.generate_password_hash(password)
+
+    def check_password(self, password):
+        return self.check_password_hash(self.password_hash, password)
+    
+    def generate_password_hash(self,password):
+        data = bytes(password)
+        sha256_hash = hashlib.sha256(data).hexdigest()
+        return sha256_hash
+    
+    def check_password_hash(self, true_password, password):
+        data = bytes(password)
+        sha256_hash = hashlib.sha256(data).hexdigest()
+        return sha256_hash == true_password
 
     def to_dict(self):
         return {
