@@ -1,10 +1,11 @@
-from flask_mail import Message
 from flask import Blueprint, request, jsonify
-from app.config.mail import mail
+from app.services.sendMail import enviar_correo
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 mail_routes = Blueprint('mail', __name__)
 
 @mail_routes.route('/send-email', methods=['POST'])
+@jwt_required()
 def enviar_correo():
     data = request.get_json()
 
@@ -14,15 +15,11 @@ def enviar_correo():
         cuerpo_texto = data.get('body', '')
         cuerpo_html = data.get('html', '')
 
-        msg = Message(
-            subject=asunto,
-            recipients=[destinatario],
-            body=cuerpo_texto,
-            html=cuerpo_html
-        )
-
-        mail.send(msg)
-        return jsonify({"message": "Correo enviado exitosamente"}), 200
+        if enviar_correo(destinatario, asunto, cuerpo_texto, cuerpo_html): 
+            return jsonify({"message": "Correo enviado exitosamente"}), 200
+        
+        return jsonify({"message": "Error enviado mail"}), 401
+        
 
     except Exception as e:
         return jsonify({"error": f"No se pudo enviar el correo: {str(e)}"}), 500

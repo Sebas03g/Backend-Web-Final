@@ -3,6 +3,7 @@ from flask import Blueprint, request, jsonify, session, current_app
 from app import db
 import jwt
 from app.modelos.Usuario import Usuario
+from app.services.sendMail import enviar_correo
 
 auth = Blueprint('auth', __name__)
 
@@ -24,6 +25,14 @@ def signup():
     user.set_password(data['contrasena_hash'])
     db.session.add(user)
     db.session.commit()
+
+    enviar_correo(
+        to=data["correo_electronico"],
+        subject="Creacion Cuenta Ubikme",
+        body="",
+        html='<h2>Cuenta Creada Exitosamente</h2></br><h3>Te damos la bienvenida a Ubikame!</h3></br><p>Inicia sesión en este enlace: </p><a></a><a href="http://127.0.0.1:5000">Enlace aquí</a>'
+    )
+
     return jsonify({"message": "Usuario creado exitosamente"}), 201
 
 @auth.route('/login', methods=['POST'])
@@ -35,7 +44,7 @@ def login():
         clave = current_app.config['JWT_SECRET_KEY']
 
         token = jwt.encode({
-            'id': user.id,
+            'sub': user.id,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=10)
         }, clave, algorithm='HS256')
 
