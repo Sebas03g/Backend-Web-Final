@@ -20,3 +20,6 @@ class RutaSchema(Schema):
         error_messages={"invalid": "ID de usuario inválido."}
     )
     eliminado = fields.Boolean(missing=False)
+
+    class Meta:
+        partial = True

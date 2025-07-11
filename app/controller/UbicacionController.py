@@ -12,21 +12,25 @@ class UbicacionController(BaseController):
     
     def create(self):
         data = request.json
+        if self.validator != None:
+            valid_data = self.validator().load(data)
+        else:
+            valid_data = data
         try:
             punto = self.repoPunto.create({
-                "lat": data["lat"],
-                "lng": data["lng"]
+                "lat": valid_data["lat"],
+                "lng": valid_data["lng"]
             })
 
             nueva_ubicacion = {
-                "nombre_ubicacion": data["nombre_ubicacion"],
-                "descripcion": data["descripcion"],
-                "tipo": data["tipo"],
-                "nivel": data["nivel"],
-                "id_usuario": data["id_usuario"],
+                "nombre_ubicacion": valid_data["nombre_ubicacion"],
+                "descripcion": valid_data["descripcion"],
+                "tipo": valid_data["tipo"],
+                "nivel": valid_data["nivel"],
+                "id_usuario": valid_data["id_usuario"],
                 "id_punto": punto.id,
             }
-            usuario = self.repoUsuario.getById(data["id_usuario"])
+            usuario = self.repoUsuario.getById(valid_data["id_usuario"])
             nuevo_objeto = self.repositorio.create(nueva_ubicacion)
             usuario_creador = self.repoUsuario.getById(session.get('user_id'))
 
@@ -34,10 +38,10 @@ class UbicacionController(BaseController):
                 f"<h2>Ubicacion Creada</h2><br>"
                 f"<p>El administrador de su cuenta con correo {usuario_creador.correo_electronico} creó la siguiente ubicación:</p><br>"
                 f"<h3>Datos Ubicación:</h3><br>"
-                f"<p>Nombre: {data['nombre_ubicacion']}</p><br>"
-                f"<p>Descripción: {data['descripcion']}</p><br>"
-                f"<p>Tipo: {data['tipo']}</p><br>"
-                f"<p>Nivel: {data['nivel']}</p><br>"
+                f"<p>Nombre: {valid_data['nombre_ubicacion']}</p><br>"
+                f"<p>Descripción: {valid_data['descripcion']}</p><br>"
+                f"<p>Tipo: {valid_data['tipo']}</p><br>"
+                f"<p>Nivel: {valid_data['nivel']}</p><br>"
             )
 
 
@@ -58,13 +62,17 @@ class UbicacionController(BaseController):
         
     def updatePoint(self, id):
         data = request.json
+        if self.validator != None:
+            valid_data = self.validator().load(data)
+        else:
+            valid_data = data
         try:
             punto = self.repoPunto.create({
-                "lat": data["lat"],
-                "lng": data["lng"]
+                "lat": valid_data["lat"],
+                "lng": valid_data["lng"]
             })
             data_ubicacion = {
-                "id_usuario": data["id_usuario"],
+                "id_usuario": valid_data["id_usuario"],
                 "id_punto": punto.id
             }
             objeto_modificado = self.repositorio.update(id, data_ubicacion)

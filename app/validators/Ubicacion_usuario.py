@@ -27,3 +27,6 @@ class UbicacionUsuarioSchema(Schema):
         }
     )
     eliminado = fields.Boolean(missing=False)
+
+    class Meta:
+        partial = True

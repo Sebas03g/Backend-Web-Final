@@ -10,9 +10,13 @@ class PersonaConfianzaController(BaseController):
     
     def create(self):
         data = request.json
+        if self.validator != None:
+            valid_data = self.validator().load(data)
+        else:
+            valid_data = data
         try:
-            usuario = self.repoUsuario.getById(data["id_usuario"])
-            nuevo_objeto = self.repositorio.create(data)
+            usuario = self.repoUsuario.getById(valid_data["id_usuario"])
+            nuevo_objeto = self.repositorio.create(valid_data)
             usuario_creador = self.repoUsuario.getById(session.get('user_id'))
 
             html= f"<h2>Persona de Confianza Creada</h2></br>"

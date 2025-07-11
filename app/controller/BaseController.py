@@ -1,14 +1,17 @@
 from flask import request, jsonify
 
 class BaseController:
-    def __init__(self, objeto, repositorio, validator):
+    def __init__(self, objeto, repositorio, validator=None):
         self.tipoObjeto = objeto
         self.repositorio = repositorio(objeto)
         self.validator = validator
     
     def create(self):
         data = request.json
-        valid_data = self.validator().load(data)
+        if self.validator != None:
+            valid_data = self.validator().load(data)
+        else:
+            valid_data = data
         try:
             nuevo_objeto = self.repositorio.create(valid_data)
             return jsonify({"id": nuevo_objeto.id, "mensaje": f"{self.tipoObjeto.__name__} creado", "objeto": nuevo_objeto.to_dict() }), 201
@@ -27,8 +30,12 @@ class BaseController:
     
     def update(self, id):
         data = request.json
+        if self.validator != None:
+            valid_data = self.validator().load(data)
+        else:
+            valid_data = data
         try:
-            objeto_modificado = self.repositorio.update(id, data)
+            objeto_modificado = self.repositorio.update(id, valid_data)
             if not objeto_modificado:
                 return jsonify({"error": f"{self.tipoObjeto.__name__} no encontrado"}), 404
             return jsonify({"id": objeto_modificado.id, "mensaje": f"{self.tipoObjeto.__name__} actualizado", "objeto": objeto_modificado.to_dict()}), 200

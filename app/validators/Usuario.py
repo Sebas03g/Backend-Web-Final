@@ -57,3 +57,6 @@ class UsuarioSchema(Schema):
     def validate_fecha_nacimiento(self, value):
         if value > datetime.utcnow():
             raise ValidationError("La fecha de nacimiento no puede ser futura.")
+
+    class Meta:
+        partial = True

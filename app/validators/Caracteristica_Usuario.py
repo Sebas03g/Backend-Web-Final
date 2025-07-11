@@ -32,3 +32,6 @@ class CaracteristicaUsuarioSchema(Schema):
     eliminado = fields.Boolean(
         missing=False
     )
+
+    class Meta:
+        partial = True

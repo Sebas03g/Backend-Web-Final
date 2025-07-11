@@ -26,3 +26,6 @@ class TransaccionSchema(Schema):
         error_messages={"invalid": "ID de plan inválido."}
     )
     eliminado = fields.Boolean(missing=False)
+
+    class Meta:
+        partial = True

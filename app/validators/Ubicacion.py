@@ -35,3 +35,6 @@ class UbicacionSchema(Schema):
         error_messages={"invalid": "ID de punto inválido."}
     )
     eliminado = fields.Boolean(missing=False)
+
+    class Meta:
+        partial = True

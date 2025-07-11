@@ -12,15 +12,19 @@ class TransaccionController(BaseController):
     
     def create(self):
         data = request.json
+        if self.validator != None:
+            valid_data = self.validator().load(data)
+        else:
+            valid_data = data
         try:
             nueva_transaccion = {
-                "id_usuario": data["id_usuario"],
-                "id_tarjeta": data["id_tarjeta"],
-                "id_plan": data["id_plan"],
+                "id_usuario": valid_data["id_usuario"],
+                "id_tarjeta": valid_data["id_tarjeta"],
+                "id_plan": valid_data["id_plan"],
             }
             nuevo_objeto = self.repositorio.create(nueva_transaccion)
             usuario_creador = self.repoUsuario.getById(session.get('user_id'))
-            plan = self.repoPlan.getById(data["id_plan"])
+            plan = self.repoPlan.getById(valid_data["id_plan"])
 
             html= f"<h2>Transaccion Realizada</h2></br>"
             +f"<p>Felicitaciones por tu nuevo plan, {usuario_creador.nombre_completo}.<p></br>"
