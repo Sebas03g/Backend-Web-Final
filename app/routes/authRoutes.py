@@ -14,6 +14,7 @@ def signup():
         return jsonify({"message": "Correo ya registrado"}), 400
     user = Usuario(nombre_completo = data['nombre_completo'],
                     correo_electronico=data['correo_electronico'],
+                    cedula=data["cedula"],
                     telefono = data['telefono'],
                     fecha_nacimiento = data['fecha_nacimiento'],
                     monitoreo = data['monitoreo'],
@@ -55,3 +56,13 @@ def login():
         }), 200
 
     return jsonify({"message": "Credenciales Inválidas"}), 401
+
+@auth.route('/logout', methods=['POST'])
+def logout():
+    if 'user_id' not in session:
+        return jsonify({"message": "No hay sesión activa."}), 400
+
+    session.clear()
+    return jsonify({"message": "Logout exitoso."}), 200
+
+

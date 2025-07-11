@@ -5,8 +5,8 @@ from flask import request, jsonify, session
 from app.services.sendMail import enviar_correo
 
 class UbicacionController(BaseController):
-    def __init__(self, objeto, repositorio, repoPunto):
-        super().__init__(objeto, repositorio)
+    def __init__(self, objeto, repositorio, validator, repoPunto):
+        super().__init__(objeto, repositorio, validator)
         self.repoPunto = repoPunto(Punto)
         self.repoUsuario = repositorio(Usuario)
     
@@ -30,13 +30,16 @@ class UbicacionController(BaseController):
             nuevo_objeto = self.repositorio.create(nueva_ubicacion)
             usuario_creador = self.repoUsuario.getById(session.get('user_id'))
 
-            html= f"<h2>Ubicacion Creada</h2></br>"
-            +f"<p>El administrador de su cuenta con correo {usuario_creador.correo_electronico} creo la siguiente ubicacion:<p></br>"
-            +f"<h3>Datos Ubicacion:</h3></br>"
-            +f"<p>Nombre: {data["nombre_ubicacion"]}</p></br>"
-            +f"<p>Descripcion: {data["descripcion"]}</p></br>"
-            +f"<p>Tipo: {data["tipo"]}</p></br>"
-            +f"<p>Nivel: {data["nivel"]}</p></br>"
+            html = (
+                f"<h2>Ubicacion Creada</h2><br>"
+                f"<p>El administrador de su cuenta con correo {usuario_creador.correo_electronico} creó la siguiente ubicación:</p><br>"
+                f"<h3>Datos Ubicación:</h3><br>"
+                f"<p>Nombre: {data['nombre_ubicacion']}</p><br>"
+                f"<p>Descripción: {data['descripcion']}</p><br>"
+                f"<p>Tipo: {data['tipo']}</p><br>"
+                f"<p>Nivel: {data['nivel']}</p><br>"
+            )
+
 
             enviar_correo(
                 to=usuario_creador.correo_electronico,

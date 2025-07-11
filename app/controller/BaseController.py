@@ -1,14 +1,16 @@
 from flask import request, jsonify
 
 class BaseController:
-    def __init__(self, objeto, repositorio):
+    def __init__(self, objeto, repositorio, validator):
         self.tipoObjeto = objeto
         self.repositorio = repositorio(objeto)
+        self.validator = validator
     
     def create(self):
         data = request.json
+        valid_data = self.validator().load(data)
         try:
-            nuevo_objeto = self.repositorio.create(data)
+            nuevo_objeto = self.repositorio.create(valid_data)
             return jsonify({"id": nuevo_objeto.id, "mensaje": f"{self.tipoObjeto.__name__} creado", "objeto": nuevo_objeto.to_dict() }), 201
         except Exception as e:
             return jsonify({"error": str(e)}), 400

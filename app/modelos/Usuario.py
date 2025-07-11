@@ -8,6 +8,7 @@ class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre_completo = db.Column(db.String(150), nullable=False)
     correo_electronico = db.Column(db.String(150), nullable=False)
+    cedula = db.Column(db.String(10), nullable=False)
     telefono = db.Column(db.String(10), nullable=False)
     fecha_nacimiento = db.Column(db.DateTime, nullable=False)
     contrasena_hash = db.Column(db.Text, nullable=False)

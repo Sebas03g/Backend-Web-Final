@@ -3,8 +3,8 @@ from flask import request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class UsuarioController(BaseController):
-    def __init__(self, objeto, repositorio):
-        super().__init__(objeto, repositorio)
+    def __init__(self, objeto, repositorio,UsuarioSchema):
+        super().__init__(objeto, repositorio,UsuarioSchema)
     
     def create(self):
         data = request.json

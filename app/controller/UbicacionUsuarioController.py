@@ -5,8 +5,8 @@ from flask import request, jsonify, session
 from app.services.sendMail import enviar_correo
 
 class UbicacionUsuarioController(BaseController):
-    def __init__(self, objeto, repositorio, repoPunto):
-        super().__init__(objeto, repositorio)
+    def __init__(self, objeto, repositorio, validator, repoPunto):
+        super().__init__(objeto, repositorio, validator)
         self.repoPunto = repoPunto(Punto)
 
     def create(self):

@@ -1,12 +1,12 @@
 from app.controller.BaseController import BaseController
 from flask import request, jsonify, session
-from app.modelos.Persona_confianza import PersonaConfianza
+from app.modelos.Usuario import Usuario
 from app.services.sendMail import enviar_correo
 
 class PersonaConfianzaController(BaseController):
-    def __init__(self, objeto, repositorio, repoUsuario):
-        super().__init__(objeto, repositorio)
-        self.repoUsuario = repoUsuario(PersonaConfianza)
+    def __init__(self, objeto, repositorio, validator):
+        super().__init__(objeto, repositorio, validator)
+        self.repoUsuario = repositorio(Usuario)
     
     def create(self):
         data = request.json
