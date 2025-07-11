@@ -20,13 +20,13 @@ class UbicacionUsuarioSchema(Schema):
     )
     fecha = fields.DateTime(
         required=False,
-        missing=lambda: datetime.utcnow(),
+        load_default=lambda: datetime.utcnow(),
         format='iso',
         error_messages={
             "invalid": "Formato de fecha inválido, debe ser ISO 8601."
         }
     )
-    eliminado = fields.Boolean(missing=False)
+    eliminado = fields.Boolean(load_default=False)
 
     class Meta:
         partial = True

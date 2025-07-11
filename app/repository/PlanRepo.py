@@ -1,4 +1,3 @@
-from app.modelos.Plan import Plan
 from app.modelos.Caracteristica_Plan import Caracteristica_Plan
 from app.repository.BaseRepo import BaseRepo
 from app.config.database import db
@@ -10,7 +9,7 @@ class PlanRepo(BaseRepo):
     def create(self, data):
         try:
             caracteristicas = data.pop('caracteristicas_plan', [])
-            nuevo_plan = Plan(**data)
+            nuevo_plan = self.tipoObjeto(**data)
             db.session.add(nuevo_plan)
             db.session.flush()
             for c in caracteristicas:

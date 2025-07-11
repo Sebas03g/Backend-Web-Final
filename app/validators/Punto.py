@@ -29,7 +29,7 @@ class PuntoSchema(Schema):
         validate=validate.Range(min=1),
         error_messages={"invalid": "ID de ruta inválido."}
     )
-    eliminado = fields.Boolean(missing=False)
+    eliminado = fields.Boolean(load_default=False)
 
     class Meta:
         partial = True

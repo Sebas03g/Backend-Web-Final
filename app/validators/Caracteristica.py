@@ -38,7 +38,7 @@ class CaracteristicaSchema(Schema):
         }
     )
 
-    eliminado = fields.Boolean(missing=False)
+    eliminado = fields.Boolean(load_default=False)
 
     class Meta:
         partial = True

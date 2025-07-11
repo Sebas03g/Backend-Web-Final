@@ -25,7 +25,7 @@ class TarjetaSchema(Schema):
             "invalid": "Debe ser un entero válido."
         }
     )
-    eliminado = fields.Boolean(missing=False)
+    eliminado = fields.Boolean(load_default=False)
 
     class Meta:
         partial = True

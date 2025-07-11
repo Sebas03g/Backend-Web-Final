@@ -38,7 +38,6 @@ class TransaccionController(BaseController):
                 subject="Cambio de Plan",
                 html=html
             )
-            
 
             return jsonify({
                 "id": nuevo_objeto.id,

@@ -4,7 +4,7 @@ from datetime import datetime
 class TransaccionSchema(Schema):
     fecha = fields.DateTime(
         required=False,
-        missing=lambda: datetime.now(),
+        load_default=lambda: datetime.now(),
         format='iso',
         error_messages={
             "invalid": "Formato de fecha inválido, debe ser ISO 8601."
@@ -25,7 +25,7 @@ class TransaccionSchema(Schema):
         validate=validate.Range(min=1),
         error_messages={"invalid": "ID de plan inválido."}
     )
-    eliminado = fields.Boolean(missing=False)
+    eliminado = fields.Boolean(load_default=False)
 
     class Meta:
         partial = True

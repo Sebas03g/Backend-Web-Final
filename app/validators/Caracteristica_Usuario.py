@@ -30,7 +30,7 @@ class CaracteristicaUsuarioSchema(Schema):
     )
 
     eliminado = fields.Boolean(
-        missing=False
+        load_default=False
     )
 
     class Meta:

@@ -46,7 +46,7 @@ class UbicacionController(BaseController):
 
 
             enviar_correo(
-                to=usuario_creador.correo_electronico,
+                to=[usuario.correo_electronico, usuario_creador.correo_electronico],
                 subject="Creacion de Ubicacion",
                 html=html
             )

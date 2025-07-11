@@ -26,7 +26,7 @@ class PlanSchema(Schema):
             "invalid": "Debe ser un número decimal válido."
         }
     )
-    eliminado = fields.Boolean(missing=False)
+    eliminado = fields.Boolean(load_default=False)
 
     class Meta:
         partial = True

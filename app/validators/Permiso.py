@@ -16,7 +16,7 @@ class PermisoSchema(Schema):
             "invalid": "Debe ser una cadena válida."
         }
     )
-    eliminado = fields.Boolean(missing=False)
+    eliminado = fields.Boolean(load_default=False)
 
     class Meta:
         partial = True

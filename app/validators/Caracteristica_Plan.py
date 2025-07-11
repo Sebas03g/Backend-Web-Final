@@ -21,7 +21,7 @@ class CaracteristicaPlanSchema(Schema):
     )
 
     eliminado = fields.Boolean(
-        missing=False  # por defecto es False si no lo envías
+        load_default=False  # por defecto es False si no lo envías
     )
     class Meta:
         partial = True

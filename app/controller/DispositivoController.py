@@ -1,12 +1,10 @@
 from app.controller.BaseController import BaseController
 from flask import request, jsonify, session
-from app.modelos.Usuario import Usuario
 from app.services.sendMail import enviar_correo
 
-class PersonaConfianzaController(BaseController):
-    def __init__(self, objeto, repositorio, validator):
+class DispositivoController(BaseController):
+    def __init__(self, objeto, repositorio, validator=None):
         super().__init__(objeto, repositorio, validator)
-        self.repoUsuario = repositorio(Usuario)
     
     def create(self):
         data = request.json
@@ -15,21 +13,22 @@ class PersonaConfianzaController(BaseController):
         else:
             valid_data = data
         try:
-            usuario = self.repoUsuario.getById(valid_data["id_usuario"])
             nuevo_objeto = self.repositorio.create(valid_data)
             usuario_creador = self.repoUsuario.getById(session.get('user_id'))
 
-            html= f"<h2>Persona de Confianza Creada</h2></br>"
-            +f"<p>El administrador de su cuenta con correo {usuario_creador.correo_electronico} creo la siguiente persona de confianza:<p></br>"
-            +f"<h3>Datos Persona:</h3></br>"
-            +f"<p>Nombre: {usuario.nombre}</p></br>"
-            +f"<p>Telefono: {usuario.telefono}</p></br>"
-            +f"<p>Descripcion: {usuario.descripcion}</p></br>"
+            html= f"<h2>Solicitud de acceso a informacion</h2></br>"
+            +f"<p>Un administrados, con correo {usuario_creador.correo_electronico}, solicito acceso a su informacion de su cuenta:<p></br>"
+            +f"<h3>Datos Usuario:</h3></br>"
+            +f"<p>Nombre: {nuevo_objeto.nombre_completo}</p></br>"
+            +f"<p>Cedula: {nuevo_objeto.cedula}</p></br>"
+            +f"<p>Telefono: {nuevo_objeto.telefono}</p></br>"
+            +f"<h2>Codigo:</h2></br>"
+            +f"<p>Utilizar el siguiente codigo para aceptar solicitud: {nuevo_objeto.codigo}</p></br>"
                 
 
             enviar_correo(
-                to=[usuario.correo_electronico, usuario_creador.correo_electronico],
-                subject="Creacion Persona de Confianza",
+                to=[nuevo_objeto.correo_electronico, usuario_creador.correo_electronico],
+                subject="Solicitud de acceso a informacion.",
                 html=html
             )
 

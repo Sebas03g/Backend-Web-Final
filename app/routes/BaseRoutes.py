@@ -9,7 +9,7 @@ class BaseRoutes:
         if protegido:
             @self.bp.before_request
             def check_jwt():
-                verify_jwt_in_request()  # ✅ Valida JWT sin usar como decorador
+                verify_jwt_in_request()
 
         # Rutas CRUD
         self.bp.add_url_rule('/', methods=['POST'], view_func=self.controller.create)

@@ -46,7 +46,7 @@ class UsuarioSchema(Schema):
         validate=validate.Range(min=1),
         error_messages={"invalid": "ID de plan inválido."}
     )
-    eliminado = fields.Boolean(missing=False)
+    eliminado = fields.Boolean(load_default=False)
 
     @validates("telefono")
     def validate_telefono(self, value):
