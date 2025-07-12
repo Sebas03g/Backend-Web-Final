@@ -9,4 +9,6 @@ from app.repository.PuntoRepo import PuntoRepo
 ubicacion_controller = UbicacionController(Ubicacion, BaseRepo, UbicacionSchema, PuntoRepo)
 ubicacion_routes = BaseRoutes('ubicacion', ubicacion_controller)
 
+ubicacion_routes.agregar_ruta_personalizada(url = '/update-point/<int:id>', methods=['POST'], funcion=ubicacion_controller.updatePoint)
+
 ubicacion_bp = ubicacion_routes.get_blueprint()

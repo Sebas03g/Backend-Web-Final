@@ -2,7 +2,6 @@ from app.config.database import db
 from sqlalchemy.exc import SQLAlchemyError
 
 class BaseRepo:
-
     def __init__(self, Objeto):
         self.tipoObjeto = Objeto
 
@@ -11,6 +10,7 @@ class BaseRepo:
             objeto = self.tipoObjeto(**data)
             db.session.add(objeto)
             db.session.commit()
+            db.session.refresh(objeto)
             return objeto
         except SQLAlchemyError as e:
             db.session.rollback()
@@ -18,20 +18,27 @@ class BaseRepo:
 
     def getAll(self):
         try:
-            return self.tipoObjeto.query.all()
+            if hasattr(self.tipoObjeto, 'eliminado'):
+                datos = self.tipoObjeto.query.filter_by(eliminado=False).all()
+            else:
+                datos = self.tipoObjeto.query.all()
+            return datos
         except SQLAlchemyError as e:
             raise Exception(f"Error obteniendo todos los objetos: {str(e)}")
 
     def getById(self, id):
         try:
-            return self.tipoObjeto.query.get(id)
+            query = self.tipoObjeto.query
+            if hasattr(self.tipoObjeto, 'eliminado'):
+                query = query.filter_by(eliminado=False)
+            return query.filter_by(id=id).first()
         except SQLAlchemyError as e:
             raise Exception(f"Error obteniendo objeto por id: {str(e)}")
 
     def update(self, id, data):
         try:
             objeto = self.tipoObjeto.query.get(id)
-            if not objeto:
+            if not objeto or getattr(objeto, 'eliminado', False):
                 return None
             if not isinstance(data, dict):
                 raise Exception("Datos inválidos para actualizar")
@@ -47,7 +54,7 @@ class BaseRepo:
     def delete(self, id):
         try:
             objeto = self.tipoObjeto.query.get(id)
-            if not objeto:
+            if not objeto or getattr(objeto, 'eliminado', False):
                 return None
             setattr(objeto, "eliminado", True)
             db.session.commit()

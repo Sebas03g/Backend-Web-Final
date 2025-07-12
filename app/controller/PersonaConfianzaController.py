@@ -19,13 +19,14 @@ class PersonaConfianzaController(BaseController):
             nuevo_objeto = self.repositorio.create(valid_data)
             usuario_creador = self.repoUsuario.getById(session.get('user_id'))
 
-            html= f"<h2>Persona de Confianza Creada</h2></br>"
-            +f"<p>El administrador de su cuenta con correo {usuario_creador.correo_electronico} creo la siguiente persona de confianza:<p></br>"
-            +f"<h3>Datos Persona:</h3></br>"
-            +f"<p>Nombre: {usuario.nombre}</p></br>"
-            +f"<p>Telefono: {usuario.telefono}</p></br>"
-            +f"<p>Descripcion: {usuario.descripcion}</p></br>"
-                
+            html= (
+                    f"<h2>Persona de Confianza Creada</h2></br>"
+                    f"<p>El administrador de su cuenta con correo {usuario_creador.correo_electronico} creo la siguiente persona de confianza:<p></br>"
+                    f"<h3>Datos Persona:</h3></br>"
+                    f"<p>Nombre: {usuario.nombre}</p></br>"
+                    f"<p>Telefono: {usuario.telefono}</p></br>"
+                    f"<p>Descripcion: {usuario.descripcion}</p></br>"
+                ) 
 
             enviar_correo(
                 to=[usuario.correo_electronico, usuario_creador.correo_electronico],

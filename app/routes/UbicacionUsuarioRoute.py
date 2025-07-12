@@ -9,6 +9,6 @@ from app.validators.Ubicacion_usuario import UbicacionUsuarioSchema
 controller = UbicacionUsuarioController(UbicacionUsuario, BaseRepo, UbicacionUsuarioSchema, PuntoRepo)
 ubicacion_usuario_routes = BaseRoutes('ubicacion-usuario', controller)
 
-ubicacion_usuario_routes.agregar_ruta_personalizada('/updatePoint', 'POST', controller.updatePoint)
+ubicacion_usuario_routes.agregar_ruta_personalizada('/update-point/<int:id>', 'POST', controller.updatePoint)
 
 bp = ubicacion_usuario_routes.get_blueprint()
