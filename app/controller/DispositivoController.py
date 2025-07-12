@@ -16,14 +16,16 @@ class DispositivoController(BaseController):
             nuevo_objeto = self.repositorio.create(valid_data)
             usuario_creador = self.repoUsuario.getById(session.get('user_id'))
 
-            html= f"<h2>Solicitud de acceso a informacion</h2></br>"
-            +f"<p>Un administrados, con correo {usuario_creador.correo_electronico}, solicito acceso a su informacion de su cuenta:<p></br>"
-            +f"<h3>Datos Usuario:</h3></br>"
-            +f"<p>Nombre: {nuevo_objeto.nombre_completo}</p></br>"
-            +f"<p>Cedula: {nuevo_objeto.cedula}</p></br>"
-            +f"<p>Telefono: {nuevo_objeto.telefono}</p></br>"
-            +f"<h2>Codigo:</h2></br>"
-            +f"<p>Utilizar el siguiente codigo para aceptar solicitud: {nuevo_objeto.codigo}</p></br>"
+            html= (
+                    f"<h2>Solicitud de acceso a informacion</h2></br>"
+                    f"<p>Un administrados, con correo {usuario_creador.correo_electronico}, solicito acceso a su informacion de su cuenta:<p></br>"
+                    f"<h3>Datos Usuario:</h3></br>"
+                    f"<p>Nombre: {nuevo_objeto.nombre_completo}</p></br>"
+                    f"<p>Cedula: {nuevo_objeto.cedula}</p></br>"
+                    f"<p>Telefono: {nuevo_objeto.telefono}</p></br>"
+                    f"<h2>Codigo:</h2></br>"
+                    f"<p>Utilizar el siguiente codigo para aceptar solicitud: {nuevo_objeto.codigo}</p></br>"
+                )
                 
 
             enviar_correo(

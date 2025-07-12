@@ -26,12 +26,14 @@ class TransaccionController(BaseController):
             usuario_creador = self.repoUsuario.getById(session.get('user_id'))
             plan = self.repoPlan.getById(valid_data["id_plan"])
 
-            html= f"<h2>Transaccion Realizada</h2></br>"
-            +f"<p>Felicitaciones por tu nuevo plan, {usuario_creador.nombre_completo}.<p></br>"
-            +f"<h3>Datos Plan:</h3></br>"
-            +f"<p>Nombre: {plan.nombre}</p></br>"
-            +f"<p>Descripcion: {plan.descripcion}</p></br>"
-            +f"<p>Precio: {plan.precio}</p></br>"
+            html= (
+                    f"<h2>Transaccion Realizada</h2></br>"
+                    f"<p>Felicitaciones por tu nuevo plan, {usuario_creador.nombre_completo}.<p></br>"
+                    f"<h3>Datos Plan:</h3></br>"
+                    f"<p>Nombre: {plan.nombre}</p></br>"
+                    f"<p>Descripcion: {plan.descripcion}</p></br>"
+                    f"<p>Precio: {plan.precio}</p></br>"
+                )
 
             enviar_correo(
                 to=usuario_creador.correo_electronico,

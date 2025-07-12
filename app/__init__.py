@@ -22,7 +22,7 @@ from app.routes.MailRoute import mail_routes
 from app.routes.CodigoRoutes import codigo_routes
 from app.routes.authRoutes import auth
 from app.routes.UserNotificationRoutes import notify
-#from app.routes.UploadImageRoute import upload
+from app.routes.ImageRoute import image_routes
 
 from flask_mail import Mail
 from flask_cors import CORS
@@ -35,11 +35,22 @@ mail = Mail()
 def create_app():
     app = Flask(__name__)
 
-    app.secret_key = os.urandom(24)
-
+    app.secret_key = "RANDOM"
     db = create_db(app)
     CORS(app)
-    talisman = Talisman(app)
+    from flask_talisman import Talisman
+
+    talisman = Talisman(app, content_security_policy={
+        'default-src': "'self'",
+        'style-src': "'self' https://cdn.jsdelivr.net https://unpkg.com https://fonts.googleapis.com 'unsafe-inline'",
+        'script-src': "'self' https://cdn.jsdelivr.net https://unpkg.com",
+        'font-src': "'self' https://fonts.gstatic.com https://cdn.jsdelivr.net",
+        'img-src': "'self' https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org",
+    })
+
+
+
+
     app.config['JWT_SECRET_KEY'] = 'clave-secreta-super-segura'
     jwt = JWTManager(app)
     mail = create_mail(app)
@@ -64,6 +75,7 @@ def create_app():
     app.register_blueprint(codigo_routes)
     app.register_blueprint(auth)
     app.register_blueprint(notify)
+    app.register_blueprint(image_routes)
 
     migrate = Migrate(app, db)
 

@@ -9,7 +9,7 @@ class Dispositivo(db.Model):
     correo_electronico = db.Column(db.String(150), nullable=False)
     telefono = db.Column(db.String(10), nullable=False)
     codigo = db.Column(db.String(15), nullable=False)
-
+    
     id_usuario = db.Column(db.Integer, db.ForeignKey('Usuario.id'))  # Usuario al que se asigna
     id_gestor = db.Column(db.Integer, db.ForeignKey('Usuario.id'))   # Usuario que lo gestiona
 
