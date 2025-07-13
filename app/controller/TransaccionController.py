@@ -19,7 +19,6 @@ class TransaccionController(BaseController):
         try:
             nueva_transaccion = {
                 "id_usuario": valid_data["id_usuario"],
-                "id_tarjeta": valid_data["id_tarjeta"],
                 "id_plan": valid_data["id_plan"],
             }
             nuevo_objeto = self.repositorio.create(nueva_transaccion)

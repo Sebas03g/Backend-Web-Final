@@ -1,6 +1,5 @@
 from ..config.database import db
 from sqlalchemy import Numeric
-from .associations import usuario_tarjeta
 import hashlib
 
 class Usuario(db.Model):
@@ -20,7 +19,6 @@ class Usuario(db.Model):
 
     transacciones = db.relationship("Transaccion", back_populates='usuario')
     caracteristicas_usuario = db.relationship("Caracteristica_Usuario", back_populates='usuario')
-    tarjetas = db.relationship('Tarjeta', secondary=usuario_tarjeta, back_populates='usuarios')
     ubicaciones = db.relationship('UbicacionUsuario', back_populates='usuario')
     ubicaciones_creadas = db.relationship('Ubicacion', back_populates='usuario')
     rutas = db.relationship('Ruta', back_populates='usuario')
@@ -61,7 +59,6 @@ class Usuario(db.Model):
             "id_plan": self.id_plan,
             "transacciones": [t.to_dict() for t in self.transacciones],
             "caracteristicas_usuario": [c.to_dict() for c in self.caracteristicas_usuario],
-            "tarjetas": [t.to_dict() for t in self.tarjetas],
             "ubicaciones": [u.to_dict() for u in self.ubicaciones],
             "ubicaciones_creadas": [u.to_dict() for u in self.ubicaciones_creadas],
             "rutas": [r.to_dict() for r in self.rutas],

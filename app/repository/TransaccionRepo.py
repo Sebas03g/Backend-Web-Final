@@ -13,7 +13,6 @@ class TransaccionRepo(BaseRepo):
             caracteristicas_data = data.get('caracteristicas_usuario', [])
             nueva_transaccion = Transaccion(
                 id_usuario=data['id_usuario'],
-                id_tarjeta=data['id_tarjeta'],
                 id_plan=data['id_plan'],
                 fecha=data['fecha'],
                 caracteristicas_usuario=[

@@ -15,11 +15,6 @@ class TransaccionSchema(Schema):
         validate=validate.Range(min=1),
         error_messages={"invalid": "ID de usuario inválido."}
     )
-    id_tarjeta = fields.Integer(
-        allow_none=True,
-        validate=validate.Range(min=1),
-        error_messages={"invalid": "ID de tarjeta inválido."}
-    )
     id_plan = fields.Integer(
         allow_none=True,
         validate=validate.Range(min=1),

@@ -11,7 +11,6 @@ from app.routes.CaracteristicaPlanRoute import caracteristica_plan_routes
 from app.routes.DispositivoRoute import dispositivo_routes
 from app.routes.PermisoUsuarioRoute import permiso_usuario_routes
 from app.routes.PersonaConfianzaRoute import permiso_confianza_routes
-from app.routes.TarjetaRoute import tarjeta_routes
 from app.routes.TransaccionRoute import transaccion_routes
 from app.routes.UbicacionUsuarioRoute import ubicacion_usuario_routes
 from app.routes.UbicacionRoute import ubicacion_routes
@@ -59,7 +58,6 @@ def create_app():
     app.register_blueprint(ruta_routes.get_blueprint())
     app.register_blueprint(caracteristica_routes.get_blueprint())
     app.register_blueprint(caracteristica_plan_routes.get_blueprint())
-    app.register_blueprint(tarjeta_routes.get_blueprint())
     app.register_blueprint(transaccion_routes.get_blueprint())
     app.register_blueprint(usuario_routes.get_blueprint())
     app.register_blueprint(caracteristica_usuario_routes.get_blueprint())
