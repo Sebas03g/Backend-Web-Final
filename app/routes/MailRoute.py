@@ -6,7 +6,7 @@ mail_routes = Blueprint('mail', __name__)
 
 @mail_routes.route('/send-email', methods=['POST'])
 @jwt_required()
-def enviar_correo():
+def send_mail():
     data = request.get_json()
 
     try:

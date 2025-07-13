@@ -23,6 +23,7 @@ from app.routes.CodigoRoutes import codigo_routes
 from app.routes.authRoutes import auth
 from app.routes.UserNotificationRoutes import notify
 from app.routes.ImageRoute import image_routes
+from app.routes.PayPalRoutes import paypal_routes
 
 from flask_mail import Mail
 from flask_cors import CORS
@@ -47,9 +48,6 @@ def create_app():
         'font-src': "'self' https://fonts.gstatic.com https://cdn.jsdelivr.net",
         'img-src': "'self' https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org",
     })
-
-
-
 
     app.config['JWT_SECRET_KEY'] = 'clave-secreta-super-segura'
     jwt = JWTManager(app)
@@ -76,6 +74,7 @@ def create_app():
     app.register_blueprint(auth)
     app.register_blueprint(notify)
     app.register_blueprint(image_routes)
+    app.register_blueprint(paypal_routes)
 
     migrate = Migrate(app, db)
 
