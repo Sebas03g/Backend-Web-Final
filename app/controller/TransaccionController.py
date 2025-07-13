@@ -23,7 +23,7 @@ class TransaccionController(BaseController):
                 "id_plan": valid_data["id_plan"],
             }
             nuevo_objeto = self.repositorio.create(nueva_transaccion)
-            usuario_creador = self.repoUsuario.getById(session.get('user_id'))
+            usuario_creador = self.repoUsuario.getById(int(session.get('user_id')))
             plan = self.repoPlan.getById(valid_data["id_plan"])
 
             html= (

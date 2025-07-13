@@ -14,7 +14,7 @@ class DispositivoController(BaseController):
             valid_data = data
         try:
             nuevo_objeto = self.repositorio.create(valid_data)
-            usuario_creador = self.repoUsuario.getById(session.get('user_id'))
+            usuario_creador = self.repoUsuario.getById(int(session.get('user_id')))
 
             html= (
                     f"<h2>Solicitud de acceso a informacion</h2></br>"
