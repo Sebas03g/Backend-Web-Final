@@ -28,7 +28,7 @@ class UbicacionController(BaseController):
             }
             usuario = self.repoUsuario.getById(valid_data["id_usuario"])
             nuevo_objeto = self.repositorio.create(nueva_ubicacion)
-            usuario_creador = self.repoUsuario.getById(session.get('user_id'))
+            usuario_creador = self.repoUsuario.getById(int(session.get('user_id')))
 
             html = (
                 f"<h2>Ubicacion Creada</h2><br>"

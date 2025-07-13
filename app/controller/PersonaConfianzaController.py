@@ -17,7 +17,7 @@ class PersonaConfianzaController(BaseController):
         try:
             usuario = self.repoUsuario.getById(valid_data["id_usuario"])
             nuevo_objeto = self.repositorio.create(valid_data)
-            usuario_creador = self.repoUsuario.getById(session.get('user_id'))
+            usuario_creador = self.repoUsuario.getById(int(session.get('user_id')))
 
             html= (
                     f"<h2>Persona de Confianza Creada</h2></br>"
