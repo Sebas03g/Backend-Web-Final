@@ -41,11 +41,11 @@ def login():
     data = request.json
     user = Usuario.query.filter_by(correo_electronico=data['correo_electronico']).first()
     if user and user.check_password(data['password']):
-        session['user_id'] = user.id
+        session['user_id'] = str(user.id)
         clave = current_app.config['JWT_SECRET_KEY']
 
         token = jwt.encode({
-            'sub': user.id,
+            'sub': str(user.id),
             'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=10)
         }, clave, algorithm='HS256')
 
