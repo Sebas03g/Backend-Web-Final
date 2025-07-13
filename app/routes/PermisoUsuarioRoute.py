@@ -6,6 +6,6 @@ from app.routes.BaseRoutes import BaseRoutes
 from app.validators.Permiso_usuario import PermisoUsuarioSchema
 
 controller = PermisoUsuarioController(PermisoUsuario, BaseRepo, PermisoUsuarioSchema)
-permiso_usuario_routes = BaseRoutes('permiso_usuario', controller)
+permiso_usuario_routes = BaseRoutes('permiso-usuario', controller)
 
 bp = permiso_usuario_routes.get_blueprint()

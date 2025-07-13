@@ -4,7 +4,7 @@ from .associations import ruta_punto
 class Ruta(db.Model):
     __tablename__ = 'Ruta'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String, nullable=False)
     descripcion = db.Column(db.Text)
     id_usuario = db.Column(db.Integer, db.ForeignKey('Usuario.id'))
@@ -20,7 +20,7 @@ class Ruta(db.Model):
             "nombre": self.nombre,
             "descripcion": self.descripcion,
             "id_usuario": self.id_usuario,
-            "usuario": self.usuario.to_dict() if self.usuario else None,
+            "usuario": self.usuario.nombre_completo if self.usuario else None,
             "puntos": [p.to_dict() for p in self.puntos],
             "eliminado": self.eliminado,
         }

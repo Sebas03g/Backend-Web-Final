@@ -21,7 +21,7 @@ class UbicacionUsuario(db.Model):
             "id_usuario": self.id_usuario,
             "id_punto": self.id_punto,
             "fecha": self.fecha,
-            "usuario": self.usuario.to_dict() if self.usuario else None,
-            "punto": self.punto.to_dict() if self.punto else None,
+            "usuario": self.usuario.nombre_completo if self.usuario else None,
+            "punto": f"{self.punto.lat},{self.punto.lng}" if self.punto else None,
             "eliminado": self.eliminado,
         }

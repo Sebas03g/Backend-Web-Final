@@ -15,14 +15,11 @@ class UbicacionUsuarioController(BaseController):
             valid_data = self.validator().load(data)
         else:
             valid_data = data
+        valid_data = data
         try:
-            punto = self.repoPunto.create({
-                "lat": valid_data["lat"],
-                "lng": valid_data["lng"]
-            })
             nueva_ubicacion = {
                 "id_usuario": valid_data["id_usuario"],
-                "id_punto": punto.id
+                "id_punto": valid_data["id_punto"]
             }
             nuevo_objeto = self.repositorio.create(nueva_ubicacion)
 
@@ -40,14 +37,11 @@ class UbicacionUsuarioController(BaseController):
             valid_data = self.validator().load(data)
         else:
             valid_data = data
+        valid_data = data
         try:
-            punto = self.repoPunto.create({
-                "lat": valid_data["lat"],
-                "lng": valid_data["lng"]
-            })
             data_ubicacion = {
                 "id_usuario": valid_data["id_usuario"],
-                "id_punto": punto.id
+                "id_punto": valid_data["id_punto"]
             }
             objeto_modificado = self.repositorio.update(id, data_ubicacion)
             return jsonify({

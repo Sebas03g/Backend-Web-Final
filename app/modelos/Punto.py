@@ -4,7 +4,7 @@ from .associations import ruta_punto
 class Punto(db.Model):
     __tablename__ = 'Punto'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     lat = db.Column(db.Float, nullable=False)
     lng = db.Column(db.Float, nullable=False)
     hora = db.Column(db.DateTime, nullable=True)
@@ -20,10 +20,10 @@ class Punto(db.Model):
         return {
             "id": self.id,
             "lat": self.lat,
-            "long": self.long,
+            "long": self.lng,
             "hora": self.hora.isoformat() if self.hora else None,
             "id_ruta": self.id_ruta,
-            "ruta": self.ruta.to_dict() if self.ruta else None,
+            "ruta": self.id_ruta if self.id_ruta else None,
             "ubicaciones_usuario": [u.to_dict() for u in self.ubicaciones_usuario],
             "ubicaciones": [u.to_dict() for u in self.ubicaciones],
             "eliminado": self.eliminado,

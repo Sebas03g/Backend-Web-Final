@@ -17,10 +17,6 @@ class UbicacionController(BaseController):
         else:
             valid_data = data
         try:
-            punto = self.repoPunto.create({
-                "lat": valid_data["lat"],
-                "lng": valid_data["lng"]
-            })
 
             nueva_ubicacion = {
                 "nombre_ubicacion": valid_data["nombre_ubicacion"],
@@ -28,7 +24,7 @@ class UbicacionController(BaseController):
                 "tipo": valid_data["tipo"],
                 "nivel": valid_data["nivel"],
                 "id_usuario": valid_data["id_usuario"],
-                "id_punto": punto.id,
+                "id_punto": valid_data["id_punto"],
             }
             usuario = self.repoUsuario.getById(valid_data["id_usuario"])
             nuevo_objeto = self.repositorio.create(nueva_ubicacion)
@@ -73,7 +69,7 @@ class UbicacionController(BaseController):
             })
             data_ubicacion = {
                 "id_usuario": valid_data["id_usuario"],
-                "id_punto": punto.id
+                "id_punto": valid_data["id_punto"],
             }
             objeto_modificado = self.repositorio.update(id, data_ubicacion)
             return jsonify({

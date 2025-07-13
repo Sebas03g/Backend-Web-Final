@@ -3,7 +3,7 @@ from ..config.database import db
 class PersonaConfianza(db.Model):
     __tablename__ = 'persona_confianza'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String, nullable=False)
     telefono = db.Column(db.String)
     descripcion = db.Column(db.Text)
@@ -21,7 +21,7 @@ class PersonaConfianza(db.Model):
             "telefono": self.telefono,
             "descripcion": self.descripcion,
             "id_usuario": self.id_usuario,
-            "usuario": self.usuario.to_dict() if self.usuario else None,
+            "usuario": self.usuario.nombre_completo if self.usuario else None,
             "imagen": self.imagen,
             "eliminado": self.eliminado,
         }

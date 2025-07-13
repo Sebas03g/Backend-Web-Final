@@ -1,10 +1,12 @@
 from app.controller.BaseController import BaseController
+from app.modelos.Usuario import Usuario
 from flask import request, jsonify, session
 from app.services.sendMail import enviar_correo
 
 class DispositivoController(BaseController):
     def __init__(self, objeto, repositorio, validator=None):
         super().__init__(objeto, repositorio, validator)
+        self.repoUsuario = repositorio(Usuario)
     
     def create(self):
         data = request.json
