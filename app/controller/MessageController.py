@@ -14,7 +14,7 @@ class MessageController():
 
             html = (
                 f"<h2>Mensaje de {usuario.nombre_completo}</h2><br>"
-                f"<p>{data["mensaje"]}</p><br>"
+                f"<p>{data['mensaje']}</p><br>"
             )
 
             enviar_correo(
@@ -32,7 +32,7 @@ class MessageController():
 
             html=(
                 f"<h2>Mensaje de {dispositivo.gestor.nombre_completo}</h2>"
-                f"<p>{data["mensaje"]}</p>"
+                f"<p>{data['mensaje']}</p>"
             )
 
             enviar_correo(

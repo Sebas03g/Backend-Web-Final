@@ -16,12 +16,12 @@ def lostMode(id):
 def notifyAcces(id):
     return NotifyUserController.NotifyInformationAccess(id)
 
-@notify.route('/message/user/<int: id>', methods = ["POST"])
+@notify.route('/message/user/<int:id>', methods = ["POST"])
 @jwt_required()
 def messageUser(id):
     return MessageController.SentMessageUser(id)
 
-@notify.route('/message/admin/<int: id>', methods = ["POST"])
+@notify.route('/message/admin/<int:id>', methods = ["POST"])
 @jwt_required()
-def messageUser(id):
+def messageAdmin(id):
     return MessageController.SentMessageAdmin(id)
