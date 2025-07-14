@@ -23,9 +23,9 @@ class PersonaConfianzaController(BaseController):
                     f"<h2>Persona de Confianza Creada</h2></br>"
                     f"<p>El administrador de su cuenta con correo {usuario_creador.correo_electronico} creo la siguiente persona de confianza:<p></br>"
                     f"<h3>Datos Persona:</h3></br>"
-                    f"<p>Nombre: {usuario.nombre}</p></br>"
-                    f"<p>Telefono: {usuario.telefono}</p></br>"
-                    f"<p>Descripcion: {usuario.descripcion}</p></br>"
+                    f"<p>Nombre: {nuevo_objeto.nombre}</p></br>"
+                    f"<p>Telefono: {nuevo_objeto.telefono}</p></br>"
+                    f"<p>Descripcion: {nuevo_objeto.descripcion}</p></br>"
                 ) 
 
             enviar_correo(

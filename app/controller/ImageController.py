@@ -10,6 +10,9 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 class ImageController:
 
+    def __init__(self, tipoObjeto):
+        self.tipoObjeto = tipoObjeto
+
     def allowed_file(self, filename):
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -30,7 +33,7 @@ class ImageController:
 
             try:
                 archivo.save(ruta_destino)
-                BaseRepo(PersonaConfianza).update(id, {"imagen": filename})
+                BaseRepo(self.tipoObjeto).update(id, {"imagen": filename})
                 return jsonify({"message": "Archivo subido correctamente", "ruta": filename}), 200
             except Exception as e:
                 return jsonify({"error": str(e)}), 500
