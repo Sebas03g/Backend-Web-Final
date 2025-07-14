@@ -35,7 +35,7 @@ class TransaccionController(BaseController):
                 )
 
             enviar_correo(
-                to=usuario_creador.correo_electronico,
+                to=[usuario_creador.correo_electronico],
                 subject="Cambio de Plan",
                 html=html
             )

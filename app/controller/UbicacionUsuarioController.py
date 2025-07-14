@@ -2,7 +2,6 @@ from app.repository.BaseRepo import BaseRepo
 from app.controller.BaseController import BaseController
 from app.modelos.Punto import Punto
 from flask import request, jsonify, session
-from app.services.sendMail import enviar_correo
 
 class UbicacionUsuarioController(BaseController):
     def __init__(self, objeto, repositorio, validator, repoPunto):

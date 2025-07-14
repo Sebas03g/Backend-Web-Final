@@ -1,5 +1,4 @@
 from flask import request, jsonify
-from app.services.sendMail import enviar_correo
 from app.repository.BaseRepo import BaseRepo
 from app.modelos.Permiso_usuario import PermisoUsuario
 from app.services.sendMail import enviar_correo

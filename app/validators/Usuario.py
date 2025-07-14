@@ -60,3 +60,4 @@ class UsuarioSchema(Schema):
 
     class Meta:
         partial = True
+    

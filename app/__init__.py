@@ -23,11 +23,9 @@ from app.routes.authRoutes import auth
 from app.routes.UserNotificationRoutes import notify
 from app.routes.ImageRoute import image_routes
 from app.routes.PayPalRoutes import paypal_routes
-
 from flask_mail import Mail
 from flask_cors import CORS
 from flask_talisman import Talisman
-import os
 
 from flask_migrate import Migrate
 mail = Mail()

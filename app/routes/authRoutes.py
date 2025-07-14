@@ -10,6 +10,7 @@ auth = Blueprint('auth', __name__)
 @auth.route('/signup', methods=['POST'])
 def signup():
     data = request.json
+    print(data['correo_electronico'])
     if Usuario.query.filter_by(correo_electronico=data['correo_electronico']).first():
         return jsonify({"message": "Correo ya registrado"}), 400
     user = Usuario(nombre_completo = data['nombre_completo'],
@@ -28,7 +29,7 @@ def signup():
     db.session.commit()
 
     enviar_correo(
-        to=data["correo_electronico"],
+        to=[data["correo_electronico"]],
         subject="Creacion Cuenta Ubikme",
         body="",
         html='<h2>Cuenta Creada Exitosamente</h2></br><h3>Te damos la bienvenida a Ubikame!</h3></br><p>Inicia sesión en este enlace: </p><a></a><a href="http://127.0.0.1:5000">Enlace aquí</a>'

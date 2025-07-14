@@ -3,7 +3,6 @@ from app.services.sendMail import enviar_correo
 from app.repository.BaseRepo import BaseRepo
 from app.modelos.Usuario import Usuario
 from app.modelos.Dispositivo import Dispositivo
-from app.services.sendMail import enviar_correo
 
 class MessageController():
     def SentMessageUser(self, id):
@@ -36,7 +35,7 @@ class MessageController():
             )
 
             enviar_correo(
-                to=dispositivo.correo_electronico,
+                to=[dispositivo.correo_electronico],
                 subject="Mensaje",
                 html=html
             )

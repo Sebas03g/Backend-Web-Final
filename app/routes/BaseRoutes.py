@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_jwt_extended import verify_jwt_in_request
 
 class BaseRoutes:
-    def __init__(self, name, controller, url_prefix=None, protegido=True):
+    def __init__(self, name, controller, url_prefix=None, protegido=False):
         self.bp = Blueprint(name, __name__, url_prefix=url_prefix or f'/{name}')
         self.controller = controller
 
@@ -11,7 +11,6 @@ class BaseRoutes:
             def check_jwt():
                 verify_jwt_in_request()
 
-        # Rutas CRUD
         self.bp.add_url_rule('/', methods=['POST'], view_func=self.controller.create)
         self.bp.add_url_rule('/', methods=['GET'], view_func=self.controller.getAll)
         self.bp.add_url_rule('/<int:id>', methods=['GET'], view_func=self.controller.getById)
