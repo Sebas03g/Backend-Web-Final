@@ -17,18 +17,6 @@ class PuntoSchema(Schema):
             "invalid": "Longitud debe ser un número entre -180 y 180."
         }
     )
-    hora = fields.DateTime(
-        allow_none=True,
-        format='iso',
-        error_messages={
-            "invalid": "Formato de fecha y hora inválido, debe ser ISO 8601."
-        }
-    )
-    id_ruta = fields.Integer(
-        allow_none=True,
-        validate=validate.Range(min=1),
-        error_messages={"invalid": "ID de ruta inválido."}
-    )
     eliminado = fields.Boolean(load_default=False)
 
     class Meta:

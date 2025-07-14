@@ -1,5 +1,4 @@
 from ..config.database import db
-from .associations import ruta_punto
 
 class Ruta(db.Model):
     __tablename__ = 'Ruta'
@@ -24,5 +23,13 @@ class Ruta(db.Model):
             "puntos": [rp.get_point() for rp in self.ruta_puntos],
             "eliminado": self.eliminado,
         }
-
-
+    
+    def to_dict_resumido(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "descripcion": self.descripcion,
+            "id_usuario": self.id_usuario,
+            "usuario": self.usuario.nombre_completo if self.usuario else None,
+            "eliminado": self.eliminado,
+        }

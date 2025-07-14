@@ -1,5 +1,4 @@
 from ..config.database import db
-from .associations import ruta_punto
 
 class Punto(db.Model):
     __tablename__ = 'Punto'
@@ -19,8 +18,7 @@ class Punto(db.Model):
             "id": self.id,
             "lat": self.lat,
             "long": self.lng,
-            "id_ruta": self.id_ruta,
-            "ruta": self.id_ruta if self.id_ruta else None,
+            "rutas": [ruta.get_ruta() for ruta in self.ruta_puntos],
             "ubicaciones_usuario": [u.to_dict() for u in self.ubicaciones_usuario],
             "ubicaciones": [u.to_dict() for u in self.ubicaciones],
             "eliminado": self.eliminado,

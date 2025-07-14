@@ -23,6 +23,7 @@ from app.routes.authRoutes import auth
 from app.routes.UserNotificationRoutes import notify
 from app.routes.ImageRoute import image_routes
 from app.routes.PayPalRoutes import paypal_routes
+from app.modelos.Ruta_Punto import RutaPunto
 from flask_mail import Mail
 from flask_cors import CORS
 from flask_talisman import Talisman
@@ -76,4 +77,5 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+
     return app

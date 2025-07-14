@@ -6,10 +6,16 @@ from sqlalchemy.exc import SQLAlchemyError
 class RutaRepo(BaseRepo):
     def __init__(self, Objeto):
         super().__init__(Objeto)
-    
+
     def assing_point(self, id_punto, id_ruta):
         try:
-            rutaPunto = RutaPunto({"ruta_id": id_ruta, "punto_id": id_punto})
-            return rutaPunto
+            ruta_punto = RutaPunto(
+                ruta_id=id_ruta,
+                punto_id=id_punto
+            )
+            db.session.add(ruta_punto)
+            db.session.commit()
+            return ruta_punto
         except SQLAlchemyError as e:
-            raise Exception(f"Error buscando objeto por cordenadas: {str(e)}")
+            db.session.rollback()
+            raise Exception(f"Error asignando punto a ruta: {str(e)}")
