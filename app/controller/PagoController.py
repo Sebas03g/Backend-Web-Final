@@ -40,8 +40,8 @@ class PagoController:
                     }
                 ],
                 "application_context": {
-                    "return_url": "https://example.com/success",
-                    "cancel_url": "https://example.com/cancel"
+                    "return_url": "http://127.0.0.1:5000/account-dashboard",
+                    "cancel_url": "http://127.0.0.1:5000/account-dashboard"
                 }
             })
 
