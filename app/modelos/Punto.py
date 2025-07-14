@@ -7,10 +7,8 @@ class Punto(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     lat = db.Column(db.Float, nullable=False)
     lng = db.Column(db.Float, nullable=False)
-    hora = db.Column(db.DateTime, nullable=True)
-    id_ruta = db.Column(db.Integer, db.ForeignKey('Ruta.id'), nullable=True)
 
-    rutas = db.relationship('Ruta', secondary=ruta_punto, back_populates='puntos')
+    ruta_puntos = db.relationship("RutaPunto", back_populates="punto", cascade="all, delete-orphan")
     ubicaciones_usuario = db.relationship('UbicacionUsuario', back_populates='punto')
     ubicaciones = db.relationship('Ubicacion', back_populates='punto')
 
@@ -21,11 +19,17 @@ class Punto(db.Model):
             "id": self.id,
             "lat": self.lat,
             "long": self.lng,
-            "hora": self.hora.isoformat() if self.hora else None,
             "id_ruta": self.id_ruta,
             "ruta": self.id_ruta if self.id_ruta else None,
             "ubicaciones_usuario": [u.to_dict() for u in self.ubicaciones_usuario],
             "ubicaciones": [u.to_dict() for u in self.ubicaciones],
+            "eliminado": self.eliminado,
+        }
+    def to_dict_resumido(self):
+        return {
+            "id": self.id,
+            "lat": self.lat,
+            "long": self.lng,
             "eliminado": self.eliminado,
         }
 

@@ -1,0 +1,107 @@
+@use '../colores' as colores;
+@use '../fuentes' as fuentes;
+
+body{
+    @extend %font-normal;
+    background-color: colores.$color-verde-primario;
+}
+
+.container{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -moz-transform: translate(-50%, -50%); /* Firefox */
+    -ms-transform: translate(-50%, -50%);  /* IE 9 */
+    -webkit-transform: translate(-50%, -50%); /* Safari and Chrome*/
+    -o-transform: translate(-50%, -50%); /* Opera */
+    transform: translate(-50%, -50%);
+    background-color: colores.$color-seleccionado;
+    border-radius: 10px;
+  }
+
+  
+  .feather {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+  }
+  
+  /*
+   * Utilities
+   */
+  
+  .border-top { border-top: 1px solid #e5e5e5; }
+  .border-bottom { border-bottom: 1px solid #e5e5e5; }
+  
+  /*Right Space*/
+
+  .right-space{
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 75%;
+    flex: 0 0 75%;
+    max-width: 100%;
+    margin-left: auto !important;
+    .row{
+      height: 30px;
+    }
+  }
+
+  /*Buttons*/
+
+  
+  .btn-primary{
+    background-color: colores.$color-verde-primario;
+    border-color: colores.$color-verde-primario;
+  }
+  
+  .btn-red{
+    background-color: firebrick;
+    border-color: black;
+    color: white;
+  }
+
+  .btn-red:hover{
+    background-color: colores.$color-blanco;
+    border-color: black;
+    color: black;
+  }
+  .btn-red:focus{
+    background-color: firebrick;
+    border-color: black;
+    color: white;
+  }
+  .btn-red:active{
+    background-color: firebrick;
+    border-color: black;
+    color: white;
+  }
+  
+  .btn-green{
+    background-color: colores.$color-verde-primario;
+    border-color: colores.$color-verde-primario;
+    color: white;
+  }
+
+  .btn-green:hover{
+    background-color: colores.$color-blanco;
+    border-color: colores.$color-verde-primario;
+    color: black;
+  }
+  .btn-green:focus{
+    background-color: colores.$color-verde-primario;
+    border-color: colores.$color-verde-primario;
+    color: white;
+  }
+  .btn-green:active{
+    background-color: colores.$color-verde-primario;
+    border-color: colores.$color-verde-primario;
+    color: white;
+  }
+
+  /*Tarjetas*/
+
+  .credit{
+    max-width: 600px;
+    background-color: colores.$color-seleccionado;
+    padding: 10px;
+  }

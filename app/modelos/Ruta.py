@@ -10,7 +10,7 @@ class Ruta(db.Model):
     id_usuario = db.Column(db.Integer, db.ForeignKey('Usuario.id'))
 
     usuario = db.relationship('Usuario', back_populates='rutas')
-    puntos = db.relationship('Punto', secondary=ruta_punto, back_populates='rutas')
+    ruta_puntos = db.relationship("RutaPunto", back_populates="ruta", cascade="all, delete-orphan")
 
     eliminado = db.Column(db.Boolean, default=False)
     
@@ -21,7 +21,7 @@ class Ruta(db.Model):
             "descripcion": self.descripcion,
             "id_usuario": self.id_usuario,
             "usuario": self.usuario.nombre_completo if self.usuario else None,
-            "puntos": [p.to_dict() for p in self.puntos],
+            "puntos": [rp.get_point() for rp in self.ruta_puntos],
             "eliminado": self.eliminado,
         }
 

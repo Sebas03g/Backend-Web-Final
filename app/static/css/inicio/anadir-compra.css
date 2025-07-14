@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap");
+.btn-green {
+  background-color: #2E6A2F;
+  border-color: #2E6A2F;
+  color: white;
+}
+
+.btn-green:hover {
+  background-color: #ffffff;
+  border-color: #2E6A2F;
+  color: black;
+}
+
+.btn-green:focus {
+  background-color: #2E6A2F;
+  border-color: #2E6A2F;
+  color: white;
+}
+
+.btn-green:active {
+  background-color: #2E6A2F;
+  border-color: #2E6A2F;
+  color: white;
+}
+
+/*# sourceMappingURL=anadir-compra.css.map */

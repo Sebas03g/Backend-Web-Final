@@ -1,0 +1,72 @@
+@use '../colores' as colores;
+@use '../fuentes' as fuentes;
+
+body{
+    @extend %font-normal;
+    background-color: colores.$color-verde-primario;
+}
+
+.form-signin {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    margin: 0 auto;
+  }
+  .form-signin .checkbox {
+    font-weight: 400;
+  }
+  .form-signin .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+  }
+  .form-signin .form-control:focus {
+    z-index: 2;
+  }
+  .form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+    .btn-green{
+    background-color: colores.$color-verde-primario;
+    border-color: colores.$color-verde-primario;
+    color: white;
+  }
+
+  .btn-green:hover{
+    background-color: colores.$color-blanco;
+    border-color: colores.$color-verde-primario;
+    color: black;
+  }
+  .btn-green:focus{
+    background-color: colores.$color-verde-primario;
+    border-color: colores.$color-verde-primario;
+    color: white;
+  }
+  .btn-green:active{
+    background-color: colores.$color-verde-primario;
+    border-color: colores.$color-verde-primario;
+    color: white;
+  }
+
+  .container{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -moz-transform: translate(-50%, -50%); /* Firefox */
+    -ms-transform: translate(-50%, -50%);  /* IE 9 */
+    -webkit-transform: translate(-50%, -50%); /* Safari and Chrome*/
+    -o-transform: translate(-50%, -50%); /* Opera */
+    transform: translate(-50%, -50%);
+    background-color: colores.$color-seleccionado;
+    border-radius: 10px;
+  }
+  

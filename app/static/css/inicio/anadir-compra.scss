@@ -1,0 +1,24 @@
+@use '../colores' as colores;
+@use '../fuentes' as fuentes;
+
+.btn-green{
+background-color: colores.$color-verde-primario;
+border-color: colores.$color-verde-primario;
+color: white;
+}
+
+.btn-green:hover{
+background-color: colores.$color-blanco;
+border-color: colores.$color-verde-primario;
+color: black;
+}
+.btn-green:focus{
+background-color: colores.$color-verde-primario;
+border-color: colores.$color-verde-primario;
+color: white;
+}
+.btn-green:active{
+background-color: colores.$color-verde-primario;
+border-color: colores.$color-verde-primario;
+color: white;
+}
