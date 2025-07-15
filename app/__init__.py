@@ -75,6 +75,8 @@ def create_app():
 
     migrate = Migrate(app, db)
 
+    from sqlalchemy import text
+
     with app.app_context():
         db.create_all()
 
