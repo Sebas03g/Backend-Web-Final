@@ -51,7 +51,6 @@ class Usuario(db.Model):
             "correo_electronico": self.correo_electronico,
             "telefono": self.telefono,
             "fecha_nacimiento": self.fecha_nacimiento.isoformat() if self.fecha_nacimiento else None,
-            "contrasena_hash": self.contrasena_hash,
             "monitoreo": self.monitoreo,
             "es_monitoreo": self.es_monitoreo,
             "imagen": self.imagen,

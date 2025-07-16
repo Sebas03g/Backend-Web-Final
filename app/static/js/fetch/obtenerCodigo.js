@@ -1,6 +1,7 @@
 export async function getCodigo(){
     const res = await fetch('/code', {
-        method: 'GET'
+        method: 'GET',
+        credentials: 'include'
     });
 
     const data = await res.json();

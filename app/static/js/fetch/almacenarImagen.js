@@ -5,7 +5,7 @@ export async function uploadImage({file}){
 
     const res = await fetch('/upload',{
         method: 'POST',
-        body: formData
+        credentials: 'include',
     });
 
     const data = await res.json();

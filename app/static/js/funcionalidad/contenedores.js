@@ -15,87 +15,9 @@ let mapaUbicacion = null;
 let mapaRuta = null;
 let marcadorSeleccionado = null;
 
-async function obtenerPermisos(){
-    const data = await getAllData('permiso');
-    return data;
-}
+const dataUsuario = sessionStorage.getItem("usuario");
 
-let listaDispositivos = [
-    {id:"1", nombre: "Sophia", correo: "sophia@gmail.com", telefono:"099000000", nombreDispositivo: "Samsung Sophia" , estado: "Activo",  cedula:" 01020123456", conectado:"Actual", tiempoViaje:"30 min", imagen:"../static/images/Sophia.png", codigo: "A7F4K9X2M8B6", permisos:[
-        {"id":1, "nivel":"1"},{"id":2, "nivel":"1"},{"id":3, "nivel":"1"},
-        {"id":4, "nivel":"1"},{"id":5, "nivel":"1"},{"id":6, "nivel":"1"},
-        {"id":7, "nivel":"1"},{"id":8, "nivel":"1"},{"id":9, "nivel":"1"}
-    ], ubicaciones: [
-        {id:"1", idPersona:"1", punto:[-2.859448, -78.963261], nombre:"Casa", tipo:"green", descripcion:"Case de Sophia"},
-        {id:"2", idPersona:"1",punto:[-2.8913363513451396, -78.97706831779115], nombre:"Casa ex-novio", tipo:"red", descripcion:"Casa del ex-novia abusivo."},
-    ], personasConfianza: [
-        { id: "1", idPersona: "1", nombre: "Pedro", telefono: "099000226", descripcion: "Amigo", imagen: "../static/images/placeholder.png" },
-        { id: "3", idPersona: "1", nombre: "Carlos", telefono: "099002233", descripcion: "Primo", imagen: "../static/images/placeholder.png" },
-        { id: "5", idPersona: "1", nombre: "Luis", telefono: "099004455", descripcion: "Compañero de trabajo", imagen: "../static/images/placeholder.png" },
-        { id: "7", idPersona: "1", nombre: "Jorge", telefono: "099006677", descripcion: "Amigo del colegio", imagen: "../static/images/placeholder.png" },
-        { id: "9", idPersona: "1", nombre: "Andrés", telefono: "099008899", descripcion: "Hermano", imagen: "../static/images/placeholder.png" }
-
-    ], ruta: [
-        {id: "1", nombre: "Camino a Universidad", puntos: [
-            {"hora": "09:00 am", "ubicacion": [-2.859448, -78.963261]},
-            {"hora": "09:10 am", "ubicacion": [-2.862557, -78.974168]},
-            {"hora": "09:20 am", "ubicacion": [-2.865666, -78.985074]},
-            {"hora": "09:30 am", "ubicacion": [-2.868775, -78.995981]},
-            {"hora": "09:40 am", "ubicacion": [-2.871884, -79.006887]},
-            {"hora": "09:50 am", "ubicacion": [-2.874993, -79.017794]},
-            {"hora": "10:00 am", "ubicacion": [-2.878102, -79.028700]},
-            {"hora": "10:10 am", "ubicacion": [-2.880210, -79.031336]},
-            {"hora": "10:20 am", "ubicacion": [-2.882319, -79.033242]},
-            {"hora": "10:30 am", "ubicacion": [-2.884428, -79.034486]},
-            {"hora": "10:40 am", "ubicacion": [-2.886537, -79.035229]},
-            {"hora": "10:50 am", "ubicacion": [-2.888646, -79.035619]},
-            {"hora": "11:00 am", "ubicacion": [-2.8918931908671124, -79.03600936098859]}
-        ]},
-    ]},
-    {id:"2", nombre:"Kevin", correo: "kevin@gmail.com", telefono:"098000000", nombreDispositivo: "iPhone Kevin" , estado: "Desactivo",  cedula:" 01020123465", conectado:"Hace 30 min", tiempoViaje:"10 min", imagen:"../static/images/Kevin.png", codigo: "B8G7ASFSDAS", permisos:[
-        {"id":1, "nivel":"1"},{"id":2, "nivel":"1"},{"id":9, "nivel":"1"}
-    ], ubicaciones: [
-        {id:"3", idPersona:"2", punto:[-2.8913363513451396, -78.97706831779115], nombre:"Casa", tipo:"green", descripcion:"Case de Kevin"},
-        {id:"4", idPersona:"2",punto:[-2.906395, -79.020527], nombre:"Casa padre", tipo:"red", descripcion:"Casa del padre abusivo."}
-    ], personasConfianza: [
-        { id: "2", idPersona: "2", nombre: "María", telefono: "099001122", descripcion: "Hermana", imagen: "../static/images/placeholder.png" },
-        { id: "4", idPersona: "2", nombre: "Ana", telefono: "099003344", descripcion: "Vecina", imagen: "../static/images/placeholder.png" },
-        { id: "6", idPersona: "2", nombre: "Diana", telefono: "099005566", descripcion: "Cuñada", imagen: "../static/images/placeholder.png"},
-        { id: "8", idPersona: "2", nombre: "Lucía", telefono: "099007788", descripcion: "Tía", imagen: "../static/images/placeholder.png" },
-        { id: "10", idPersona: "2", nombre: "Paola", telefono: "099009900", descripcion: "Sobrina", imagen: "../static/images/placeholder.png" }
-
-    ], ruta: [
-        {id: "2", nombre: "Camino a Trabajo", puntos: [
-            {"hora": "09:00 am", "ubicacion": [-2.891336, -78.977068]},
-            {"hora": "09:05 am", "ubicacion": [-2.891359, -78.979426]},
-            {"hora": "09:10 am", "ubicacion": [-2.891382, -78.981785]},
-            {"hora": "09:15 am", "ubicacion": [-2.891405, -78.984143]},
-            {"hora": "09:20 am", "ubicacion": [-2.891428, -78.986501]},
-            {"hora": "09:25 am", "ubicacion": [-2.891451, -78.988859]},
-            {"hora": "09:30 am", "ubicacion": [-2.891474, -78.991217]},
-            {"hora": "09:35 am", "ubicacion": [-2.891497, -78.993575]},
-            {"hora": "09:40 am", "ubicacion": [-2.891520, -78.995933]},
-            {"hora": "09:45 am", "ubicacion": [-2.891543, -78.998291]},
-            {"hora": "09:50 am", "ubicacion": [-2.891566, -79.000649]},
-            {"hora": "09:55 am", "ubicacion": [-2.891589, -79.003008]},
-            {"hora": "10:00 am", "ubicacion": [-2.891612, -79.005366]},
-            {"hora": "10:05 am", "ubicacion": [-2.891635, -79.007724]},
-            {"hora": "10:10 am", "ubicacion": [-2.891658, -79.010082]},
-            {"hora": "10:15 am", "ubicacion": [-2.891681, -79.012440]},
-            {"hora": "10:20 am", "ubicacion": [-2.891704, -79.014798]},
-            {"hora": "10:25 am", "ubicacion": [-2.891727, -79.017156]},
-            {"hora": "10:30 am", "ubicacion": [-2.891750, -79.019514]},
-            {"hora": "10:35 am", "ubicacion": [-2.891773, -79.021872]},
-            {"hora": "10:40 am", "ubicacion": [-2.891796, -79.024231]},
-            {"hora": "10:45 am", "ubicacion": [-2.891819, -79.026589]},
-            {"hora": "10:50 am", "ubicacion": [-2.891842, -79.028947]},
-            {"hora": "10:55 am", "ubicacion": [-2.891865, -79.031305]},
-            {"hora": "11:00 am", "ubicacion": [-2.8918931908671124, -79.03600936098859]}
-            ]
-        },
-    ]}
-]
-
+let listaDispositivos = dataUsuario.dispositivos_gestionados
 
 let permisos = [
     {
@@ -568,9 +490,9 @@ function crearRuta(elementoRuta) {
 
     const iconoPunto = L.divIcon({
         html: '<i class="bi bi-dot" style="color: blue; font-size: 50px;"></i>',
-        className: '', // evita clases predeterminadas
-        iconSize: [50, 50], // coincide con el tamaño del icono visual
-        iconAnchor: [25, 25], // centro del ícono
+        className: '',
+        iconSize: [50, 50],
+        iconAnchor: [25, 25],
         popupAnchor: [0, -25]
     });
 

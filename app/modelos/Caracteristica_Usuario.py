@@ -13,11 +13,6 @@ class Caracteristica_Usuario(db.Model):
     caracteristica = db.relationship('Caracteristica', back_populates='caracteristicas_usuario')
     usuario = db.relationship('Usuario', back_populates='caracteristicas_usuario')
     transaccion = db.relationship('Transaccion', back_populates='caracteristicas_usuario')
-
-    __table_args__ = (
-        db.UniqueConstraint('id_caracteristica', 'id_usuario', name='uix_caracteristica_usuario'),
-    )
-
     eliminado = db.Column(db.Boolean, default=False)
 
     def to_dict(self):

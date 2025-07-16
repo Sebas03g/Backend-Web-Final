@@ -44,7 +44,8 @@ def create_app():
         'style-src': "'self' https://cdn.jsdelivr.net https://unpkg.com https://fonts.googleapis.com 'unsafe-inline'",
         'script-src': "'self' https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com",
         'font-src': "'self' https://fonts.gstatic.com https://cdn.jsdelivr.net",
-        'img-src': "'self' https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org http://www.w3.org/2000/svg",
+        'img-src': "'self' data: https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org http://www.w3.org/2000/svg",
+
     })
 
     app.config['JWT_SECRET_KEY'] = 'clave-secreta-super-segura'
@@ -74,6 +75,10 @@ def create_app():
     app.register_blueprint(paypal_routes)
 
     migrate = Migrate(app, db)
+
+    app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+    app.config["JWT_COOKIE_SECURE"] = False
+    app.config["JWT_COOKIE_CSRF_PROTECT"] = False 
 
     from sqlalchemy import text
 

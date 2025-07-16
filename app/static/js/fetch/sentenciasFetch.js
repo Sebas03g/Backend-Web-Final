@@ -2,7 +2,9 @@ const BASE_URL = 'http://localhost:5000';
 
 export async function createData(tipoElemento, data) {
     try {
-        const response = await axios.post(`${BASE_URL}/${tipoElemento}`, data);
+        const response = await axios.post(`${BASE_URL}/${tipoElemento}`, data, {
+            withCredentials: true
+        });
         console.log(response.data);
         return response.data.objeto;
     } catch (error) {
@@ -13,7 +15,9 @@ export async function createData(tipoElemento, data) {
 
 export async function updateData(tipoElemento, data, id) {
     try {
-        const response = await axios.put(`${BASE_URL}/${tipoElemento}/${id}`, data);
+        const response = await axios.put(`${BASE_URL}/${tipoElemento}/${id}`, data, {
+            withCredentials: true
+        });
         console.log(response.data);
         return response.data.objeto;
     } catch (error) {
@@ -24,7 +28,9 @@ export async function updateData(tipoElemento, data, id) {
 
 export async function getAllData(tipoElemento) {
     try {
-        const response = await axios.get(`${BASE_URL}/${tipoElemento}`);
+        const response = await axios.get(`${BASE_URL}/${tipoElemento}`, {
+            withCredentials: true
+        });
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -35,7 +41,9 @@ export async function getAllData(tipoElemento) {
 
 export async function getDataById(tipoElemento, id) {
     try {
-        const response = await axios.get(`${BASE_URL}/${tipoElemento}/${id}`);
+        const response = await axios.get(`${BASE_URL}/${tipoElemento}/${id}`, {
+            withCredentials: true
+        });
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -46,7 +54,9 @@ export async function getDataById(tipoElemento, id) {
 
 export async function deleteData(tipoElemento, id) {
     try {
-        const response = await axios.delete(`${BASE_URL}/${tipoElemento}/${id}`);
+        const response = await axios.delete(`${BASE_URL}/${tipoElemento}/${id}`, {
+            withCredentials: true
+        });
         console.log(response.data);
         return response.data;
     } catch (error) {

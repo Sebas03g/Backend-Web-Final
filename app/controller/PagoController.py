@@ -1,8 +1,13 @@
 from flask import request, jsonify
 from paypalcheckoutsdk.orders import OrdersCreateRequest, OrdersCaptureRequest
 from paypalcheckoutsdk.core import PayPalHttpClient, SandboxEnvironment
+from app.controller.TransaccionController import TransaccionController
+from app.modelos.Transaccion import Transaccion
+from app.repository.BaseRepo import BaseRepo
 import configparser
 import os
+
+from app.validators.Transaccion import TransaccionSchema
 
 class PagoController:
 
@@ -74,11 +79,23 @@ class PagoController:
             result = response.result
 
             if result.status == "COMPLETED":
-                return jsonify({
-                    "message": "Pago capturado con éxito",
-                    "status": result.status,
-                    "id": result.id
-                }), 200
+                if "id_usuario" not in data:
+                    return jsonify({"error": "El campo 'id_usuario' es obligatorio"}), 400
+
+                transaccion = {
+                    "order_id": order_id,
+                    "id_usuario": data["id_usuario"]
+                }
+                if "id_plan" in data:
+                    transaccion["id_plan"] = data["id_plan"]
+                if "caracteristicas_usuario" in data:
+                    transaccion["caracteristicas_usuario"] = data["caracteristicas_usuario"]
+
+                transaccion_controller = TransaccionController(Transaccion, BaseRepo, TransaccionSchema)
+                response, status = transaccion_controller.create(transaccion)
+
+                return response, status
+
             else:
                 return jsonify({
                     "message": "Pago no completado",

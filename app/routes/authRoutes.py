@@ -1,9 +1,10 @@
 import datetime
-from flask import Blueprint, request, jsonify, session, current_app
+from flask import Blueprint, request, jsonify, session, current_app, make_response
 from app import db
 import jwt
 from app.modelos.Usuario import Usuario
 from app.services.sendMail import enviar_correo
+from flask_jwt_extended import set_access_cookies
 
 auth = Blueprint('auth', __name__)
 
@@ -49,12 +50,16 @@ def login():
             'sub': str(user.id),
             'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=10)
         }, clave, algorithm='HS256')
+        
+        response = make_response(jsonify({
+                "message": "Inicio de Sesión Exitoso",
+                "token": token,
+                "usuario": user.to_dict()
+            }))
 
-        return jsonify({
-            "message": "Inicio de Sesión Exitoso",
-            "token": token,
-            "usuario": user.to_dict_resumido()
-        }), 200
+        set_access_cookies(response, token)
+
+        return response
 
     return jsonify({"message": "Credenciales Inválidas"}), 401
 

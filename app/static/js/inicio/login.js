@@ -1,3 +1,5 @@
+import { loginFunctionality } from "../fetch/Credentials.js";
+
 const signup_button = document.getElementById("signup");
 
 signup_button.addEventListener("click", function () {
@@ -8,7 +10,7 @@ signup_button.addEventListener("click", function () {
 
 const login_button = document.getElementById("login");
 
-login_button.addEventListener("click", function (e) {
+login_button.addEventListener("click", async function (e) {
     e.preventDefault()
 
     const emailInput = document.getElementById('inputEmail');
@@ -22,5 +24,8 @@ login_button.addEventListener("click", function (e) {
         alert('Campos no pueden estar vacíos.');
         return;
     }
-    window.location.href = "cuenta.html";
+
+    const form = document.querySelector(".form-signin");
+
+    await loginFunctionality(form);
 });
