@@ -3,12 +3,8 @@ import {esTelefonoValido} from  '../general/utilidades.js';
 import {validarVacio} from '../general/utilidades.js';
 
 export function validarDatosGestor(){
-    console.log(document.getElementById("emailGestor"))
     const email = document.getElementById("emailGestor").value;
     const codigo = document.getElementById("codigoGestor").value;
-
-    console.log(codigo);
-
     return esEmailValido(email) && validarVacio(codigo);
 
 }

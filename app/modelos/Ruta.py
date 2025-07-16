@@ -29,7 +29,6 @@ class Ruta(db.Model):
             "id": self.id,
             "nombre": self.nombre,
             "descripcion": self.descripcion,
-            "id_usuario": self.id_usuario,
             "usuario": self.usuario.nombre_completo if self.usuario else None,
             "eliminado": self.eliminado,
         }

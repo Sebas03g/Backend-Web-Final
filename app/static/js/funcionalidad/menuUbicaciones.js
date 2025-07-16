@@ -6,12 +6,9 @@ import * as validar from './validacion.js';
 let mapaUbicacion = null;
 let marcadorSeleccionado = null;
 
+const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
-
-let areas = [
-    {id:1, punto:[-2.8918931908671124, -79.03600936098859], nombre:"Zona Segura", descripcion:"Zona de bajo riesgo",tipo:"green"},
-    {id:2, punto:[-2.9221155566716095, -79.0415370113893], nombre:"Zona Insegura", descripcion:"Zona con alto riesgo de secuestro",tipo:"red"}
-]
+let areas = dataUsuario.dispositivos_gestionados.usuario_asignado.ubicaciones_creadas
 
 function abrirVentanaUbicacionesGenerales(){
 
@@ -51,7 +48,6 @@ function creacionListaUbicacion(lista){
         nuevoElementoLista.appendChild(nuevoBoton);
 
         nuevoElementoLista.addEventListener("click", () => {
-            console.log("SI")
             crearCartaUbicacion(listaBotones, nuevoBoton, area);
         });
             
@@ -95,9 +91,9 @@ function agregarFuncionesBusqueda(){
 
     document.getElementById("busquedaUbicacionGeneral").addEventListener('keyup', () => {
         let valor = document.getElementById("busquedaUbicacionGeneral").value;
-        let lista = areas.filter(l => l.nombre.toLowerCase().includes(valor.toLowerCase()));
+        let lista = areas.filter(l => l.nombre_ubicacion.toLowerCase().includes(valor.toLowerCase()));
         if(valor === ""){
-            lista = areas.ubicaciones;
+            lista = areas;
         }
         document.getElementById("listaUbicacionesGenerales").innerHTML = "";
         creacionListaUbicacion(lista);

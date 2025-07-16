@@ -49,7 +49,15 @@ class DispositivoSchema(Schema):
         error_messages={"invalid": "ID del gestor inválido."}
     )
 
-    eliminado = fields.Boolean(load_default=False)
+    estado = fields.Boolean(
+        required=False,
+        load_default=False
+    )
+
+    eliminado = fields.Boolean(
+        required=False,
+        load_default=False
+    )
 
     class Meta:
         partial = True

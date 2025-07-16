@@ -19,3 +19,11 @@ class Permiso(db.Model):
             "permisos_usuario": [pu.to_dict() for pu in self.permisos_usuario],
             "eliminado": self.eliminado,
         }
+
+    def to_dict_resumido(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "descripcion": self.descripcion,
+            "eliminado": self.eliminado,
+        }

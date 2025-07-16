@@ -3,8 +3,6 @@ import { esPantallaPequena } from '../general/utilidades.js'
 import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import { slideDownElementos } from '../general/utilidades.js';
 import * as validar from './validacion.js';
-import {getAllData, getDataById} from '../fetch/sentenciasFetch.js'
-import { fetchUserData } from '../fetch/fetchUserData.js';
 
 import { gestorPersonaConfianza } from '../data/GestionarPersonaConfianza.js';
 
@@ -15,57 +13,9 @@ let mapaUbicacion = null;
 let mapaRuta = null;
 let marcadorSeleccionado = null;
 
-const dataUsuario = sessionStorage.getItem("usuario");
+const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
 let listaDispositivos = dataUsuario.dispositivos_gestionados
-
-let permisos = [
-    {
-        id: 1,
-        nombre: "Ver Información",
-        descripcion: "Este permiso permite al gestor acceder a tu información personal, como tu nombre, datos de contacto, historial y otra información importante. Esto es necesario para realizar un seguimiento efectivo y para que el gestor pueda coordinar acciones rápidamente en caso de que se requiera asistencia o seguimiento."
-    },
-    {
-        "id": 2,
-        "nombre": "Ver Ubicación en vivo",
-        "descripcion": "Al otorgar este permiso, el gestor podrá ver tu ubicación en tiempo real. Esto es especialmente útil si estás perdido o necesitas ser localizado rápidamente. El gestor podrá usar esta información para dirigir equipos de rescate o asistencia hacia tu ubicación actual."
-    },
-    {
-        "id": 3,
-        "nombre": "Ver ruta",
-        "descripcion": "Con este permiso, el gestor podrá acceder al historial de las rutas que has seguido. Esto puede ser útil para entender tu desplazamiento, identificar posibles áreas de interés o simplemente seguir tu camino en tiempo real. Es especialmente útil si estás perdido y el gestor necesita analizar tus movimientos previos para buscarte de manera más efectiva."
-    },
-    {
-        "id": 4,
-        "nombre": "Mandar Mensajes",
-        "descripcion": "Este permiso le da al gestor la capacidad de enviarte mensajes directos a tu dispositivo. Estos mensajes pueden ser de alerta, instrucciones o actualizaciones importantes. Esto facilita la comunicación en caso de que necesiten coordinar acciones contigo mientras trabajas para encontrar una solución a la situación de pérdida."
-    },
-    {
-        "id": 5,
-        "nombre": "Generar Alarmas",
-        "descripcion": "Al otorgar este permiso, el gestor podrá generar alarmas o notificaciones que te alertarán sobre situaciones críticas o importantes. Las alarmas pueden ser utilizadas en caso de emergencia, indicándote que tomes una acción inmediata o sigas ciertas instrucciones para garantizar tu seguridad."
-    },
-    {
-        "id": 6,
-        "nombre": "Escuchar audio en vivo",
-        "descripcion": "Con este permiso, el gestor podrá escuchar el audio en vivo desde tu dispositivo. Esto puede ser útil en situaciones de emergencia donde se necesita verificar lo que está sucediendo a tu alrededor, o para escuchar información importante que pueda ayudarte a ser localizado o proporcionar detalles de la situación."
-    },
-    {
-        "id": 7,
-        "nombre": "Registrar Ubicaciones",
-        "descripcion": "Este permiso permite al gestor registrar las ubicaciones donde te encuentras a lo largo del tiempo. Esto puede ser útil para mantener un historial de tus ubicaciones y ayudar al equipo de rescate a rastrear mejor tu posición y encontrar patrones que ayuden a localizarte más rápidamente."
-    },
-    {
-        "id": 8,
-        "nombre": "Registrar Personas",
-        "descripcion": "Este permiso le da al gestor la capacidad de registrar nuevas personas en el sistema, como parte de un proceso de seguimiento o de coordinación. Si otras personas están involucradas en la búsqueda o si el gestor necesita añadir datos de otras personas, este permiso permite mantener todo el equipo de rescate debidamente actualizado."
-    },
-    {
-        "id": 9,
-        "nombre": "Registrar Usuario",
-        "descripcion": "Con este permiso, el gestor podrá crear y administrar tu cuenta dentro del sistema. Registrar un usuario es esencial para garantizar que puedas tener acceso a la plataforma y para que el gestor pueda gestionar las interacciones adecuadas durante el proceso de rastreo, y este permiso es el que permitirá la comunicación entre el dispositivo y la aplicación."
-    }
-]
 
 
 function accionesNavBar(elementosNav){
@@ -125,9 +75,9 @@ function agregarFuncionesBusqueda(){
     document.getElementById("busquedaUbicacion").addEventListener('keyup', () => {
         const persona = listaDispositivos.find(l => l.id == idDispositivo);
         let valor = document.getElementById("busquedaUbicacion").value;
-        let lista = persona.ubicaciones.filter(l => l.nombre.toLowerCase().includes(valor.toLowerCase()));
+        let lista = persona.usuario_asignado.ubicaciones_creadas.filter(l => l.nombre.toLowerCase().includes(valor.toLowerCase()));
         if(valor === ""){
-            lista = persona.ubicaciones;
+            lista = persona.usuario_asignado.ubicaciones_creadas;
         }
         document.getElementById("listaUbicaciones").innerHTML = "";
         let listaBotones = document.getElementById(document.getElementById("busquedaUbicacion").dataset.idLista)
@@ -137,9 +87,9 @@ function agregarFuncionesBusqueda(){
     document.getElementById("busquedaPC").addEventListener('keyup', () => {
         const persona = listaDispositivos.find(l => l.id == idDispositivo);
         let valor = document.getElementById("busquedaPC").value;
-        let lista = persona.personasConfianza.filter(l => l.nombre.toLowerCase().includes(valor.toLowerCase()));
+        let lista = persona.usuario_asignado.personas_confianza.filter(l => l.nombre.toLowerCase().includes(valor.toLowerCase()));
         if(valor === ""){
-            lista = persona.personasConfianza;
+            lista = persona.usuario_asignado.personas_confianza;
         }
 
         document.getElementById("listaPersonas").innerHTML =""
@@ -237,7 +187,7 @@ function crearContenedorPermisos() {
                 listaBotonesPermisos,
                 nuevoBoton,
                 permiso,
-                persona.permisos.find(p => p.id == permiso.id).nivel
+                persona.permisos_usuario.find(p => p.id == permiso.id).nivel
             );
             eliminarClase(listaBotonesPermisos.querySelectorAll("li"), "seleccionado");
             nuevoElementoLista.classList.add("seleccionado");
@@ -278,7 +228,7 @@ function crearCartaPermiso(padre, elemento, permiso, nivel) {
 
 function crearContenedorUbicacion(){
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
-    let listaUbicaciones = persona.ubicaciones;
+    let listaUbicaciones = persona.usuario_asignado.ubicaciones_creadas;
     let listBotonesUbicaciones = document.getElementById("listaUbicaciones");
     listBotonesUbicaciones.innerHTML = "";
 
@@ -402,13 +352,11 @@ function eliminarDispositivo(){
 
 function crearMapa(elementoUbicacion) {
 
-    // Si ya hay un mapa, lo removemos correctamente
     if (mapaUbicacion) {
-        mapaUbicacion.remove(); // destruye el mapa anterior
+        mapaUbicacion.remove();
         mapaUbicacion = null;
     }
 
-    // Creamos el nuevo mapa
     mapaUbicacion = L.map(document.getElementById("mapaUbicacion"), {
         center: elementoUbicacion.punto,
         zoom: 14,
@@ -432,7 +380,7 @@ function crearMapa(elementoUbicacion) {
 
 function crearContenedorRuta(){
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
-    let listaRutas = persona.ruta;
+    let listaRutas = persona.usuario_asignado.ruta;
     let listaBotonesRutas = document.getElementById("listaRutas");
     listaBotonesRutas.innerHTML = "";
 
@@ -475,7 +423,6 @@ function crearRuta(elementoRuta) {
         mapaRuta.remove();
         mapaRuta = null;
     }
-    console.log(elementoRuta.puntos[0].ubicacion);
     mapaRuta = L.map(document.getElementById("mapaRuta"), {
         center: elementoRuta.puntos[0].ubicacion,
         zoom: 14,
@@ -503,15 +450,14 @@ function crearRuta(elementoRuta) {
         iconAnchor: [5, 10],
     });
 
-    elementoRuta.puntos.slice(1, -1).forEach(punto => {
-        console.log(punto.ubicacion)
-        puntoRuta = L.marker(punto.ubicacion, { icon: iconoPunto, pane: "punto"}).addTo(mapaRuta);
-        puntoRuta.bindPopup(punto.hora);
+    elementoRuta.ruta_puntos.slice(1, -1).forEach(rp => {
+        puntoRuta = L.marker([rp.punto.lat, rp.punto.lng], { icon: iconoPunto, pane: "punto"}).addTo(mapaRuta);
+        puntoRuta.bindPopup(rp.fecha_asignacion);
         puntosRuta.push(puntoRuta);
     });
 
-    L.marker(elementoRuta.puntos[0].ubicacion, { icon: iconoMeta, pane: "punto"}).addTo(mapaRuta);
-    L.marker(elementoRuta.puntos[elementoRuta.puntos.length - 1].ubicacion).addTo(mapaRuta);
+    L.marker([elementoRuta.ruta_puntos[0].punto.lat, elementoRuta.ruta_puntos[0].punto.lng], { icon: iconoMeta, pane: "punto"}).addTo(mapaRuta);
+    L.marker([elementoRuta.ruta_puntos[elementoRuta.ruta_puntos.length - 1].punto.lat, elementoRuta.ruta_puntos[elementoRuta.ruta_puntos.length - 1].punto.lng]).addTo(mapaRuta);
 
 
     L.control.zoom({
@@ -529,7 +475,7 @@ function crearRuta(elementoRuta) {
 
 function crearContenedorPersonas(){
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
-    let listaPersonasConfianza = persona.personasConfianza;
+    let listaPersonasConfianza = persona.usuario_asignado.personas_confianza;
     let listBotonesPersonas = document.getElementById("listaPersonas");
     listBotonesPersonas.innerHTML = "";
 

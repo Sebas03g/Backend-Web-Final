@@ -26,3 +26,12 @@ class PersonaConfianza(db.Model):
             "eliminado": self.eliminado,
         }
 
+    def to_dict_resumido(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "telefono": self.telefono,
+            "descripcion": self.descripcion,
+            "imagen": self.imagen,
+        }
+

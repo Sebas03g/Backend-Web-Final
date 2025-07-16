@@ -3,7 +3,7 @@ import { slideDownElementos } from '../general/utilidades.js';
 import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import * as validar from './validacion.js';
 
-let datosUsuario = {nombre:"Sebastian Garcia", email:"sebastian@gmail.com", telefono:"0999022665"};
+let datosUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
 function abrirContenedores(opciones){
     let botones = opciones.querySelectorAll(".btn");
@@ -19,9 +19,9 @@ function abrirMenuUsuario(botonIcono){
         botonIcono.classList.toggle("seleccionado");
         document.getElementById("menuUsuario").classList.toggle("abierto");
 
-        document.getElementById("nombreUsuario").value = datosUsuario.nombre;
+        document.getElementById("nombreUsuario").value = datosUsuario.nombre_completo;
         document.getElementById("telefonoUsuario").value = datosUsuario.telefono;
-        document.getElementById("correoUsuario").value = datosUsuario.email;
+        document.getElementById("correoUsuario").value = datosUsuario.correo_electronico;
 
     });
 }

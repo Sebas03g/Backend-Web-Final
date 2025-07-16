@@ -10,7 +10,7 @@ class UbicacionUsuario(db.Model):
     id_punto = db.Column(db.Integer, db.ForeignKey('Punto.id'), nullable=False)
     fecha = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-    usuario = db.relationship('Usuario', back_populates='ubicaciones')
+    usuario = db.relationship('Usuario', back_populates='ubicacion')
     punto = db.relationship('Punto', back_populates='ubicaciones_usuario')
 
     eliminado = db.Column(db.Boolean, default=False)

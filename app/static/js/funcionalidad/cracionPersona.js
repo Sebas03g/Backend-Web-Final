@@ -4,40 +4,11 @@ import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import { slideDownElementos } from '../general/utilidades.js';
 import * as validar from './validacion.js';
 
-import { fetchUserData } from '../fetch/fetchUserData.js';
-
 let idDispositivo = null;
 
-let listaDispositivos = [
-    {id:"1", nombre: "Sophia", correo: "sophia@gmail.com", telefono:"099000000", nombreDispositivo: "Samsung Sophia" , estado: "Activo",  cedula:" 01020123456", conectado:"Actual", tiempoViaje:"30 min", imagen:"../static/images/Sophia.png", codigo: "A7F4K9X2M8B6", permisos:[
-        {"id":1, "nivel":"1"},{"id":2, "nivel":"1"},{"id":3, "nivel":"1"},
-        {"id":4, "nivel":"1"},{"id":5, "nivel":"1"},{"id":6, "nivel":"1"},
-        {"id":7, "nivel":"1"},{"id":8, "nivel":"1"},{"id":9, "nivel":"1"}
-    ], ubicaciones: [
-        {id:"1", idPersona:"1", punto:[-2.859448, -78.963261], nombre:"Casa", tipo:"green", descripcion:"Case de Sophia"},
-        {id:"2", idPersona:"1",punto:[-2.8913363513451396, -78.97706831779115], nombre:"Casa ex-novio", tipo:"red", descripcion:"Casa del ex-novia abusivo."},
-    ], personasConfianza: [
-        { id: "1", idPersona: "1", nombre: "Pedro", telefono: "099000226", descripcion: "Amigo", imagen: "../static/images/placeholder.png" },
-        { id: "3", idPersona: "1", nombre: "Carlos", telefono: "099002233", descripcion: "Primo", imagen: "../static/images/placeholder.png" },
-        { id: "5", idPersona: "1", nombre: "Luis", telefono: "099004455", descripcion: "Compañero de trabajo", imagen: "../static/images/placeholder.png" },
-        { id: "7", idPersona: "1", nombre: "Jorge", telefono: "099006677", descripcion: "Amigo del colegio", imagen: "../static/images/placeholder.png" },
-        { id: "9", idPersona: "1", nombre: "Andrés", telefono: "099008899", descripcion: "Hermano", imagen: "../static/images/placeholder.png" }
+const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
-    ]}, 
-    {id:"2", nombre:"Kevin", correo: "kevin@gmail.com", telefono:"098000000", nombreDispositivo: "iPhone Kevin" , estado: "Desactivo",  cedula:" 01020123465", conectado:"Hace 30 min", tiempoViaje:"10 min", imagen:"../static/images/Kevin.png", codigo: "B8G7ASFSDAS", permisos:[
-        {"id":1, "nivel":"1"},{"id":2, "nivel":"1"},{"id":9, "nivel":"1"}
-    ], ubicaciones: [
-        {id:"3", idPersona:"2", punto:[-2.8913363513451396, -78.97706831779115], nombre:"Casa", tipo:"green", descripcion:"Case de Kevin"},
-        {id:"4", idPersona:"2",punto:[-2.906395, -79.020527], nombre:"Casa padre", tipo:"red", descripcion:"Casa del padre abusivo."}
-    ], personasConfianza: [
-        { id: "2", idPersona: "2", nombre: "María", telefono: "099001122", descripcion: "Hermana", imagen: "../static/images/placeholder.png" },
-        { id: "4", idPersona: "2", nombre: "Ana", telefono: "099003344", descripcion: "Vecina", imagen: "../static/images/placeholder.png" },
-        { id: "6", idPersona: "2", nombre: "Diana", telefono: "099005566", descripcion: "Cuñada", imagen: "../static/images/placeholder.png"},
-        { id: "8", idPersona: "2", nombre: "Lucía", telefono: "099007788", descripcion: "Tía", imagen: "../static/images/placeholder.png" },
-        { id: "10", idPersona: "2", nombre: "Paola", telefono: "099009900", descripcion: "Sobrina", imagen: "../static/images/placeholder.png" }
-
-    ]}
-]
+let listaDispositivos = dataUsuario.dispositivos_gestionados
 
 function accionesDispositivos(dispositivos){
     dispositivos.forEach(dispositivo => {
@@ -68,10 +39,10 @@ function accionesDispositivos(dispositivos){
 function cartaDispositivos(){
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
 
-    document.getElementById("nombreDispositivoModificar").value = persona.nombre;
-    document.getElementById("cedulaDispositivoModificar").value = persona.cedula;
-    document.getElementById("correoDispositivoModificar").value = persona.correo;
-    document.getElementById("telefonoDispositivoModificar").value = persona.telefono;
+    document.getElementById("nombreDispositivoModificar").value = persona.usuario_asignado.nombre_completo;
+    document.getElementById("cedulaDispositivoModificar").value = persona.usuario_asignado.cedula;
+    document.getElementById("correoDispositivoModificar").value = persona.usuario_asignado.correo_electronico;
+    document.getElementById("telefonoDispositivoModificar").value = persona.usuario_asignado.telefono;
 
 }
 

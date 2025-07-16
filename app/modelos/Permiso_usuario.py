@@ -19,6 +19,7 @@ class PermisoUsuario(db.Model):
             "id_dispositivo": self.id_dispositivo,
             "nivel": self.nivel,
             "dispositivo": self.dispositivo.codigo if self.dispositivo else None,
-            "permiso": self.permiso.nombre if self.permiso else None,
+            "permiso": self.permiso.to_dict_resumido() if self.permiso else None,
             "eliminado": self.eliminado,
         }
+    

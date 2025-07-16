@@ -19,7 +19,7 @@ class Usuario(db.Model):
 
     transacciones = db.relationship("Transaccion", back_populates='usuario')
     caracteristicas_usuario = db.relationship("Caracteristica_Usuario", back_populates='usuario')
-    ubicaciones = db.relationship('UbicacionUsuario', back_populates='usuario')
+    ubicacion = db.relationship('UbicacionUsuario', back_populates='usuario')
     ubicaciones_creadas = db.relationship('Ubicacion', back_populates='usuario')
     rutas = db.relationship('Ruta', back_populates='usuario')
     personas_confianza = db.relationship('PersonaConfianza', back_populates='usuario')
@@ -48,6 +48,7 @@ class Usuario(db.Model):
         return {
             "id": self.id,
             "nombre_completo": self.nombre_completo,
+            "cedula": self.cedula,
             "correo_electronico": self.correo_electronico,
             "telefono": self.telefono,
             "fecha_nacimiento": self.fecha_nacimiento.isoformat() if self.fecha_nacimiento else None,
@@ -58,10 +59,10 @@ class Usuario(db.Model):
             "id_plan": self.id_plan,
             "transacciones": [t.to_dict() for t in self.transacciones],
             "caracteristicas_usuario": [c.to_dict() for c in self.caracteristicas_usuario],
-            "ubicaciones": [u.to_dict() for u in self.ubicaciones],
+            "ubicacion": [u.to_dict() for u in self.ubicacion],
             "ubicaciones_creadas": [u.to_dict() for u in self.ubicaciones_creadas],
             "rutas": [r.to_dict() for r in self.rutas],
-            "personas_confianza": [p.to_dict() for p in self.personas_confianza],
+            "personas_confianza": [p.to_dict_resumido() for p in self.personas_confianza],
             "dispositivos_gestionados": [d.to_dict() for d in self.dispositivos_gestionados],
             "dispositivos_asignados": [d.to_dict() for d in self.dispositivos_asignados],
             "plan": self.plan.to_dict() if self.plan else None,
@@ -76,4 +77,8 @@ class Usuario(db.Model):
             "telefono": self.telefono,
             "fecha_nacimiento": self.fecha_nacimiento.isoformat() if self.fecha_nacimiento else None,
             "eliminado": self.eliminado,
+            "rutas": [r.to_dict() for r in self.rutas],
+            "ubicacion": [u.to_dict() for u in self.ubicacion],
+            "ubicaciones_creadas": [u.to_dict() for u in self.ubicaciones_creadas],
+            "personas_confianza": [p.to_dict_resumido() for p in self.personas_confianza],
         }
