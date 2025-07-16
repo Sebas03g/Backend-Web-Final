@@ -128,8 +128,8 @@ function crearContenedorInformacion(){
 
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
 
-    document.getElementById("nombreDispositivo").textContent = `Nombre Dispositivo: ${persona.nombreDispositivo}`;
-    document.getElementById("nombrePersonaDispositivo").textContent = `Nombre Persona: ${persona.nombre}`;
+    document.getElementById("nombreDispositivo").textContent = `Nombre Dispositivo: ${persona.nombre_completo}`;
+    document.getElementById("nombrePersonaDispositivo").textContent = `Nombre Persona: ${persona.usuario_asignado.nombre_completo}`;
     document.getElementById("cedulaDispositivo").textContent = `Cedula Persona: ${persona.cedula}`;
     document.getElementById("correoDispositivo").textContent = `Correo: ${persona.correo}`;
     document.getElementById("telefonoDispositivo").textContent = `Telefono: ${persona.telefono}`;

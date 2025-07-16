@@ -1,6 +1,7 @@
 from ..config.database import db
 from sqlalchemy import Numeric
 import hashlib
+from datetime import datetime
 
 class Usuario(db.Model):
     __tablename__ = 'Usuario'
@@ -15,6 +16,9 @@ class Usuario(db.Model):
     es_monitoreo = db.Column(db.Boolean, nullable=False)
     imagen = db.Column(db.String(150), nullable=False)
     eliminado = db.Column(db.Boolean, default=False)
+    estado = db.Column(db.String)
+    conectado = db.Column(db.DateTime, default=datetime.utcnow)
+    tiempo_viaje = db.Column(db.DateTime,  nullable=True)
     id_plan = db.Column(db.Integer, db.ForeignKey('Plan.id', ondelete='SET NULL'), nullable=True)
 
     transacciones = db.relationship("Transaccion", back_populates='usuario')
