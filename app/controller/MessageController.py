@@ -9,8 +9,7 @@ class MessageController():
         data = request.json
         try:
             usuario = BaseRepo(Usuario).getById(id)
-            lista_correos = list(map(lambda x: x.gestor.correo_electronico,[usuario.dispositivos_asignados]))
-
+            lista_correos = [d.gestor.correo_electronico for d in usuario.dispositivos_asignados if d.gestor]
             html = (
                 f"<h2>Mensaje de {usuario.nombre_completo}</h2><br>"
                 f"<p>{data['mensaje']}</p><br>"
@@ -21,6 +20,8 @@ class MessageController():
                 subject="Mensaje",
                 html=html
             )
+
+            return jsonify({"mensaje":"Se mando el mensaje"}), 200
 
         except Exception as e:
             return jsonify({"error": str(e)}), 400
@@ -39,6 +40,8 @@ class MessageController():
                 subject="Mensaje",
                 html=html
             )
+
+            return jsonify({"mensaje":"Se mando el mensaje"}), 200
 
         except Exception as e:
             return jsonify({"error": str(e)}), 400

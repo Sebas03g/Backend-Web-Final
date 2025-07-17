@@ -84,6 +84,12 @@ def create_app():
     from sqlalchemy import text
 
     with app.app_context():
+        #db.session.execute(text("DROP SCHEMA public CASCADE"))
+        #db.session.execute(text("CREATE SCHEMA public"))
+        #db.session.execute(text("GRANT ALL ON SCHEMA public TO postgres"))
+        #db.session.execute(text("GRANT ALL ON SCHEMA public TO public"))
+        #db.session.commit()
+
         db.create_all()
 
     return app

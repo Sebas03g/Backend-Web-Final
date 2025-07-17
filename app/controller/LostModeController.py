@@ -22,6 +22,7 @@ class LostModeController():
                 subject="Activacion modo perdida.",
                 html=html
             )
+            return jsonify({"mensaje":"Se enscendio el modo de perdida"}), 200
 
         except Exception as e:
             return jsonify({"error": str(e)}), 400

@@ -20,13 +20,13 @@ class BaseController:
         
     def getAll(self):
         datos = self.repositorio.getAll()
-        return jsonify([dato.to_dict() for dato in datos])
+        return jsonify([dato.to_dict() for dato in datos]),200
 
     def getById(self, id):
         dato = self.repositorio.getById(id)
         if not dato:
             return jsonify({"error": f"{self.tipoObjeto.__name__} no encontrado"}), 404
-        return jsonify(dato.to_dict())
+        return jsonify(dato.to_dict()), 200
     
     def update(self, id):
         data = request.json

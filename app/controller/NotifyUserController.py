@@ -10,7 +10,7 @@ class NotifyUserController():
 
             html = (
                 f"<h2>Informacion visualizada</h2><br>"
-                f"<p>El usuario administrado {permiso.dispositivo.gestor.nombre} accedio a informacion permitida por el siguiente permiso:<br>"
+                f"<p>El usuario administrado {permiso.dispositivo.gestor.nombre_completo} accedio a informacion permitida por el siguiente permiso:<br>"
                 f"Nombre Permiso: {permiso.permiso.nombre}<br>"
                 f"Descripcion Permiso: {permiso.permiso.descripcion}</br></p>"
             )
@@ -23,6 +23,8 @@ class NotifyUserController():
                 subject="Informacion visualizada.",
                 html=html
             )
+
+            return jsonify({"mensaje":"Se notifico el mensaje"}), 200
 
         except Exception as e:
             return jsonify({"error": str(e)}), 400

@@ -128,16 +128,18 @@ function crearContenedorInformacion(){
 
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
 
+    const tiempo = persona.usuario_asignado.ruta_activa!==null ? persona.usuario_asignado.ruta_activa.tiempo : "No esta en ruta"
+
     document.getElementById("nombreDispositivo").textContent = `Nombre Dispositivo: ${persona.nombre_completo}`;
     document.getElementById("nombrePersonaDispositivo").textContent = `Nombre Persona: ${persona.usuario_asignado.nombre_completo}`;
-    document.getElementById("cedulaDispositivo").textContent = `Cedula Persona: ${persona.cedula}`;
-    document.getElementById("correoDispositivo").textContent = `Correo: ${persona.correo}`;
-    document.getElementById("telefonoDispositivo").textContent = `Telefono: ${persona.telefono}`;
-    document.getElementById("estadoDispositivo").textContent = `Estado: ${persona.estado}`;
-    document.getElementById("conectadoDispositivo").textContent = `Ultima vez conectado: ${persona.conectado}`;
-    document.getElementById("timpoViajeDispositivo").textContent = `Tiempo de ultimo viaje: ${persona.tiempoViaje}`;
+    document.getElementById("cedulaDispositivo").textContent = `Cedula Persona: ${persona.usuario_asignado.cedula}`;
+    document.getElementById("correoDispositivo").textContent = `Correo: ${persona.usuario_asignado.correo_electronico}`;
+    document.getElementById("telefonoDispositivo").textContent = `Telefono: ${persona.usuario_asignado.telefono}`;
+    document.getElementById("estadoDispositivo").textContent = `Estado: ${persona.usuario_asignado.estado}`;
+    document.getElementById("conectadoDispositivo").textContent = `Ultima vez conectado: ${persona.usuario_asignado.conectado}`;
+    document.getElementById("timpoViajeDispositivo").textContent = `Tiempo de ultimo viaje: ${tiempo}`;
     document.getElementById("codigoUsuario").textContent = persona.codigo;
-    document.getElementById("imagenPersona").src = persona.imagen;
+    document.getElementById("imagenPersona").src = persona.usuario_asignado.imagen;
 
     document.getElementById("modificarDispositivo").dataset.idDispositivo = idDispositivo;
 
@@ -163,19 +165,26 @@ function modificarIMG(){
 
 function crearContenedorPermisos() {
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
-    let listaBotonesPermisos = document.getElementById("listaPermisos");
-    
-    let listaPermisos = permisos.filter(permiso =>
-        persona.permisos.some(p => p.id === permiso.id)
-    );
+    const listaBotonesPermisos = document.getElementById("listaPermisos");
+
+    const listaPermisos = persona?.permisos_usuario || [];
 
     listaBotonesPermisos.innerHTML = "";
-    persona.permisos.sort((a, b) => a.id - b.id);
+
+    if (listaPermisos.length === 0) {
+        // Puedes mostrar un mensaje si no hay permisos
+        const mensaje = document.createElement("p");
+        mensaje.textContent = "No hay permisos asignados.";
+        listaBotonesPermisos.appendChild(mensaje);
+        return;
+    }
+
+    listaPermisos.sort((a, b) => a.id - b.id);
 
     listaPermisos.forEach(permiso => {
-        let nuevoElementoLista = document.createElement("li");
+        const nuevoElementoLista = document.createElement("li");
 
-        let nuevoBoton = document.createElement("button");
+        const nuevoBoton = document.createElement("button");
         nuevoBoton.classList.add("elementoLista");
         nuevoBoton.textContent = permiso.nombre;
         nuevoBoton.dataset.id = permiso.id;
@@ -186,8 +195,8 @@ function crearContenedorPermisos() {
             crearCartaPermiso(
                 listaBotonesPermisos,
                 nuevoBoton,
-                permiso,
-                persona.permisos_usuario.find(p => p.id == permiso.id).nivel
+                permiso.permiso,
+                permiso.nivel
             );
             eliminarClase(listaBotonesPermisos.querySelectorAll("li"), "seleccionado");
             nuevoElementoLista.classList.add("seleccionado");
@@ -196,15 +205,16 @@ function crearContenedorPermisos() {
         listaBotonesPermisos.appendChild(nuevoElementoLista);
     });
 
-    const primerPermiso = persona.permisos[0];
-    const permisoData = permisos.find(p => p.id === primerPermiso.id);
+    const primerPermiso = listaPermisos[0];
     const botonElemento = Array.from(listaBotonesPermisos.querySelectorAll(".elementoLista"))
         .find(el => parseInt(el.dataset.id) === primerPermiso.id);
 
-    if (botonElemento && permisoData) {
-        crearCartaPermiso(listaBotonesPermisos, botonElemento, permisoData, primerPermiso.nivel);
+    if (botonElemento && primerPermiso.permiso) {
+        crearCartaPermiso(listaBotonesPermisos, botonElemento, primerPermiso.permiso, primerPermiso.nivel);
+        botonElemento.parentElement.classList.add("seleccionado");
     }
 }
+
 
 function crearCartaPermiso(padre, elemento, permiso, nivel) {
     eliminarClase(padre.querySelectorAll(".elementoLista"), "seleccionado");
@@ -226,19 +236,28 @@ function crearCartaPermiso(padre, elemento, permiso, nivel) {
 
 }
 
-function crearContenedorUbicacion(){
+function crearContenedorUbicacion() {
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
-    let listaUbicaciones = persona.usuario_asignado.ubicaciones_creadas;
-    let listBotonesUbicaciones = document.getElementById("listaUbicaciones");
+    const listaUbicaciones = persona?.usuario_asignado?.ubicaciones_creadas || [];
+    const listBotonesUbicaciones = document.getElementById("listaUbicaciones");
     listBotonesUbicaciones.innerHTML = "";
 
-    document.getElementById("crearUbicacion").addEventListener("click", () => crearUbicacion(Array.from(listBotonesUbicaciones.querySelectorAll(".elementoLista"))));
+    document.getElementById("crearUbicacion").addEventListener("click", () =>
+        crearUbicacion(Array.from(listBotonesUbicaciones.querySelectorAll(".elementoLista")))
+    );
 
     funcionalidadBusquedaLista(listaUbicaciones, crearCartaUbicacion, listBotonesUbicaciones);
 
-    crearCartaUbicacion(listBotonesUbicaciones, Array.from(listBotonesUbicaciones.querySelectorAll(".elementoLista"))
-    .find(l => l.dataset.id = listaUbicaciones[0].id), listaUbicaciones[0]);
+    if (listaUbicaciones.length > 0) {
+        const primerElemento = Array.from(listBotonesUbicaciones.querySelectorAll(".elementoLista"))
+            .find(l => l.dataset.id == listaUbicaciones[0].id);
+        
+        if (primerElemento) {
+            crearCartaUbicacion(listBotonesUbicaciones, primerElemento, listaUbicaciones[0]);
+        }
+    }
 }
+
 
 function crearUbicacion(listaBotones){
 
@@ -378,19 +397,27 @@ function crearMapa(elementoUbicacion) {
     return mapaUbicacion;
 }
 
-function crearContenedorRuta(){
+function crearContenedorRuta() {
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
-    let listaRutas = persona.usuario_asignado.ruta;
-    let listaBotonesRutas = document.getElementById("listaRutas");
+    const listaRutas = persona?.usuario_asignado?.ruta || [];
+    const listaBotonesRutas = document.getElementById("listaRutas");
     listaBotonesRutas.innerHTML = "";
 
-    //document.getElementById("crearRuta").addEventListener("click", () => )
+    // Si necesitas una acción al crear nuevas rutas:
+    // document.getElementById("crearRuta").addEventListener("click", () => { ... });
 
     funcionalidadBusquedaLista(listaRutas, crearCartaRuta, listaBotonesRutas);
 
-    crearCartaRuta(listaBotonesRutas, Array.from(listaBotonesRutas.querySelectorAll(".elementoLista")).find(l => l.dataset.id = listaRutas[0].id), listaRutas[0]);
-
+    if (listaRutas.length > 0) {
+        const primerElemento = Array.from(listaBotonesRutas.querySelectorAll(".elementoLista"))
+            .find(l => l.dataset.id == listaRutas[0].id);
+        
+        if (primerElemento) {
+            crearCartaRuta(listaBotonesRutas, primerElemento, listaRutas[0]);
+        }
+    }
 }
+
 
 function crearCartaRuta(padre,elemento, elementoRuta){
     let mapa = crearRuta(elementoRuta);
@@ -473,19 +500,28 @@ function crearRuta(elementoRuta) {
 }
 
 
-function crearContenedorPersonas(){
+function crearContenedorPersonas() {
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
-    let listaPersonasConfianza = persona.usuario_asignado.personas_confianza;
-    let listBotonesPersonas = document.getElementById("listaPersonas");
+    const listaPersonasConfianza = persona?.usuario_asignado?.personas_confianza || [];
+    const listBotonesPersonas = document.getElementById("listaPersonas");
     listBotonesPersonas.innerHTML = "";
 
-    document.getElementById("crearPC").addEventListener("click", () => crearPC( Array.from(listBotonesPersonas.querySelectorAll(".elementoLista"))));
+    document.getElementById("crearPC").addEventListener("click", () =>
+        crearPC(Array.from(listBotonesPersonas.querySelectorAll(".elementoLista")))
+    );
 
     funcionalidadBusquedaLista(listaPersonasConfianza, crearCartaPC, listBotonesPersonas);
 
-    crearCartaPC(listBotonesPersonas, Array.from(listBotonesPersonas.querySelectorAll(".elementoLista"))
-    .find(l => l.dataset.id = listaPersonasConfianza[0].id), listaPersonasConfianza[0]);
+    if (listaPersonasConfianza.length > 0) {
+        const primerElemento = Array.from(listBotonesPersonas.querySelectorAll(".elementoLista"))
+            .find(l => l.dataset.id == listaPersonasConfianza[0].id);
+
+        if (primerElemento) {
+            crearCartaPC(listBotonesPersonas, primerElemento, listaPersonasConfianza[0]);
+        }
+    }
 }
+
 
 function crearPC(listaBotones){
 
