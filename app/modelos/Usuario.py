@@ -72,9 +72,11 @@ class Usuario(db.Model):
         return {
             "id": self.id,
             "nombre_completo": self.nombre_completo,
+            "cedula": self.cedula,
             "correo_electronico": self.correo_electronico,
             "telefono": self.telefono,
             "fecha_nacimiento": self.fecha_nacimiento.isoformat() if self.fecha_nacimiento else None,
+            "imagen": self.imagen,
             "eliminado": self.eliminado,
             "rutas": [r.to_dict() for r in self.rutas] if self.rutas else [],
             "ruta_activa": self.ruta_activa if self.ruta_activa else None,

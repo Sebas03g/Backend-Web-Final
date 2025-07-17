@@ -15,7 +15,7 @@ let marcadorSeleccionado = null;
 
 const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
-let listaDispositivos = dataUsuario.dispositivos_gestionados
+let listaDispositivos = dataUsuario.dispositivos_asignados;
 
 
 function accionesNavBar(elementosNav){
@@ -129,6 +129,7 @@ function crearContenedorInformacion(){
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
 
     const tiempo = persona.usuario_asignado.ruta_activa!==null ? persona.usuario_asignado.ruta_activa.tiempo : "No esta en ruta"
+    
 
     document.getElementById("nombreDispositivo").textContent = `Nombre Dispositivo: ${persona.nombre_completo}`;
     document.getElementById("nombrePersonaDispositivo").textContent = `Nombre Persona: ${persona.usuario_asignado.nombre_completo}`;
@@ -139,7 +140,8 @@ function crearContenedorInformacion(){
     document.getElementById("conectadoDispositivo").textContent = `Ultima vez conectado: ${persona.usuario_asignado.conectado}`;
     document.getElementById("timpoViajeDispositivo").textContent = `Tiempo de ultimo viaje: ${tiempo}`;
     document.getElementById("codigoUsuario").textContent = persona.codigo;
-    document.getElementById("imagenPersona").src = persona.usuario_asignado.imagen;
+    const urlImagen = `http://localhost:5000/uploads/${persona.usuario_asignado.imagen}`;
+    document.getElementById("imagenPersona").src = urlImagen;
 
     document.getElementById("modificarDispositivo").dataset.idDispositivo = idDispositivo;
 
@@ -172,7 +174,6 @@ function crearContenedorPermisos() {
     listaBotonesPermisos.innerHTML = "";
 
     if (listaPermisos.length === 0) {
-        // Puedes mostrar un mensaje si no hay permisos
         const mensaje = document.createElement("p");
         mensaje.textContent = "No hay permisos asignados.";
         listaBotonesPermisos.appendChild(mensaje);
@@ -247,6 +248,7 @@ function crearContenedorUbicacion() {
     );
 
     funcionalidadBusquedaLista(listaUbicaciones, crearCartaUbicacion, listBotonesUbicaciones);
+
 
     if (listaUbicaciones.length > 0) {
         const primerElemento = Array.from(listBotonesUbicaciones.querySelectorAll(".elementoLista"))
@@ -324,11 +326,13 @@ function crearCartaUbicacion(padre,elemento, elementoUbicacion){
     let mapa = crearMapa(elementoUbicacion);
     eliminarClase(padre.querySelectorAll(".elementoLista"), "seleccionado");
     elemento.classList.add("seleccionado");
+
     generarPuntos(elementoUbicacion, mapa);
 
-    marcadorSeleccionado = elementoUbicacion.punto;
 
-    document.getElementById("nombreUbicacion").value = elementoUbicacion.nombre;
+    marcadorSeleccionado = elementoUbicacion.punto.split(",").map(Number);
+
+    document.getElementById("nombreUbicacion").value = elementoUbicacion.nombre_ubicacion;
     document.getElementById("descripcionUbicacion").textContent = elementoUbicacion.descripcion;
     document.getElementById("miComboboxSeguridad").value = elementoUbicacion.tipo;
 
@@ -345,13 +349,14 @@ function crearCartaUbicacion(padre,elemento, elementoUbicacion){
 }
 
 function generarPuntos(elementoUbicacion, mapa){
-    let area = L.circle(elementoUbicacion.punto, {
+
+    let area = L.circle(elementoUbicacion.punto.split(",").map(Number), {
         color: "black",
         fillColor: elementoUbicacion.tipo,
         fillOpacity: 0.3,
         radius: 100
     }).addTo(mapa);
-    area.bindPopup(elementoUbicacion.nombre);
+    area.bindPopup(elementoUbicacion.nombre_ubicacion);
 }
 
 function eliminarDispositivo(){
@@ -376,8 +381,9 @@ function crearMapa(elementoUbicacion) {
         mapaUbicacion = null;
     }
 
+
     mapaUbicacion = L.map(document.getElementById("mapaUbicacion"), {
-        center: elementoUbicacion.punto,
+        center: elementoUbicacion.punto.split(",").map(Number),
         zoom: 14,
         zoomControl: false
     });
@@ -391,6 +397,7 @@ function crearMapa(elementoUbicacion) {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(mapaUbicacion);
+
 
     funcionalidadMapa();
 
