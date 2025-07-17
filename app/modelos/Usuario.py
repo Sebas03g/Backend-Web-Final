@@ -16,16 +16,15 @@ class Usuario(db.Model):
     es_monitoreo = db.Column(db.Boolean, nullable=False)
     imagen = db.Column(db.String(150), nullable=False)
     eliminado = db.Column(db.Boolean, default=False)
-    estado = db.Column(db.String)
     conectado = db.Column(db.DateTime, default=datetime.utcnow)
-    tiempo_viaje = db.Column(db.DateTime,  nullable=True)
     id_plan = db.Column(db.Integer, db.ForeignKey('Plan.id', ondelete='SET NULL'), nullable=True)
+    id_ruta_activa = db.Column(db.Integer, db.ForeignKey('Ruta.id', ondelete="SET NULL"), nullable=True)
 
     transacciones = db.relationship("Transaccion", back_populates='usuario')
     caracteristicas_usuario = db.relationship("Caracteristica_Usuario", back_populates='usuario')
-    ubicacion = db.relationship('UbicacionUsuario', back_populates='usuario')
+    ubicacion = db.relationship('UbicacionUsuario', back_populates='usuario', uselist=False)
     ubicaciones_creadas = db.relationship('Ubicacion', back_populates='usuario')
-    rutas = db.relationship('Ruta', back_populates='usuario')
+    rutas = db.relationship('Ruta', back_populates='usuario', foreign_keys='Ruta.id_usuario')
     personas_confianza = db.relationship('PersonaConfianza', back_populates='usuario')
     dispositivos_gestionados = db.relationship('Dispositivo', back_populates='gestor', foreign_keys='Dispositivo.id_gestor')
     dispositivos_asignados = db.relationship('Dispositivo', back_populates='usuario_asignado', foreign_keys='Dispositivo.id_usuario')
@@ -61,16 +60,15 @@ class Usuario(db.Model):
             "imagen": self.imagen,
             "eliminado": self.eliminado,
             "id_plan": self.id_plan,
-            "transacciones": [t.to_dict() for t in self.transacciones],
-            "caracteristicas_usuario": [c.to_dict() for c in self.caracteristicas_usuario],
-            "ubicacion": [u.to_dict() for u in self.ubicacion],
-            "ubicaciones_creadas": [u.to_dict() for u in self.ubicaciones_creadas],
+            "transacciones": [t.to_dict() for t in self.transacciones] if self.transacciones else [],
+            "caracteristicas_usuario": [c.to_dict() for c in self.caracteristicas_usuario] if self.caracteristicas_usuario else [],
+            "ubicacion": self.ubicacion.to_dict() if self.ubicacion else None,
+            "ubicaciones_creadas": [u.to_dict() for u in self.ubicaciones_creadas] if self.ubicaciones_creadas else [],
             "rutas": [r.to_dict() for r in self.rutas],
-            "personas_confianza": [p.to_dict_resumido() for p in self.personas_confianza],
-            "dispositivos_gestionados": [d.to_dict() for d in self.dispositivos_gestionados],
-            "dispositivos_asignados": [d.to_dict() for d in self.dispositivos_asignados],
+            "personas_confianza": [p.to_dict_resumido() for p in self.personas_confianza] if self.personas_confianza else [],
+            "dispositivos_gestionados": [d.to_dict() for d in self.dispositivos_gestionados] if self.dispositivos_gestionados else [],
+            "dispositivos_asignados": [d.to_dict() for d in self.dispositivos_asignados] if self.dispositivos_asignados else [],
             "plan": self.plan.to_dict() if self.plan else None,
-            "eliminado": self.eliminado,
         }
 
     def to_dict_resumido(self):
@@ -81,8 +79,8 @@ class Usuario(db.Model):
             "telefono": self.telefono,
             "fecha_nacimiento": self.fecha_nacimiento.isoformat() if self.fecha_nacimiento else None,
             "eliminado": self.eliminado,
-            "rutas": [r.to_dict() for r in self.rutas],
-            "ubicacion": [u.to_dict() for u in self.ubicacion],
-            "ubicaciones_creadas": [u.to_dict() for u in self.ubicaciones_creadas],
-            "personas_confianza": [p.to_dict_resumido() for p in self.personas_confianza],
+            "rutas": [r.to_dict() for r in self.rutas] if self.rutas else [],
+            "ubicacion": self.ubicacion.to_dict() if self.ubicacion else None,
+            "ubicaciones_creadas": [u.to_dict() for u in self.ubicaciones_creadas] if self.ubicaciones_creadas else [],
+            "personas_confianza": [p.to_dict_resumido() for p in self.personas_confianza] if self.personas_confianza else [],
         }

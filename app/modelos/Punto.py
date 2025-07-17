@@ -18,9 +18,9 @@ class Punto(db.Model):
             "id": self.id,
             "lat": self.lat,
             "long": self.lng,
-            "rutas": [ruta.get_ruta() for ruta in self.ruta_puntos],
-            "ubicaciones_usuario": [u.to_dict() for u in self.ubicaciones_usuario],
-            "ubicaciones": [u.to_dict() for u in self.ubicaciones],
+            "rutas": [ruta.get_ruta() for ruta in self.ruta_puntos] if self.ruta_puntos else [],
+            "ubicaciones_usuario": [u.to_dict() for u in self.ubicaciones_usuario] if self.ubicaciones_usuario else [],
+            "ubicaciones": [u.to_dict() for u in self.ubicaciones] if self.ubicaciones else [],
             "eliminado": self.eliminado,
         }
     def to_dict_resumido(self):

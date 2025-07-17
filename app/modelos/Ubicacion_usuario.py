@@ -6,8 +6,8 @@ class UbicacionUsuario(db.Model):
     __tablename__ = 'Ubicacion_usuario'
 
     id = db.Column(db.Integer, primary_key=True)
-    id_usuario = db.Column(db.Integer, db.ForeignKey('Usuario.id'), nullable=False)
-    id_punto = db.Column(db.Integer, db.ForeignKey('Punto.id'), nullable=False)
+    id_usuario = db.Column(db.Integer, db.ForeignKey('Usuario.id'), nullable=False, unique=True)
+    id_punto = db.Column(db.Integer, db.ForeignKey('Punto.id'), nullable=True)
     fecha = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     usuario = db.relationship('Usuario', back_populates='ubicacion')

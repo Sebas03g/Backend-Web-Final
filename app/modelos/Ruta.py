@@ -1,14 +1,16 @@
 from ..config.database import db
+from datetime import datetime
 
 class Ruta(db.Model):
     __tablename__ = 'Ruta'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    nombre = db.Column(db.String, nullable=False)
-    descripcion = db.Column(db.Text)
+    nombre = db.Column(db.String, nullable=True)
+    descripcion = db.Column(db.Text, nullable=True)
+    tiempo = db.Column(db.DateTime, default=datetime.utcnow)
     id_usuario = db.Column(db.Integer, db.ForeignKey('Usuario.id'))
 
-    usuario = db.relationship('Usuario', back_populates='rutas')
+    usuario = db.relationship('Usuario', back_populates='rutas', foreign_keys=[id_usuario])
     ruta_puntos = db.relationship("RutaPunto", back_populates="ruta", cascade="all, delete-orphan")
 
     eliminado = db.Column(db.Boolean, default=False)
@@ -20,7 +22,7 @@ class Ruta(db.Model):
             "descripcion": self.descripcion,
             "id_usuario": self.id_usuario,
             "usuario": self.usuario.nombre_completo if self.usuario else None,
-            "puntos": [rp.get_point() for rp in self.ruta_puntos],
+            "puntos": [rp.get_point() for rp in self.ruta_puntos] if self.ruta_puntos else [],
             "eliminado": self.eliminado,
         }
     

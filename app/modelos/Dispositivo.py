@@ -39,7 +39,7 @@ class Dispositivo(db.Model):
             "codigo": self.codigo,
             "usuario_asignado": self.usuario_asignado.to_dict_resumido() if self.usuario_asignado else None,
             "gestor": self.gestor.to_dict_resumido() if self.gestor else None,
-            "permisos_usuario": [p.to_dict() for p in self.permisos_usuario],
+            "permisos_usuario": [p.to_dict() for p in self.permisos_usuario] if self.permisos_usuario else [],
             "estado": self.estado,
             "eliminado": self.eliminado     
         }

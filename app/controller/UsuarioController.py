@@ -2,10 +2,12 @@ from app.controller.BaseController import BaseController
 from flask import request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.services.sendMail import enviar_correo
+from app.modelos.Ubicacion_usuario import UbicacionUsuario
 
 class UsuarioController(BaseController):
     def __init__(self, objeto, repositorio,UsuarioSchema):
         super().__init__(objeto, repositorio,UsuarioSchema)
+        self.repoUbiUsuario = self.repositorio(UbicacionUsuario)
     
     def create(self):
         data = request.json
@@ -16,6 +18,9 @@ class UsuarioController(BaseController):
         valid_data['contrasena_hash'] = generate_password_hash(valid_data['contrasena_hash'])
         try:
             nuevo_objeto = self.repositorio.create(valid_data)
+
+            self.repoUbiUsuario.create({"id_usuario":nuevo_objeto.id})
+
             return jsonify({"id": nuevo_objeto.id, "mensaje": f"{self.tipoObjeto.__name__} creado", "objeto": nuevo_objeto.to_dict() }), 201
         except Exception as e:
             return jsonify({"error": str(e)}), 400
@@ -27,7 +32,7 @@ class UsuarioController(BaseController):
         else:
             valid_data = data
         try:
-            if 'contrasea_hash' in valid_data.keys():
+            if 'contrasena_hash' in valid_data:
                 valid_data['contrasena_hash'] = generate_password_hash(valid_data['contrasena_hash'])
             objeto_modificado = self.repositorio.update(id, valid_data)
             if not objeto_modificado:
