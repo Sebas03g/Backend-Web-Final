@@ -17,7 +17,8 @@ export const loginFunctionality = async (form) => {
 
         if (response.ok) {
             sessionStorage.setItem("usuario", JSON.stringify(result.usuario));
-            iniciarMonitoreo(result.usuario.ubicacion);
+            console.log(result.usuario);
+            iniciarMonitoreo(result.usuario.ubicacion.id);
             window.location.href = '/user-type';
         } else {
             alert(result.message || "Error en el login");
@@ -29,25 +30,24 @@ export const loginFunctionality = async (form) => {
 };
 
 
-function iniciarMonitoreo(id_ubicacion) {
+async function iniciarMonitoreo(id_ubicacion) {
     if ("geolocation" in navigator) {
         const watchId = navigator.geolocation.watchPosition(
             async (position) => {
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
                 try {
-                    const response = await fetch(`http://localhost:5000/ubicacion-usuario/update-point/${id_ubicacion}`, {
+                    const response = await fetch(`http://127.0.0.1:5000/ubicacion-usuario/update-point/${id_ubicacion}`, {
                         method: "POST",
                         headers: {
-                            "Content-Type": "application/json",
-                            "credentials": "include"
+                            "Content-Type": "application/json"
                         },
+                        credentials: "include",
                         body: JSON.stringify({
                             lat: lat,
                             lng: lng
                         })
                     });
-
                     const data = await response.json();
                 } catch (error) {
                     console.error("Error al enviar ubicación:", error);
@@ -67,3 +67,4 @@ function iniciarMonitoreo(id_ubicacion) {
         alert("Geolocalización no disponible.");
     }
 }
+

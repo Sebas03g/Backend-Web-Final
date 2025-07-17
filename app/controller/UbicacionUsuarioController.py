@@ -3,6 +3,7 @@ from app.controller.BaseController import BaseController
 from app.modelos.Punto import Punto
 from app.modelos.Ruta import Ruta
 from app.modelos.Usuario import Usuario
+from app.validators.Punto import PuntoSchema
 from flask import request, jsonify
 
 class UbicacionUsuarioController(BaseController):
@@ -39,12 +40,14 @@ class UbicacionUsuarioController(BaseController):
     def updatePoint(self, id):
         try:
             data = request.json
-            valid_data = self.validator().load(data) if self.validator else data
-
-            punto = self.repoPunto.create({
+            valid_data = PuntoSchema().load(data) if self.validator else data
+            
+            data_punto = {
                 "lat": valid_data["lat"],
                 "lng": valid_data["lng"]
-            })
+            }
+
+            punto = self.repoPunto.create(data_punto)
 
             objeto_modificado = self.repositorio.update(id, {
                 "id_punto": punto.id

@@ -41,12 +41,13 @@ def create_app():
 
     talisman = Talisman(app, content_security_policy={
         'default-src': "'self'",
+        'connect-src': "'self' *",
         'style-src': "'self' https://cdn.jsdelivr.net https://unpkg.com https://fonts.googleapis.com 'unsafe-inline'",
         'script-src': "'self' https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com",
         'font-src': "'self' https://fonts.gstatic.com https://cdn.jsdelivr.net",
         'img-src': "'self' data: https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org http://www.w3.org/2000/svg",
-
     })
+
 
     app.config['JWT_SECRET_KEY'] = 'clave-secreta-super-segura'
     jwt = JWTManager(app)

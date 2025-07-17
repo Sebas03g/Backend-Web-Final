@@ -2,6 +2,7 @@ from ..config.database import db
 from sqlalchemy import Numeric
 import hashlib
 from datetime import datetime
+from werkzeug.security import check_password_hash
 
 class Usuario(db.Model):
     __tablename__ = 'Usuario'
@@ -14,7 +15,7 @@ class Usuario(db.Model):
     contrasena_hash = db.Column(db.Text, nullable=False)
     monitoreo = db.Column(db.Boolean, nullable=False)
     es_monitoreo = db.Column(db.Boolean, nullable=False)
-    imagen = db.Column(db.String(150), nullable=False)
+    imagen = db.Column(db.String(150), nullable=True)
     eliminado = db.Column(db.Boolean, default=False)
     conectado = db.Column(db.DateTime, default=datetime.utcnow)
     id_plan = db.Column(db.Integer, db.ForeignKey('Plan.id', ondelete='SET NULL'), nullable=True)
@@ -34,18 +35,12 @@ class Usuario(db.Model):
         self.contrasena_hash = self.generate_password_hash(password)
 
     def check_password(self, password):
-        return self.check_password_hash(self.contrasena_hash, password)
+        return check_password_hash(self.contrasena_hash, password)
     
     def generate_password_hash(self, password):
         data = bytes(password, 'utf-8')
         sha256_hash = hashlib.sha256(data).hexdigest()
         return sha256_hash
-
-    def check_password_hash(self, true_password, password):
-        data = bytes(password, 'utf-8')
-        sha256_hash = hashlib.sha256(data).hexdigest()
-        return sha256_hash == true_password
-
 
     def to_dict(self):
         return {

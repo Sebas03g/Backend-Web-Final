@@ -9,8 +9,10 @@ class UsuarioController(BaseController):
         super().__init__(objeto, repositorio,UsuarioSchema)
         self.repoUbiUsuario = repositorio(UbicacionUsuario)
     
-    def create(self):
-        data = request.json
+    def create(self, data=None):
+        if data is None:
+            data = request.json
+        print(data)
         if self.validator != None:
             valid_data = self.validator().load(data)
         else:
@@ -21,7 +23,7 @@ class UsuarioController(BaseController):
 
             self.repoUbiUsuario.create({"id_usuario":nuevo_objeto.id})
 
-            return jsonify({"id": nuevo_objeto.id, "mensaje": f"{self.tipoObjeto.__name__} creado", "objeto": nuevo_objeto.to_dict() }), 201
+            return nuevo_objeto
         except Exception as e:
             return jsonify({"error": str(e)}), 400
     
