@@ -7,7 +7,7 @@ from app.modelos.Ubicacion_usuario import UbicacionUsuario
 class UsuarioController(BaseController):
     def __init__(self, objeto, repositorio,UsuarioSchema):
         super().__init__(objeto, repositorio,UsuarioSchema)
-        self.repoUbiUsuario = self.repositorio(UbicacionUsuario)
+        self.repoUbiUsuario = repositorio(UbicacionUsuario)
     
     def create(self):
         data = request.json
