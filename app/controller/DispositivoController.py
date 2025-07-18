@@ -10,12 +10,15 @@ class DispositivoController(BaseController):
     
     def create(self):
         data = request.json
+        print(data)
         if self.validator != None:
             valid_data = self.validator().load(data)
         else:
             valid_data = data
         try:
+            print(valid_data)
             nuevo_objeto = self.repositorio.create(valid_data)
+            print()
             usuario_creador = self.repoUsuario.getById(int(session.get('user_id')))
 
             html= (

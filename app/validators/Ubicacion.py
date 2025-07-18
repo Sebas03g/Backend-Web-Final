@@ -19,11 +19,6 @@ class UbicacionSchema(Schema):
         validate=validate.Length(max=100),
         error_messages={"invalid": "Debe ser una cadena válida."}
     )
-    nivel = fields.Integer(
-        allow_none=True,
-        validate=validate.Range(min=0),
-        error_messages={"invalid": "Debe ser un entero válido."}
-    )
     id_usuario = fields.Integer(
         allow_none=True,
         validate=validate.Range(min=1),

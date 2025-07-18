@@ -8,7 +8,7 @@ let marcadorSeleccionado = null;
 
 const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
-let areas = dataUsuario?.ubicaciones_creadas ? dataUsuario.dispositivos_asignados?.usuario_asignado?.ubicaciones_creadas : [] 
+let areas = dataUsuario?.ubicaciones_creadas ? dataUsuario.dispositivos_gestionados?.usuario_asignado?.ubicaciones_creadas : [] 
 
 function abrirVentanaUbicacionesGenerales(){
 

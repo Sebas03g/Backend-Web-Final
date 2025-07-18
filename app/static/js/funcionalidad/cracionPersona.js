@@ -8,7 +8,7 @@ let idDispositivo = null;
 
 const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
-let listaDispositivos = dataUsuario.dispositivos_asignados;
+let listaDispositivos = dataUsuario.dispositivos_gestionados;
 
 function accionesDispositivos(dispositivos){
     dispositivos.forEach(dispositivo => {

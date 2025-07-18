@@ -5,6 +5,7 @@ from app.modelos.Ruta import Ruta
 from app.modelos.Usuario import Usuario
 from app.validators.Punto import PuntoSchema
 from flask import request, jsonify
+from datetime import datetime
 
 class UbicacionUsuarioController(BaseController):
     def __init__(self, objeto, repositorio, validator, repoPunto, repoRuta):
@@ -67,7 +68,11 @@ class UbicacionUsuarioController(BaseController):
 
                 self.repoRuta.assing_point(punto.id, id_ruta)
             else:
+                id_ruta = usuario.id_ruta_activa
+                if id_ruta is not None:
+                    self.repoRuta.update(id_ruta, {"hora_fin": datetime.now().time})
                 self.repoUsuario.update(id_usuario, {"id_ruta_activa": None})
+                 
 
             return jsonify({
                 "id": objeto_modificado.id,

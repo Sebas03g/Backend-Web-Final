@@ -14,6 +14,14 @@ class RutaSchema(Schema):
         validate=validate.Length(max=1000),
         error_messages={"invalid": "Debe ser una cadena válida."}
     )
+    hora_inicio = fields.Time(
+        format="%H:%M:%S", 
+        required=True
+        )
+    hora_fin = fields.Time(
+        format="%H:%M:%S", 
+        required=False
+        )
     id_usuario = fields.Integer(
         allow_none=True,
         validate=validate.Range(min=1),

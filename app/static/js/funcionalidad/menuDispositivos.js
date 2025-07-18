@@ -6,7 +6,7 @@ var idDipositivo;
 
 const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
-const dispositivos = dataUsuario.dispositivos_asignados;
+const dispositivos = dataUsuario.dispositivos_gestionados;
 
 function accionMenuBoton(btn){
   const menu = document.getElementById('contenedorMenu');

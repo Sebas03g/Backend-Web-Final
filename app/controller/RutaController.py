@@ -16,13 +16,8 @@ class RutaController(BaseController):
         else:
             valid_data = data
         try:
-            print("AQUIII")
-            print(valid_data)
             punto = self.puntoRepo.create(valid_data)
-            print("PASAAAAAAAA")
-            print(punto.id)
             rutaPunto = self.repositorio.assing_point(punto.id, id)
-            print("PASAAAAAA  222")
             return jsonify({"id": rutaPunto.id, "mensaje": f"Punto agregado a ruta", "objeto": rutaPunto.to_dict() }), 201
         except Exception as e:
             return jsonify({"error": str(e)}), 400

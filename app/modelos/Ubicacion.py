@@ -7,7 +7,6 @@ class Ubicacion(db.Model):
     nombre_ubicacion = db.Column(db.String, nullable=False)
     descripcion = db.Column(db.Text)
     tipo = db.Column(db.String)
-    nivel = db.Column(db.Integer)
     id_usuario = db.Column(db.Integer, db.ForeignKey('Usuario.id'))
     id_punto = db.Column(db.Integer, db.ForeignKey('Punto.id'))
 
@@ -22,7 +21,6 @@ class Ubicacion(db.Model):
             "nombre_ubicacion": self.nombre_ubicacion,
             "descripcion": self.descripcion,
             "tipo": self.tipo,
-            "nivel": self.nivel,
             "id_usuario": self.id_usuario,
             "id_punto": self.id_punto,
             "usuario": self.usuario.nombre_completo if self.usuario else None,

@@ -302,7 +302,7 @@
               <i class="bi bi-plus-circle"></i>
             </button>
           </div>
-          <form class="container carta informacionContenido">
+          <form class="container carta informacionContenido" id="informacionUbicacion">
             <div class="card" >
                 <div id="mapaUbicacion">
                 </div>
@@ -314,11 +314,11 @@
                     <h5 class="card-title">Ubicaciones</h5>
                     <div class="mb-3">
                       <label for="nombre" class="form-label">Nombre</label>
-                      <input type="text" class="form-control" id="nombreUbicacion" placeholder="Nombre Ubicación">
+                      <input type="text" class="form-control" id="nombreUbicacion" name="nombreUbicacion" placeholder="Nombre Ubicación">
                     </div>
                     <div class="mb-3">
                       <label for="comentario" class="form-label">Descripcion</label>
-                      <textarea class="form-control" id="descripcionUbicacion" rows="4" placeholder="Escribe la descripcion de la ubicacion aquí..."></textarea>
+                      <textarea class="form-control" id="descripcionUbicacion" name="descripcionUbicacion" rows="4" placeholder="Escribe la descripcion de la ubicacion aquí..."></textarea>
                     </div>
                     <div class="mb-3">
                       <label for="miComboboxSeguridad" class="form-label">Seleccione el Tipo:</label>
@@ -359,7 +359,7 @@
               </li>
             </ul>
           </div>
-          <form class="container carta informacionContenido">
+          <form class="container carta informacionContenido" id="informacionRuta">
             <div class="card" >
                 <div id="mapaRuta">
                 </div>
@@ -370,14 +370,18 @@
                   </div>
                     <h5 class="card-title">Rutas</h5>
                     <div class="mb-3">
-                      <label for="nombre" class="form-label">Nombre</label>
+                      <label for="nombreRuta" class="form-label">Nombre</label>
                       <input type="text" class="form-control" id="nombreRuta" placeholder="Nombre Ruta">
                     </div>
                     <div class="mb-3">
-                      <label for="nombre" class="form-label">Hora Inicial</label>
-                      <input type="text" class="form-control" id="puntoInicialRuta" placeholder="00:00">
-                      <label for="nombre" class="form-label">Hora Final</label>
-                      <input type="text" class="form-control" id="puntoFinalRuta" placeholder="00:00">
+                      <label for="comentario" class="form-label">Descripcion</label>
+                      <textarea class="form-control" id="descripcionRuta" name="descripcionRuta" rows="4" placeholder="Escribe la descripcion de la ruta aquí..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                      <label for="horaInicialRuta" class="form-label">Hora Inicial</label>
+                      <input type="time" class="form-control" id="horaInicialRuta" placeholder="00:00">
+                      <label for="horaInicialRuta" class="form-label">Hora Final</label>
+                      <input type="time" class="form-control" id="horaInicialRuta" placeholder="00:00">
                     </div>
                     <input type="" class="btn btnModificar" value="Aceptar" readonly>
                     <input type="" class="btn eliminados" id="botonEliminarRuta" value="Eliminar" readonly>
@@ -413,7 +417,7 @@
               <i class="bi bi-plus-circle"></i>
             </button>
           </div>
-          <form class="container carta informacionContenido">
+          <form class="container carta informacionContenido" id="informacionPC">
             <div class="card" >
                 <img src="../static/images/placeholder.png" class="card-img" alt="Imagen de carta" id="imgConfianza">
                 <input type="file" id="inputImagenPC" accept="image/*" style="display: none;" />

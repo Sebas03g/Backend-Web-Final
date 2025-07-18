@@ -1,21 +1,29 @@
 import { eliminarClase } from '../general/utilidades.js'
+import { eliminarPC } from './funcionalidadPC.js';
+import { eliminarUbicacion } from './funcionalidadUbicaciones.js';
+import { eliminarRuta } from './funcionalidadRuta.js';
+import { accionBotonContenedorPC } from './funcionalidadPC.js';
+import { accionBotonContenedorRuta } from './funcionalidadRuta.js';
 import { esPantallaPequena } from '../general/utilidades.js'
 import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
+import { accionBotonContenedorUbicacion } from './funcionalidadUbicaciones.js'
 import { slideDownElementos } from '../general/utilidades.js';
 import * as validar from './validacion.js';
-
-import { gestorPersonaConfianza } from '../data/GestionarPersonaConfianza.js';
 
 let idDispositivo = null;
 let idPC = null;
 let idUbicacion = null;
+let idRuta = null;
 let mapaUbicacion = null;
 let mapaRuta = null;
 let marcadorSeleccionado = null;
 
-const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+var listaDispositivos;
 
-let listaDispositivos = dataUsuario.dispositivos_asignados;
+function recargarDatos(){
+    const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+    listaDispositivos = dataUsuario.dispositivos_gestionados;
+}
 
 
 function accionesNavBar(elementosNav){
@@ -51,13 +59,13 @@ function accionBotonMenu(botonMenu){
     })
 }
 
-function funcionalidadBusquedaLista(lista, funcion, listaBotones){
+function funcionalidadBusquedaLista(lista, funcion, listaBotones, nombre="nombre"){
     lista.forEach(elemento => {
         let nuevoElementoLista = document.createElement("li");
 
         let nuevoBoton = document.createElement("button");
         nuevoBoton.classList.add("elementoLista");
-        nuevoBoton.textContent = elemento.nombre;
+        nuevoBoton.textContent = elemento[nombre];
         nuevoBoton.dataset.id = elemento.id;
 
         nuevoElementoLista.appendChild(nuevoBoton);
@@ -75,13 +83,13 @@ function agregarFuncionesBusqueda(){
     document.getElementById("busquedaUbicacion").addEventListener('keyup', () => {
         const persona = listaDispositivos.find(l => l.id == idDispositivo);
         let valor = document.getElementById("busquedaUbicacion").value;
-        let lista = persona.usuario_asignado.ubicaciones_creadas.filter(l => l.nombre.toLowerCase().includes(valor.toLowerCase()));
+        let lista = persona.usuario_asignado.ubicaciones_creadas.filter(l => l.nombre_ubicacion.toLowerCase().includes(valor.toLowerCase()));
         if(valor === ""){
             lista = persona.usuario_asignado.ubicaciones_creadas;
         }
         document.getElementById("listaUbicaciones").innerHTML = "";
         let listaBotones = document.getElementById(document.getElementById("busquedaUbicacion").dataset.idLista)
-        funcionalidadBusquedaLista(lista, crearCartaUbicacion, listaBotones);
+        funcionalidadBusquedaLista(lista, crearCartaUbicacion, listaBotones, "nombre_ubicacion");
     });
 
     document.getElementById("busquedaPC").addEventListener('keyup', () => {
@@ -141,6 +149,7 @@ function crearContenedorInformacion(){
     document.getElementById("timpoViajeDispositivo").textContent = `Tiempo de ultimo viaje: ${tiempo}`;
     document.getElementById("codigoUsuario").textContent = persona.codigo;
     const urlImagen = `http://localhost:5000/uploads/${persona.usuario_asignado.imagen}`;
+    console.log(urlImagen)
     document.getElementById("imagenPersona").src = urlImagen;
 
     document.getElementById("modificarDispositivo").dataset.idDispositivo = idDispositivo;
@@ -187,8 +196,8 @@ function crearContenedorPermisos() {
 
         const nuevoBoton = document.createElement("button");
         nuevoBoton.classList.add("elementoLista");
-        nuevoBoton.textContent = permiso.nombre;
-        nuevoBoton.dataset.id = permiso.id;
+        nuevoBoton.textContent = permiso.permiso.nombre;
+        nuevoBoton.dataset.id = permiso.permiso.id;
 
         nuevoElementoLista.appendChild(nuevoBoton);
 
@@ -240,6 +249,7 @@ function crearCartaPermiso(padre, elemento, permiso, nivel) {
 function crearContenedorUbicacion() {
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
     const listaUbicaciones = persona?.usuario_asignado?.ubicaciones_creadas || [];
+    console.log(listaUbicaciones)
     const listBotonesUbicaciones = document.getElementById("listaUbicaciones");
     listBotonesUbicaciones.innerHTML = "";
 
@@ -247,7 +257,7 @@ function crearContenedorUbicacion() {
         crearUbicacion(Array.from(listBotonesUbicaciones.querySelectorAll(".elementoLista")))
     );
 
-    funcionalidadBusquedaLista(listaUbicaciones, crearCartaUbicacion, listBotonesUbicaciones);
+    funcionalidadBusquedaLista(listaUbicaciones, crearCartaUbicacion, listBotonesUbicaciones, "nombre_ubicacion");
 
 
     if (listaUbicaciones.length > 0) {
@@ -341,7 +351,7 @@ function crearCartaUbicacion(padre,elemento, elementoUbicacion){
     document.getElementById("botonAccionUbicacion").dataset.tipo = "modify";
 
     document.getElementById("botonEliminarUbicacion").addEventListener("click",() => {
-        funcionPanelMensaje("¿Estás seguro de que deseas eliminar esta ubicacion?", "Esta acción no se puede deshacer. Toda la información relacionada será permanentemente eliminada.", "eliminar", "Eliminar");
+        funcionPanelMensaje("¿Estás seguro de que deseas eliminar esta ubicacion?", "Esta acción no se puede deshacer. Toda la información relacionada será permanentemente eliminada.", "eliminar", "Eliminar", eliminarUbicacion, idUbicacion);
     });
     
     
@@ -438,7 +448,8 @@ function crearCartaRuta(padre,elemento, elementoRuta){
     document.getElementById("botonEliminarRuta").style.display = "inline";
 
     document.getElementById("botonEliminarRuta").addEventListener("click",() => {
-        funcionPanelMensaje("¿Estás seguro de que deseas eliminar esta ruta?", "Esta acción no se puede deshacer. Toda la información relacionada será permanentemente eliminada.", "eliminar", "Eliminar");
+        funcionPanelMensaje("¿Estás seguro de que deseas eliminar esta ruta?", "Esta acción no se puede deshacer. Toda la información relacionada será permanentemente eliminada.", "eliminar", "Eliminar", eliminarUbicacion, idRuta);
+
     });
     
     
@@ -539,7 +550,6 @@ function crearPC(listaBotones){
     document.getElementById("descripcionPersona").value = "";
 
     document.getElementById("botonEliminarPC").style.display = "none";
-    document.getElementById("botonAccionPC").addEventListener("click",  gestorPersonaConfianza())
 
     eliminarClase(listaBotones, "seleccionado");
 }
@@ -558,7 +568,7 @@ function crearCartaPC(padre,elemento, elementoPersonaConfianza){
     document.getElementById("botonEliminarPC").style.display = "inline";
 
     document.getElementById("botonEliminarPC").addEventListener("click",() => {
-        funcionPanelMensaje("¿Estás seguro de que deseas eliminar esta Persona?", "Esta acción no se puede deshacer. Toda la información relacionada será permanentemente eliminada.", "eliminar", "Eliminar");
+        funcionPanelMensaje("¿Estás seguro de que deseas eliminar esta Persona?", "Esta acción no se puede deshacer. Toda la información relacionada será permanentemente eliminada.", "eliminar", "Eliminar", eliminarPC, idPC);
     });
 }
 
@@ -570,21 +580,39 @@ function crearContenedores(){
     crearContenedorPersonas();
     eliminarDispositivo();
 
-    document.getElementById("contenedorUbicacion").querySelector(".btnModificar").addEventListener("click", () => {
-        if(validar.validarUbicacion(marcadorSeleccionado)){
+    document.getElementById("contenedorUbicacion").querySelector(".btnModificar").addEventListener("click", (e) => {
+        
+        if(validar.validarUbicacion(marcadorSeleccionado) && accionBotonContenedorUbicacion(idUbicacion, idDispositivo, marcadorSeleccionado)){
+             recargarDatos();
+             crearContenedorUbicacion();
              document.getElementById("btnAccionPanel").onclick = null;
              funcionPanelMensaje("¿Estás seguro de que deseas administrar esta Ubicacion?", "Esta informacion sera registrada y se le informara al usuario de la creacion de estos datos.", "modificar", "Crear");
-             document.getElementById("btnAccionPanel").onclick = gestorUbicacion(marcadorSeleccionado,idUbicacion);
+             document.getElementById("btnAccionPanel").onclick = accionBotonContenedorUbicacion(idUbicacion, idDispositivo, marcadorSeleccionad);
+        }else{
+            funcionPanelMensaje("Datos invalidos", "Los datos ingresados son invalidos.", "modificar", "Aceptar");
+        }
+    });
+
+    document.getElementById("contenedorRutas").querySelector(".btnModificar").addEventListener("click", (e) => {
+        
+        if(validar.validarUbicacion(marcadorSeleccionado)){
+             recargarDatos();
+             crearContenedorRuta();
+             document.getElementById("btnAccionPanel").onclick = null;
+             funcionPanelMensaje("¿Estás seguro de que deseas administrar esta Ubicacion?", "Esta informacion sera registrada y se le informara al usuario de la creacion de estos datos.", "modificar", "Crear");
+             document.getElementById("btnAccionPanel").onclick = accionBotonContenedorRuta(idRuta, idDispositivo)
         }else{
             funcionPanelMensaje("Datos invalidos", "Los datos ingresados son invalidos.", "modificar", "Aceptar");
         }
     });
 
     document.getElementById("contenedorPersonas").querySelector(".btnModificar").addEventListener("click", () => {
-        if(validar.validarDatosPC()){
+        if(validar.validarDatosPC() && accionBotonContenedorPC(idPC, idDispositivo) ){
+             recargarDatos();
+             crearContenedorPersonas();
              document.getElementById("btnAccionPanel").onclick = null;
              funcionPanelMensaje("¿Estás seguro de que deseas administrar esta Persona?", "Esta informacion sera registrada y se le informara al usuario de la creacion de estos datos.", "modificar", "Crear");
-             document.getElementById("btnAccionPanel").onclick = gestorPersonaConfianza(idPC);
+             document.getElementById("btnAccionPanel").onclick = accionBotonContenedorPC(idPC, idDispositivo);
         }else{
             funcionPanelMensaje("Datos invalidos", "Los datos ingresados son invalidos.", "modificar", "Aceptar");
         }
@@ -597,6 +625,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const botonMenu = document.getElementById("contenedor").querySelector(".botonBajar");
     const dispositivos = document.getElementById("listaDispositivos").querySelectorAll(".elementoDispositivo");   
 
+    recargarDatos();
     accionesNavBar(elementosNav);
     accionBotonMenu(botonMenu);
     accionesDispositivos(dispositivos);

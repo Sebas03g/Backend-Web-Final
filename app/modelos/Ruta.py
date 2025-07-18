@@ -7,7 +7,8 @@ class Ruta(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String, nullable=True)
     descripcion = db.Column(db.Text, nullable=True)
-    tiempo = db.Column(db.DateTime, default=datetime.utcnow)
+    hora_inicio = db.Column(db.Time, nullable=False, default=datetime.now().time)
+    hora_fin = db.Column(db.Time, nullable=True)
     id_usuario = db.Column(db.Integer, db.ForeignKey('Usuario.id'))
 
     usuario = db.relationship('Usuario', back_populates='rutas', foreign_keys=[id_usuario])

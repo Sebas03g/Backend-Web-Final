@@ -19,7 +19,6 @@ def uploadUser(id):
     return ImageController(Usuario).UploadImage(id) 
 
 @image_routes.route('/uploads/<filename>', methods=["GET"])
-@jwt_required()
 def uploaded_file(filename):
     try:
         return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=False)

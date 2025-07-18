@@ -18,6 +18,13 @@ class UbicacionController(BaseController):
             valid_data = data
         try:
 
+            if "id_punto" not in valid_data:
+                nuevo_punto = self.repoPunto.create({
+                    "lat": valid_data["lat"],
+                    "lng": valid_data["lng"]
+                })
+                valid_data["id_punto"] = nuevo_punto.id
+
             nueva_ubicacion = {
                 "nombre_ubicacion": valid_data["nombre_ubicacion"],
                 "descripcion": valid_data["descripcion"],

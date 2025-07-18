@@ -114,6 +114,7 @@ function abrirMarker(listaDispositivos, mapa){
     listaMarkers.forEach(m => m.closePopup());
     dispositivo.querySelector("label").addEventListener("click", () => {
       console.log("dispositivo.dataset.idDispositivo")
+      console.log(dispositivo.dataset.idDispositivo)
       const marker = listaMarkers.find(m => m.customId == dispositivo.dataset.idDispositivo);
       marker.openPopup();
       mapa.flyTo(marker.getLatLng(), 18);

@@ -1,11 +1,17 @@
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'http://127.0.0.1:5000';
 
 export async function createData(tipoElemento, data) {
     try {
         const response = await axios.post(`${BASE_URL}/${tipoElemento}`, data, {
             withCredentials: true
         });
-        console.log(response.data);
+
+        const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+        const idUsuario = dataUsuario.id;
+        sessionStorage.dropItem("usuario");
+        const usuario = await getDataById("usuario", idUsuario);
+        sessionStorage.setItem("usuario", JSON.stringify(usuario));
+
         return response.data.objeto;
     } catch (error) {
         console.error("Error en createData:", error);
@@ -18,7 +24,11 @@ export async function updateData(tipoElemento, data, id) {
         const response = await axios.put(`${BASE_URL}/${tipoElemento}/${id}`, data, {
             withCredentials: true
         });
-        console.log(response.data);
+        const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+        const idUsuario = dataUsuario.id;
+        sessionStorage.dropItem("usuario");
+        const usuario = await getDataById("usuario", idUsuario);
+        sessionStorage.setItem("usuario", JSON.stringify(usuario));
         return response.data.objeto;
     } catch (error) {
         console.error("Error en updateData:", error);
@@ -57,7 +67,11 @@ export async function deleteData(tipoElemento, id) {
         const response = await axios.delete(`${BASE_URL}/${tipoElemento}/${id}`, {
             withCredentials: true
         });
-        console.log(response.data);
+        const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+        const idUsuario = dataUsuario.id;
+        sessionStorage.dropItem("usuario");
+        const usuario = await getDataById("usuario", idUsuario);
+        sessionStorage.setItem("usuario", JSON.stringify(usuario));
         return response.data;
     } catch (error) {
         console.error("Error en deleteData:", error);

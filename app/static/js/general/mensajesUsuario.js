@@ -1,4 +1,4 @@
-function crearMensaje(titulo, mensaje, clase, txtBtn, funcion) {
+function crearMensaje(titulo, mensaje, clase, txtBtn, funcion=null, id=null, data=null) {
     let contenedor = document.getElementById("mensajes");
     contenedor.classList.add("mostrar");
     contenedor.innerHTML = `
@@ -10,7 +10,14 @@ function crearMensaje(titulo, mensaje, clase, txtBtn, funcion) {
 
         </div>
     `;
-    contenedor.querySelector("button").classList.add(clase);
+    const boton = contenedor.querySelector("#btnAccionPanel");
+    boton.classList.add(clase);
+
+    if (typeof funcion === "function") {
+        boton.onclick = () => funcion(id);
+    } else {
+        boton.onclick = () => contenedor.classList.remove("mostrar");
+    }
 }
 
 function agregarAcciones(clase, elemento) {
