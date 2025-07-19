@@ -19,8 +19,8 @@ class Plan(db.Model):
             "nombre": self.nombre,
             "descripcion": self.descripcion,
             "precio": float(self.precio),
-            "transacciones": [t.to_dict() for t in self.transacciones] if self.transacciones else [],
-            "caracteristicas_plan": [c.to_dict() for c in self.caracteristicas_plan] if self.caracteristicas_plan else [],
+            "transacciones": [t.to_dict() for t in self.transacciones if not t.eliminado] if self.transacciones else [],
+            "caracteristicas_plan": [c.to_dict() for c in self.caracteristicas_plan if not c.eliminado] if self.caracteristicas_plan else [],
             "eliminado": self.eliminado,
         }
     

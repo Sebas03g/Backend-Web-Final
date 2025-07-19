@@ -23,7 +23,7 @@ class Transaccion(db.Model):
             "id_plan": self.id_plan,
             "fecha": self.fecha,
             "usuario": self.usuario.to_dict_resumido() if self.usuario else None,
-            "caracteristicas_usuario": [c.to_dict_resumido() for c in self.caracteristicas_usuario] if self.caracteristicas_usuario else [],
+            "caracteristicas_usuario": [c.to_dict_resumido() for c in self.caracteristicas_usuario if not c.eliminado] if self.caracteristicas_usuario else [],
             "eliminado": self.eliminado,
         }
 

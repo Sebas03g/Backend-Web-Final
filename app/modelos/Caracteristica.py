@@ -21,8 +21,8 @@ class Caracteristica(db.Model):
             "descripcion": self.descripcion,
             "unidad_valor": self.unidad_valor,
             "valor": self.valor,
-            "caracteristicas_usuario": [c.to_dict_resumido() for c in self.caracteristicas_usuario] if self.caracteristicas_usuario else [],
-            "caracteristicas_plan": [c.to_dict_resumido() for c in self.caracteristicas_plan] if self.caracteristicas_plan else [],
+            "caracteristicas_usuario": [c.to_dict_resumido() for c in self.caracteristicas_usuario if not c.eliminado] if self.caracteristicas_usuario else [],
+            "caracteristicas_plan": [c.to_dict_resumido() for c in self.caracteristicas_plan  if not c.eliminado] if self.caracteristicas_plan else [],
             "eliminado": self.eliminado,
         }
 

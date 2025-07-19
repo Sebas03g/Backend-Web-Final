@@ -1,9 +1,10 @@
 
-import { createData } from "../fetch/sentenciasFetch.js";
+import { createData, deleteData } from "../fetch/sentenciasFetch.js";
 import { updateData } from "../fetch/sentenciasFetch.js";
+import { uploadImage } from "../fetch/uploadImages.js";
 
 export async function accionBotonContenedorPC(id, id_usuario){
-    const boton = document.getElementById("contenedorPersonas").querySelector(".btnModificar");
+    const boton = document.getElementById("botonAccionPC");
 
     const dataPC = {     
         nombre: document.getElementById("nombrePersona").value,
@@ -11,6 +12,7 @@ export async function accionBotonContenedorPC(id, id_usuario){
         descripcion: document.getElementById("descripcionPersona").value,
         id_usuario: id_usuario,
     }
+
     try{
         if(boton.dataset.tipo == "modify"){
             await actualizarPC(id, dataPC)
@@ -24,7 +26,19 @@ export async function accionBotonContenedorPC(id, id_usuario){
 }
 
 async function crearPC(data){
-    await createData("persona-confianza", data);
+    const pc = await createData("persona-confianza", data);
+    
+    const archivo = document.getElementById("inputImagenPC").files[0];
+
+    console.log(archivo)
+
+    const formData = new FormData()
+
+    formData.append("archivo", archivo);
+
+    console.log(formData)
+
+    await uploadImage("persona-confianza", formData, pc.id);
 
 }
 

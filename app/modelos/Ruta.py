@@ -23,7 +23,7 @@ class Ruta(db.Model):
             "descripcion": self.descripcion,
             "id_usuario": self.id_usuario,
             "usuario": self.usuario.nombre_completo if self.usuario else None,
-            "puntos": [rp.get_point() for rp in self.ruta_puntos] if self.ruta_puntos else [],
+            "puntos": [rp.get_point() for rp in self.ruta_puntos if not rp.eliminado] if self.ruta_puntos else [],
             "eliminado": self.eliminado,
         }
     

@@ -1,5 +1,6 @@
 from app.repository.BaseRepo import BaseRepo
 from app.config.database import db
+from sqlalchemy import and_
 from sqlalchemy.exc import SQLAlchemyError
 
 class DispositivoRepo(BaseRepo):
@@ -18,6 +19,21 @@ class DispositivoRepo(BaseRepo):
                     setattr(objeto, key, value)
             db.session.commit()
             return objeto
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            raise Exception(f"Error actualizando objeto: {str(e)}")
+        
+    def validate_code(self, code):
+        try:
+            dispositivo = db.session.query(self.tipoObjeto).filter(
+                and_(
+                    self.tipoObjeto.codigo == code,
+                    self.tipoObjeto.eliminado == False
+                )
+            ).first()
+
+            return bool(dispositivo)
+
         except SQLAlchemyError as e:
             db.session.rollback()
             raise Exception(f"Error actualizando objeto: {str(e)}")

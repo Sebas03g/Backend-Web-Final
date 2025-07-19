@@ -2,13 +2,21 @@ import { eliminarClase } from '../general/utilidades.js';
 import { esPantallaPequena } from '../general/utilidades.js';
 import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import { slideDownElementos } from '../general/utilidades.js';
+import { crearDataDispositivo, editarDataDispositivos, eliminarDataDispositivo } from '../funcionalidad/funcionalidadDispositivos.js'
+import { accionListaDispositivos, crearDispositivos as menuDispositivos } from '../funcionalidad/menuDispositivos.js'
+import { accionesDispositivos as menuAccionesDispositvos } from '../funcionalidad/contenedores.js'
+
 import * as validar from './validacion.js';
 
 let idDispositivo = null;
 
-const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
-let listaDispositivos = dataUsuario.dispositivos_gestionados;
+let dataGestor;
+
+function recargarDatos(){
+    const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+    dataGestor = dataUsuario;
+}
 
 function accionesDispositivos(dispositivos){
     dispositivos.forEach(dispositivo => {
@@ -37,12 +45,16 @@ function accionesDispositivos(dispositivos){
 }
 
 function cartaDispositivos(){
-    const persona = listaDispositivos.find(l => l.id == idDispositivo);
+    const persona = dataGestor.dispositivos_gestionados.find(l => l.id == idDispositivo);
 
-    document.getElementById("nombreDispositivoModificar").value = persona.usuario_asignado.nombre_completo;
-    document.getElementById("cedulaDispositivoModificar").value = persona.usuario_asignado.cedula;
-    document.getElementById("correoDispositivoModificar").value = persona.usuario_asignado.correo_electronico;
-    document.getElementById("telefonoDispositivoModificar").value = persona.usuario_asignado.telefono;
+    document.getElementById("nombreDispositivoModificar").value = persona.nombre_completo;
+    document.getElementById("cedulaDispositivoModificar").value = persona.cedula;
+    document.getElementById("correoDispositivoModificar").value = persona.correo_electronico;
+    document.getElementById("telefonoDispositivoModificar").value = persona.telefono;
+
+    document.getElementById("btnModificarDispositivo").addEventListener("click", async(e) => {
+        await actualizarListaDispositivos(e, idDispositivo)
+    });
 
 }
 
@@ -52,6 +64,32 @@ function crearDispositivo(btn){
         document.getElementById("contenedor").classList.remove("abierto");
         document.getElementById("modificarPersona").classList.remove("abierto");
     });
+
+    document.getElementById("btnCrearDispositivo").addEventListener("click", async(e) => {
+        await actualizarListaDispositivos(e)
+    });
+}
+
+async function actualizarListaDispositivos(e, id=null){
+
+    const listaDispositivos = document.getElementById("listaDispositivos");
+
+    console.log("ID")
+    console.log(id)
+    
+    if(e.target.id == "btnCrearDispositivo"){
+        const id_usuario = dataGestor.id;
+        await crearDataDispositivo(id_usuario);
+    }else if(e.target.id == "btnModificarDispositivo"){
+        await editarDataDispositivos(id);
+    }else{
+        await eliminarDataDispositivo(id);
+    }
+    recargarDatos();
+    menuDispositivos(listaDispositivos);
+    accionListaDispositivos(listaDispositivos);
+    accionesDispositivos(listaDispositivos.querySelectorAll(".elementoDispositivo"));
+    menuAccionesDispositvos(listaDispositivos.querySelectorAll(".elementoDispositivo"));
 }
 
 function cerrarDispositivo(botones){
@@ -70,12 +108,11 @@ function cerrarDispositivo(botones){
 }
 
 function agregarDispositvo(){
-    document.getElementById("creacionPersona").querySelector(".btn-primary").addEventListener("click", () => {
+    document.getElementById("creacionPersona").querySelector(".btn-primary").addEventListener("click", (e) => {
         if(validar.validarDatosPersona("Crear")){
-            document.getElementById("btnAccionPanel").onclick = null;
             funcionPanelMensaje("Dispositivo Creado", "El dispositivo se creó exitosamente y el usuario ha sido notificado. Solo falta que el usuario agregue al gestor.", "comunicacion", "Aceptar");
+            document.getElementById("btnAccionPanel").onclick = null;
             slideDownElementos(document.getElementById("creacionPersona"));
-            document.getElementById("btnAccionPanel").onclick = gestionDispositivo();
         }else{
             funcionPanelMensaje("Datos invalidos", "Los datos ingresados son invalidos, ingrese nuevamente.", "comunicacion", "Aceptar");
         }
@@ -86,10 +123,9 @@ function agregarDispositvo(){
 function modificarDispositvo(){
     document.getElementById("modificarPersona").querySelector(".btn-primary").addEventListener("click", () => {
         if(validar.validarDatosPersona("Modificar")){
-            document.getElementById("btnAccionPanel").onclick = null;
             funcionPanelMensaje("Dispositivo Modificado", "El dispositivo ha sido modificado con exito.", "comunicacion", "Aceptar");
             slideDownElementos(document.getElementById("modificarPersona"));
-            document.getElementById("btnAccionPanel").onclick = gestionDispositivo(idDispositivo);
+            document.getElementById("btnAccionPanel").onclick = null;
         }else{
             funcionPanelMensaje("Datos invalidos", "Los datos ingresados son invalidos, ingrese nuevamente.", "comunicacion", "Aceptar");
         }
@@ -101,6 +137,7 @@ document.addEventListener("DOMContentLoaded", function(){
     const botonCreacion = document.getElementById("btn-creacion")
     const botonesCerrar = document.querySelectorAll(".botonCerrarDispositivo");
 
+    recargarDatos();
     accionesDispositivos(dispositivos)
     crearDispositivo(botonCreacion);
     cerrarDispositivo(botonesCerrar);

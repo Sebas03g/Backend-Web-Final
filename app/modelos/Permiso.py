@@ -16,7 +16,7 @@ class Permiso(db.Model):
             "id": self.id,
             "nombre": self.nombre,
             "descripcion": self.descripcion,
-            "permisos_usuario": [pu.to_dict() for pu in self.permisos_usuario] if self.permisos_usuario else [],
+            "permisos_usuario": [pu.to_dict() for pu in self.permisos_usuario if not pu.eliminado] if self.permisos_usuario else [],
             "eliminado": self.eliminado,
         }
 

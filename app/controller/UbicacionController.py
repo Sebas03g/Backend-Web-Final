@@ -29,7 +29,6 @@ class UbicacionController(BaseController):
                 "nombre_ubicacion": valid_data["nombre_ubicacion"],
                 "descripcion": valid_data["descripcion"],
                 "tipo": valid_data["tipo"],
-                "nivel": valid_data["nivel"],
                 "id_usuario": valid_data["id_usuario"],
                 "id_punto": valid_data["id_punto"],
             }
@@ -44,7 +43,6 @@ class UbicacionController(BaseController):
                 f"<p>Nombre: {valid_data['nombre_ubicacion']}</p><br>"
                 f"<p>Descripción: {valid_data['descripcion']}</p><br>"
                 f"<p>Tipo: {valid_data['tipo']}</p><br>"
-                f"<p>Nivel: {valid_data['nivel']}</p><br>"
             )
 
 

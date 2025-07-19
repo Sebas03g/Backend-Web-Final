@@ -8,7 +8,7 @@ export async function createData(tipoElemento, data) {
 
         const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
         const idUsuario = dataUsuario.id;
-        sessionStorage.dropItem("usuario");
+        sessionStorage.removeItem("usuario");
         const usuario = await getDataById("usuario", idUsuario);
         sessionStorage.setItem("usuario", JSON.stringify(usuario));
 
@@ -24,17 +24,29 @@ export async function updateData(tipoElemento, data, id) {
         const response = await axios.put(`${BASE_URL}/${tipoElemento}/${id}`, data, {
             withCredentials: true
         });
-        const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+
+        const dataUsuarioStr = sessionStorage.getItem("usuario");
+        if (!dataUsuarioStr) throw new Error("No se encontró el usuario en sessionStorage");
+
+        const dataUsuario = JSON.parse(dataUsuarioStr);
+        console.log("ESTA ES LA DATA USUARIO: ", dataUsuario);
+
         const idUsuario = dataUsuario.id;
-        sessionStorage.dropItem("usuario");
+
+        console.log("ID USUARIO: ", idUsuario)
+
+        sessionStorage.removeItem("usuario");
         const usuario = await getDataById("usuario", idUsuario);
         sessionStorage.setItem("usuario", JSON.stringify(usuario));
+
         return response.data.objeto;
+
     } catch (error) {
         console.error("Error en updateData:", error);
         throw error;
     }
 }
+
 
 export async function getAllData(tipoElemento) {
     try {
@@ -69,7 +81,7 @@ export async function deleteData(tipoElemento, id) {
         });
         const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
         const idUsuario = dataUsuario.id;
-        sessionStorage.dropItem("usuario");
+        sessionStorage.removeItem("usuario");
         const usuario = await getDataById("usuario", idUsuario);
         sessionStorage.setItem("usuario", JSON.stringify(usuario));
         return response.data;

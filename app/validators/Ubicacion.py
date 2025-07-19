@@ -29,6 +29,14 @@ class UbicacionSchema(Schema):
         validate=validate.Range(min=1),
         error_messages={"invalid": "ID de punto inválido."}
     )
+    lat = fields.Decimal(
+        allow_none=True,
+        error_messages={"invalid": "Lat invalida."}
+    )
+    lng = fields.Decimal(
+        allow_none=True,
+        error_messages={"invalid": "Lng invalida."}
+    )
     eliminado = fields.Boolean(load_default=False)
 
     class Meta:

@@ -29,7 +29,7 @@ class DispositivoSchema(Schema):
     )
 
     codigo = fields.String(
-        required=True,
+        required=False,
         validate=validate.Length(min=1, max=15),
         error_messages={
             "required": "El código del dispositivo es obligatorio.",
@@ -38,6 +38,7 @@ class DispositivoSchema(Schema):
     )
 
     id_usuario = fields.Integer(
+        required=False,
         allow_none=True,
         validate=validate.Range(min=1),
         error_messages={"invalid": "ID de usuario inválido."}

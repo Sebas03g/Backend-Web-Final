@@ -1,45 +1,59 @@
 from app.controller.BaseController import BaseController
 from app.modelos.Usuario import Usuario
+from app.services.GenerateCode import generar_codigo
 from flask import request, jsonify, session
 from app.services.sendMail import enviar_correo
 
 class DispositivoController(BaseController):
-    def __init__(self, objeto, repositorio, validator=None):
+    def __init__(self, objeto, repositorio, repoUsuario, validator=None):
         super().__init__(objeto, repositorio, validator)
-        self.repoUsuario = repositorio(Usuario)
+        self.repoUsuario = repoUsuario(Usuario)
     
     def create(self):
         data = request.json
-        print(data)
-        if self.validator != None:
+
+        if self.validator:
             valid_data = self.validator().load(data)
         else:
             valid_data = data
-        try:
-            print(valid_data)
-            nuevo_objeto = self.repositorio.create(valid_data)
-            print()
-            usuario_creador = self.repoUsuario.getById(int(session.get('user_id')))
 
-            html= (
-                    f"<h2>Solicitud de acceso a informacion</h2></br>"
-                    f"<p>Un administrados, con correo {usuario_creador.correo_electronico}, solicito acceso a su informacion de su cuenta:<p></br>"
-                    f"<h3>Datos Usuario:</h3></br>"
-                    f"<p>Nombre: {nuevo_objeto.nombre_completo}</p></br>"
-                    f"<p>Cedula: {nuevo_objeto.cedula}</p></br>"
-                    f"<p>Telefono: {nuevo_objeto.telefono}</p></br>"
-                    f"<h2>Codigo:</h2></br>"
-                    f"<p>Utilizar el siguiente codigo para aceptar solicitud: {nuevo_objeto.codigo}</p></br>"
-                )
-                
+        try:
+            codigo = generar_codigo()
+            while self.repositorio.validate_code(codigo):
+                codigo = generar_codigo()
+
+            valid_data["codigo"] = codigo
+            nuevo_objeto = self.repositorio.create(valid_data)
+
+            id_usuario = session.get('user_id')
+            if not id_usuario:
+                raise Exception("No se encontró el usuario en sesión")
+
+            usuario_creador = self.repoUsuario.getById(int(id_usuario))
+
+            html = (
+                f"<h2>Solicitud de acceso a información</h2><br>"
+                f"<p>Un administrador, con correo <strong>{usuario_creador.correo_electronico}</strong>, "
+                f"solicitó acceso a la información de su cuenta:</p><br>"
+                f"<h3>Datos del Usuario:</h3><br>"
+                f"<p>Nombre: {nuevo_objeto.nombre_completo}</p><br>"
+                f"<p>Cédula: {nuevo_objeto.cedula}</p><br>"
+                f"<p>Teléfono: {nuevo_objeto.telefono}</p><br>"
+                f"<h2>Código de acceso:</h2><br>"
+                f"<p>{nuevo_objeto.codigo}</p><br>"
+            )
 
             enviar_correo(
                 to=[nuevo_objeto.correo_electronico, usuario_creador.correo_electronico],
-                subject="Solicitud de acceso a informacion.",
+                subject="Solicitud de acceso a información",
                 html=html
             )
 
-            return jsonify({"id": nuevo_objeto.id, "mensaje": f"{self.tipoObjeto.__name__} creado", "objeto": nuevo_objeto.to_dict() }), 201
-        
+            return jsonify({
+                "id": nuevo_objeto.id,
+                "mensaje": f"{self.tipoObjeto.__name__} creado",
+                "objeto": nuevo_objeto.to_dict()
+            }), 201
+
         except Exception as e:
             return jsonify({"error": str(e)}), 400

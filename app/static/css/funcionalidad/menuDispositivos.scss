@@ -1,4 +1,4 @@
-@use '../colores' as colores;
+@use '../general/colores' as colores;
 
 .dropdown-item{
     animation:none;
@@ -91,6 +91,26 @@
             }
             
         }
+
+        .elementoDispositivoDesactivo {
+            height: 5vh;
+            width: 100%;
+            left: 0;
+            display: flex;
+            flex-direction: column; /* 👈 esto es lo importante */
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            color: colores.$color-rojo;
+            cursor: pointer;
+
+            .subTema {
+                font-size: 10px;
+                font-style: italic;
+            }
+        }
+
+
         .seleccionado{
             width: 100%;
             display: flex;
