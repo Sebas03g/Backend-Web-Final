@@ -1,13 +1,27 @@
 import { eliminarClase } from '../general/utilidades.js'
 import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
+import { getAllData } from '../fetch/sentenciasFetch.js';
 
-const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+let gestores;
 
-let gestores = dataUsuario.dispositivos_gestionados;
+let ubicaciones;
 
-let ubicaciones = dataUsuario.ubicaciones_creadas;
+let personasConfianza;
+let permisos;
 
-let personasConfianza = dataUsuario.personas_confianza
+async function getPermisos(){
+    permisos =  await getAllData("permiso");
+}
+
+function reloadData(){
+    const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+
+    gestores = dataUsuario.dispositivos_asignados;
+
+    ubicaciones = dataUsuario.ubicaciones_creadas;
+
+    personasConfianza = dataUsuario.personas_confianza
+}
 
 
 function crearContenedores(){
@@ -150,7 +164,10 @@ function agregarFuncionesCheck(){
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async() => {
+    reloadData();
+    await getPermisos();
     crearContenedores();
     agregarFuncionesCheck();
+    
 });

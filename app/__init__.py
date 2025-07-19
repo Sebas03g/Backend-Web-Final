@@ -23,6 +23,7 @@ from app.routes.authRoutes import auth
 from app.routes.UserNotificationRoutes import notify
 from app.routes.ImageRoute import image_routes
 from app.routes.PayPalRoutes import paypal_routes
+from app.routes.PWARoutes import pwa_routes
 from app.modelos.Ruta_Punto import RutaPunto
 from flask_mail import Mail
 from flask_cors import CORS
@@ -74,6 +75,7 @@ def create_app():
     app.register_blueprint(notify)
     app.register_blueprint(image_routes)
     app.register_blueprint(paypal_routes)
+    app.register_blueprint(pwa_routes)
 
     migrate = Migrate(app, db)
 

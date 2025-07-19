@@ -32,7 +32,7 @@ class DispositivoRepo(BaseRepo):
                 )
             ).first()
 
-            return bool(dispositivo)
+            return dispositivo
 
         except SQLAlchemyError as e:
             db.session.rollback()

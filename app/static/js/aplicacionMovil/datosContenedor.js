@@ -4,11 +4,6 @@ import { getAllData } from '../fetch/sentenciasFetch.js';
 
 let mapaUbicacion = null;
 let marcadorSeleccionado = null;
-
-async function getPermisos(){
-    return await getAllData("permiso");
-}
-
 const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
 let gestores = dataUsuario.dispositivos_gestionados;
@@ -17,7 +12,21 @@ let ubicaciones = dataUsuario.ubicaciones_creadas;
 
 let personasConfianza = dataUsuario.personas_confianza;
 
-let permisos = await getPermisos();
+let permisos;
+
+async function getPermisos(){
+    permisos =  await getAllData("permiso");
+}
+
+function recargarDatos(){
+    const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+
+    gestores = dataUsuario.dispositivos_asignados;
+
+    ubicaciones = dataUsuario.ubicaciones_creadas;
+
+    personasConfianza = dataUsuario.personas_confianza
+}
 
 function crearContenedoresDatos(){
 
@@ -371,11 +380,19 @@ function funcionesMensajes(){
             document.getElementById("crearDatos").classList.remove("abierto");
             document.getElementById("crearDatoGestor").classList.remove("abierto");
             funcionPanelMensaje("Registro de nuevo Gestor", "Esta accion registrara al gestor y podra gestionar permisos para el mismo. ¿Desea continar?", "comunicacion", "Registrar");
+            document.getElementById("btnAccionPanel").onclick = null
+            document.getElementById("btnAccionPanel").addEventListener("click", async(e) => await recargarPaginaPersonas(e));
+        
             
         }else{
             funcionPanelMensaje("Datos erroneos del Gestor", "Los datos son invalidos para el registro de un gestor.", "comunicacion", "Aceptar");
         }
     });
+}
+
+async function recargarPaginaGestor(e){
+    const boton = e.target;
+    recargarDatos();
 }
 
 function agregarFuncionesCheck(){
@@ -400,7 +417,9 @@ function agregarFuncionesCheck(){
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    recargarDatos();
+    await getPermisos();
     crearContenedoresDatos();
     crearDatos();
     cerrarVentanas();

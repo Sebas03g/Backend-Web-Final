@@ -1,12 +1,12 @@
 const CACHE_NAME = 'mi-pwa-v1';
 const URLS_TO_CACHE = [
-  '/templates/aplicacionMovil.html',
-  '/static/css/aplicacionMovil/contenedores.css',
-  '/static/css/aplicacionMovil/cuerpo.css',
-  '/static/css/aplicacionMovil/datosContenedor.css',
-  '/static/js/ubicacionActual.js',
+  '/user-dashboard',
+  '/contenedores.css',
+  '/cuerpo.css',
+  '/datosContenedor.css',
+  '/ubicacionActual.js',
   '/manifest.json',
-  '/static/js/setUpPWA.js'
+  '/setUpPWA.js'
 ];
 
 // Instalar SW y cachear archivos
