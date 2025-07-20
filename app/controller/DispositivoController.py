@@ -73,31 +73,53 @@ class DispositivoController(BaseController):
             dispositivo = self.repositorio.validate_code(codigo)
 
             if dispositivo:
-                self.repositorio.update({id_usuario:id_usuario})
+                self.repositorio.update( dispositivo.id, {
+                    "id_usuario":id_usuario,
+                    "estado":True
+                    })
 
             html = (
-                f"<h2>Solicitud de acceso a información</h2><br>"
-                f"<p>Un administrador, con correo <strong>{usuario_creador.correo_electronico}</strong>, "
-                f"solicitó acceso a la información de su cuenta:</p><br>"
+                f"<h2>Dispositivo agregado</h2><br>"
+                f"<p>El usuario <strong>{usuario_creador.correo_electronico}</strong>, "
+                f"Sedio informacion:</p><br>"
                 f"<h3>Datos del Usuario:</h3><br>"
-                f"<p>Nombre: {nuevo_objeto.nombre_completo}</p><br>"
-                f"<p>Cédula: {nuevo_objeto.cedula}</p><br>"
-                f"<p>Teléfono: {nuevo_objeto.telefono}</p><br>"
+                f"<p>Nombre: {usuario_creador.nombre_completo}</p><br>"
+                f"<p>Cédula: {usuario_creador.cedula}</p><br>"
+                f"<p>Teléfono: {usuario_creador.telefono}</p><br>"
                 f"<h2>Código de acceso:</h2><br>"
-                f"<p>{nuevo_objeto.codigo}</p><br>"
+                f"<p>{usuario_creador.codigo}</p><br>"
             )
 
             enviar_correo(
-                to=[nuevo_objeto.correo_electronico, usuario_creador.correo_electronico],
+                to=[dispositivo.gestor.correo_electronico, usuario_creador.correo_electronico],
                 subject="Solicitud de acceso a información",
                 html=html
             )
 
             return jsonify({
-                "id": nuevo_objeto.id,
-                "mensaje": f"{self.tipoObjeto.__name__} creado",
-                "objeto": nuevo_objeto.to_dict()
+                "id": dispositivo.id,
+                "mensaje": f"{self.tipoObjeto.__name__} agregada",
+                "objeto": dispositivo.to_dict()
             }), 201
 
         except Exception as e:
             return jsonify({"error": str(e)}), 400
+        
+    
+    def modificarEstado(self, id_dispositivo):
+        try:
+            dispositivo = self.repositorio.getById(int(id_dispositivo))
+            if not dispositivo:
+                return jsonify({"error": "Dispositivo no encontrado"}), 404
+
+            nuevo_estado = not dispositivo.estado
+            self.repositorio.update(dispositivo.id, {"estado": nuevo_estado})
+
+            return jsonify({
+                "mensaje": "Estado del dispositivo actualizado correctamente",
+                "nuevo_estado": nuevo_estado
+            }), 200
+
+        except Exception as e:
+            return jsonify({"error": str(e)}), 400
+

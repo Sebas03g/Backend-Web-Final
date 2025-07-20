@@ -78,7 +78,7 @@ function crearDispositivo(dispositivo, listaDispositivos){
 
   const div = document.createElement('div');
 
-  if(dispositivo.usuario_asignado){
+  if(dispositivo.usuario_asignado && dispositivo.estado){
     div.className = 'elementoDispositivo';
     div.setAttribute('data-id-dispositivo', parseInt(dispositivo.id));
     div.setAttribute('data-id-asignado', parseInt(dispositivo.usuario_asignado.id));

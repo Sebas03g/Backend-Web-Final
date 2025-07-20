@@ -1,6 +1,7 @@
 import { eliminarClase } from '../general/utilidades.js'
 import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import { getAllData } from '../fetch/sentenciasFetch.js';
+import { agregarGestor, estadoGestor } from './funcionalidadGestor.js';
 
 let gestores;
 
@@ -53,7 +54,6 @@ function crearListaGestores(listaFiltradaGestores){
         
         const nuevoInput = document.createElement("input")
         nuevoInput.type = "checkbox";
-        nuevoInput.name = `${gestor.id}GestorCheckBox`
         nuevoInput.checked = gestor.estado;
 
         nuevoElementoLista.appendChild(nuevoBoton);
@@ -62,6 +62,12 @@ function crearListaGestores(listaFiltradaGestores){
         listaGestores.appendChild(nuevoElementoLista);
 
     });
+}
+
+async function modificarEstadoGestor(elementoLista){
+    const idGestor = elementoLista.dataset.idGestor
+    reloadData()
+    crearContenedorGestores()
 }
 
 function crearContenedorPC(){
