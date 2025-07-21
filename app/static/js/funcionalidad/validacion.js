@@ -16,11 +16,6 @@ export function validarDatosPersona(tipo){
 export function validarUbicacion(punto, nivel=""){
     const nombre = document.getElementById(`nombreUbicacion${nivel}`).value;
     const tipo =  document.getElementById(`miComboboxSeguridad${nivel}`).value;
-
-    console.log(punto)
-    console.log(nombre)
-    console.log(tipo);
-
     return validarVacio(nombre) && validarVacio(tipo) && punto != null;
 }
 

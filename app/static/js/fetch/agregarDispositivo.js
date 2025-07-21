@@ -1,3 +1,5 @@
+import { getDataById } from "./sentenciasFetch.js";
+
 const BASE_URL = 'http://127.0.0.1:5000/dispositivo';
 
 export async function addDevice(codigo) {
@@ -11,7 +13,6 @@ export async function addDevice(codigo) {
 
         const dataUsuario = JSON.parse(dataUsuarioStr);
         const idUsuario = dataUsuario.id;
-
         sessionStorage.removeItem("usuario");
         const usuario = await getDataById("usuario", idUsuario);
         sessionStorage.setItem("usuario", JSON.stringify(usuario));

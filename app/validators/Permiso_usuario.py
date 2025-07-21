@@ -28,6 +28,13 @@ class PermisoUsuarioSchema(Schema):
         }
     )
 
+    estado = fields.Boolean(
+        required=False,
+        error_messages={
+            "invalid": "El estado debe ser verdadero o falso."
+        }
+    )
+
     eliminado = fields.Boolean(
         load_default=False
     )

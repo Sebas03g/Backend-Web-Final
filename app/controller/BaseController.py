@@ -31,7 +31,7 @@ class BaseController:
     def update(self, id):
         data = request.json
         if self.validator != None:
-            valid_data = self.validator().load(data)
+            valid_data = self.validator().load(data, partial=True)
         else:
             valid_data = data
         try:

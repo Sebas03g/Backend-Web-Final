@@ -1,6 +1,9 @@
 import { addDevice, modificarEstadoDispositivo } from '../fetch/agregarDispositivo.js'
 
-export async function agregarGestor(codigo){
+export async function agregarGestor(){
+
+    const codigo = document.getElementById("codigoGestor").value;
+
     await addDevice(codigo);
 }
 

@@ -19,6 +19,11 @@ export async function accionBotonContenedorPC(id, id_usuario){
         }else{
             await crearPC(dataPC)
         }
+
+        document.getElementById("nombrePersona").value = "";
+        document.getElementById("telefonoPersona").value = "";
+        document.getElementById("descripcionPersona").value = "";
+
         return true
     }catch(e){
         console.log(e)
@@ -28,18 +33,19 @@ export async function accionBotonContenedorPC(id, id_usuario){
 async function crearPC(data){
     const pc = await createData("persona-confianza", data);
     
-    const archivo = document.getElementById("inputImagenPC").files[0];
+    const inputArchivo = document.getElementById("inputImagenPC");
 
-    console.log(archivo)
+    if(inputArchivo.files.length > 0){
+        const archivo = inputArchivo.files[0];
 
-    const formData = new FormData()
+        const formData = new FormData()
 
-    formData.append("archivo", archivo);
+        formData.append("archivo", archivo);
 
-    console.log(formData)
+        await uploadImage("persona-confianza", formData, pc.id);
 
-    await uploadImage("persona-confianza", formData, pc.id);
-
+        inputArchivo.value = "";
+    }
 }
 
 async function actualizarPC(id, data){

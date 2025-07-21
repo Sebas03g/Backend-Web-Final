@@ -1,55 +1,44 @@
-
-import { createData, deleteData } from "../fetch/sentenciasFetch.js";
-import { updateData } from "../fetch/sentenciasFetch.js";
+import { createData, deleteData, updateData } from "../fetch/sentenciasFetch.js";
 import { uploadImage } from "../fetch/uploadImages.js";
 
-export async function accionBotonContenedorPC(id, id_usuario){
-    const boton = document.getElementById("botonAccionPC");
+export async function agregarPC() {
+    const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
-    const dataPC = {     
-        nombre: document.getElementById("nombrePersona").value,
-        telefono: document.getElementById("telefonoPersona").value,
-        descripcion: document.getElementById("descripcionPersona").value,
-        id_usuario: id_usuario,
+    const nombre = document.getElementById("nombreCrearPC").value.trim();
+    const telefono = document.getElementById("telCrearPC").value.trim();
+    const descripcion = document.getElementById("descripcionCrearPC").value.trim();
+    const inputArchivo = document.getElementById("inputImagenPC");
+
+    if (!nombre || !telefono) {
+        alert("Por favor completa al menos el nombre y el teléfono.");
+        return;
     }
-
-    try{
-        if(boton.dataset.tipo == "modify"){
-            await actualizarPC(id, dataPC)
-        }else{
-            await crearPC(dataPC)
-        }
-        return true
-    }catch(e){
-        console.log(e)
-    }
-}
-
-async function crearPC(id_usuario){
 
     const data = {
-        nombre: document.getElementById("nombreCrearPC").value,
-        telefono: document.getElementById("telefonoCrearPC").value,
-        descripcion: document.getElementById("descripcionCrearPC").value,
-        id_usuario: id_usuario,
+        nombre,
+        telefono,
+        descripcion,
+        id_usuario: dataUsuario.id,
+    };
+
+    try {
+        const pc = await createData("persona-confianza", data);
+
+        if (inputArchivo.files.length > 0) {
+            const archivo = inputArchivo.files[0];
+            const formData = new FormData();
+            formData.append("archivo", archivo);
+
+            await uploadImage("persona-confianza", formData, pc.id);
+        }
+
+        document.getElementById("nombreCrearPC").value = "";
+        document.getElementById("telCrearPC").value = "";
+        document.getElementById("descripcionCrearPC").value = "";
+        inputArchivo.value = "";
+
+
+    } catch (error) {
+        console.error("Error al agregar persona de confianza:", error);
     }
-
-    const pc = await createData("persona-confianza", data);
-    
-    const archivo = document.getElementById("inputImagenPC").files[0];
-
-    const formData = new FormData()
-
-    formData.append("archivo", archivo);
-
-    await uploadImage("persona-confianza", formData, pc.id);
-
-}
-
-async function actualizarPC(id, data){
-    await updateData("persona-confianza", data, id);
-}
-
-export async function eliminarPC(id){
-    await deleteData("persona-confianza", id);
 }

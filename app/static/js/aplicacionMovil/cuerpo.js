@@ -2,6 +2,8 @@ import { eliminarClase } from '../general/utilidades.js';
 import { slideDownElementos } from '../general/utilidades.js';
 import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import * as validar from './validacion.js';
+import { actualizarDatosUsuario, actualizarImagen } from './funcionalidadUsuario.js';
+import { logoutFunctionality } from '../fetch/Credentials.js';
 
 let datosUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
@@ -29,8 +31,13 @@ function abrirMenuUsuario(botonIcono){
 function funcionalidadImg(){
     const input = document.getElementById("inputImagenUsuario");
     const imagenUsuario = document.getElementById("agregarIMG").querySelector("img");
-    document.getElementById("agregarIMG").addEventListener("click", () => input.click());
-    input.addEventListener("change", () => {
+    document.getElementById("agregarIMG").addEventListener("click", () => {
+        funcionPanelMensaje("Modifcar Imagen", "¿Estas seguro que quieres modificar la imagen de su cuenta? ", "comunicacion", "Aceptar");
+        document.getElementById("btnAccionPanel").onclick = null
+        document.getElementById("btnAccionPanel").addEventListener("click", () => input.click());  
+        
+    });
+    input.addEventListener("change", async() => {
         const archivo = input.files[0];
         if (archivo) {
             const reader = new FileReader();
@@ -39,8 +46,11 @@ function funcionalidadImg(){
             };
             reader.readAsDataURL(archivo);
         }
+        await actualizarImagen();
     });
 }
+
+
 
 function accionesMenuUsuario(menuUsuario){
     menuUsuario.querySelector(".btn").addEventListener("click", () => {
@@ -48,7 +58,12 @@ function accionesMenuUsuario(menuUsuario){
         if(validar.validarUsuario()){
             document.getElementById("iconoUsuario").querySelector("i").classList.remove("seleccionado");
             document.getElementById("menuUsuario").classList.remove("abierto");
-            funcionPanelMensaje("Modificacion Exitosa", "Se han modificado los datos", "informacion", "Aceptar");
+            funcionPanelMensaje("Modificar datos Usuario", "¿Estas seguro que quieres modificar los datos de su cuenta? ", "comunicacion", "Aceptar");
+            document.getElementById("btnAccionPanel").onclick = null
+            document.getElementById("btnAccionPanel").addEventListener("click", async() => {
+                await actualizarDatosUsuario();
+                datosUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+            });  
         }else{
             funcionPanelMensaje("Modificacion Rechazada", "Los datos ingresados son invalidos.", "informacion", "Aceptar");
         }
@@ -62,6 +77,11 @@ function cerrarContenedor(botonesBajar){
             slideDownElementos(boton.parentElement);
         });
     });
+}
+
+function cerrarSesion(){
+    const btn = document.getElementById("btnSalir");
+    btn.addEventListener("click", async() => await logoutFunctionality())
 }
 
 function cerrarContenido(){
@@ -80,6 +100,9 @@ function accionBotonAlarma(botonAlarma){
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    const imgUsuario = document.getElementById("agregarIMG").querySelector("img");
+
+    imgUsuario.src = `uploads/${datosUsuario.imagen}`;
     const opciones = document.getElementById("opciones");
     const botonesBajar = document.querySelectorAll(".botonBajar");
     const iconoUsuario = document.getElementById("iconoUsuario").querySelector("i");
@@ -92,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(err => console.error("❌ Error al registrar SW", err));
     }
 
-
     accionBotonAlarma(botonAlarma);
     abrirContenedores(opciones);
     cerrarContenedor(botonesBajar);
@@ -100,4 +122,5 @@ document.addEventListener("DOMContentLoaded", () => {
     accionesMenuUsuario(menuUsuario);
     funcionalidadImg();
     cerrarContenido();
+    cerrarSesion()
 });

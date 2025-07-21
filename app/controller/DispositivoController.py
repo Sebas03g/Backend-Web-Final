@@ -86,8 +86,6 @@ class DispositivoController(BaseController):
                 f"<p>Nombre: {usuario_creador.nombre_completo}</p><br>"
                 f"<p>Cédula: {usuario_creador.cedula}</p><br>"
                 f"<p>Teléfono: {usuario_creador.telefono}</p><br>"
-                f"<h2>Código de acceso:</h2><br>"
-                f"<p>{usuario_creador.codigo}</p><br>"
             )
 
             enviar_correo(

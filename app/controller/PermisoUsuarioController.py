@@ -74,4 +74,53 @@ class PermisoUsuarioController(BaseController):
 
         except Exception as e:
             return jsonify({"error": f"Error al denegar el permiso: {str(e)}"}), 400
+    
+    def modifyAllState(self, id):
+        data = request.json
+        try:
+            if "id_permiso" not in data or "estado" not in data:
+                return jsonify({"error": "Faltan campos requeridos (id_permiso o estado)"}), 400
+
+            id_permiso = data["id_permiso"]
+            permisoUsuario = self.repositorio.getAll()
+            listaUsuarios = []
+
+            puFiltrados = [
+                pu for pu in permisoUsuario 
+                if pu.id_permiso == id_permiso and pu.dispositivo.id_usuario == id
+            ]
+
+            if not puFiltrados:
+                return jsonify({"error": "No se encontraron permisos para ese usuario"}), 404
+
+            usuario = puFiltrados[0].dispositivo.usuario_asignado
+            permiso = puFiltrados[0].permiso
+
+            for pu in puFiltrados:
+                self.repositorio.update(pu.id, {"estado": data["estado"]})
+                listaUsuarios.append(pu.dispositivo.gestor.correo_electronico)
+
+            html = (
+                f"<h2>Permiso Denegado</h2><br>"
+                f"<p>El usuario administrado por usted con correo {usuario.correo_electronico} "
+                f"le denegó el siguiente permiso:</p><br>"
+                f"<h3>Permiso:</h3><br>"
+                f"<p>Nombre: {permiso.nombre}</p><br>"
+                f"<p>Descripción: {permiso.descripcion}</p><br>"
+            )
+
+            enviar_correo(
+                to=listaUsuarios,
+                subject="Se denegó el siguiente permiso",
+                html=html
+            )
+
+            return jsonify({
+                "id": permiso.id,
+                "mensaje": f"Permiso denegado correctamente",
+                "objeto": permiso.to_dict()
+            }), 200
+
+        except Exception as e:
+            return jsonify({"error": f"Error al denegar el permiso: {str(e)}"}), 400
 

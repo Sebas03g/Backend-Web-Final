@@ -1,12 +1,18 @@
 import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import * as validar from './validacion.js';
 import { getAllData } from '../fetch/sentenciasFetch.js';
+import { agregarGestor } from './funcionalidadGestor.js';
+import { crearContenedorGestores, crearContenedorPC, crearContenedorUbicaciones } from './contenedores.js';
+import { agregarPC } from './funcionalidadPC.js';
+import { agregarUbicacion } from './funcionalidadUbicacion.js';
+import { asignarPermiso, modificarEstadoPU, modificarNivel } from './funcionalidadPermiso.js';
+import { modificarEstadoDispositivo } from '../fetch/agregarDispositivo.js';
 
 let mapaUbicacion = null;
 let marcadorSeleccionado = null;
 const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
-let gestores = dataUsuario.dispositivos_gestionados;
+let gestores = dataUsuario.dispositivos_asignados;
 
 let ubicaciones = dataUsuario.ubicaciones_creadas;
 
@@ -83,11 +89,10 @@ function funcionalidadImg(){
 
 function funcionalidadCrearMapa(){
     if (mapaUbicacion) {
-        mapaUbicacion.remove(); // destruye el mapa anterior
+        mapaUbicacion.remove();
         mapaUbicacion = null;
     }
 
-    // Creamos el nuevo mapa
     mapaUbicacion = L.map(document.getElementById("mapaCrearUbicacion"), {
         center: [-2.8918931908671124, -79.03600936098859],
         zoom: 14,
@@ -114,21 +119,24 @@ function funcionalidadCrearMapa(){
 
 function datoContenedorGestor(id){
     let gestor = gestores.find(l => l.id == id);
-    document.getElementById("nombreGestor").textContent = gestor.nombre_completo;
-    document.getElementById("mailGestor").textContent = gestor.correo_electronico;
+    document.getElementById("nombreGestor").textContent = gestor.gestor.nombre_completo;
+    document.getElementById("mailGestor").textContent = gestor.gestor.correo_electronico;
 
     document.getElementById("listaPermisosGestor").innerHTML = "";
 
-    gestor.permisos.forEach(permiso => {
-        let permisoCreado = permisos.find(l => l.id == permiso.id);
+    gestor.permisos_usuario.forEach(permiso => {
+        let permisoCreado = permisos.find(l => l.id == permiso.permiso.id);
 
         const nuevoElementoLista = document.createElement("li");
+        nuevoElementoLista.dataset.idPermiso = permiso.permiso.id;
 
         const nuevaLabel = document.createElement("label");
         nuevaLabel.textContent = permisoCreado.nombre
 
         const selectNivel = document.createElement("select");
         selectNivel.classList.add("selectNivel");
+        selectNivel.dataset.idPU = permiso.id;
+        selectNivel.addEventListener("change", async(e) => await modificarNivelPermisoGestor(e));
 
         const nivel1 = document.createElement("option");
         nivel1.value=1;
@@ -152,7 +160,9 @@ function datoContenedorGestor(id){
         checkbox.name = `${permisoCreado.nombre}Permiso${gestor.nombre}`;
         checkbox.value = "activo";
         checkbox.checked = permiso.estado;
-
+        checkbox.dataset.idPU = permiso.id;
+        checkbox.addEventListener("change", async(e) => await modificarAccesoPermisoGestor(e));
+        
         nuevoElementoLista.appendChild(nuevaLabel);
         nuevoElementoLista.appendChild(selectNivel);
         nuevoElementoLista.appendChild(checkbox);
@@ -162,21 +172,41 @@ function datoContenedorGestor(id){
 
 }
 
+async function modificarNivelPermisoGestor(elemento){ 
+    funcionPanelMensaje("Gestion Permiso", "Esta accion modificara el nivel del permiso del gestor, ¿Desea continar?", "comunicacion", "Aceptar");
+    document.getElementById("btnAccionPanel").onclick = null
+    document.getElementById("btnAccionPanel").addEventListener("click", async() => await modificarNivel(elemento));  
+    recargarDatos();
+}
+
+async function modificarAccesoPermisoGestor(elemento){
+    funcionPanelMensaje("Gestion Permiso", "Esta accion modificara el acceso al permiso del gestor, ¿Desea continar?", "comunicacion", "Aceptar");
+    document.getElementById("btnAccionPanel").onclick = null
+    document.getElementById("btnAccionPanel").addEventListener("click", async() => await modificarEstadoPU(elemento));
+    recargarDatos();  
+}
+
 function datoContenedorPermiso(id){
     let permiso = permisos.find(l => l.id == id);
     document.getElementById("nombrePermiso").textContent = permiso.nombre;
     document.getElementById("descripcionPermiso").textContent = permiso.descripcion;
+    document.getElementById("btnActivarPermiso").dataset.idPermiso = id;
 
+    crearListaPermisosValidos(id);
+
+}
+
+function crearListaPermisosValidos(id){
     let gestores_validos = gestores.filter(gestor => 
-        gestor.permisos.some(l => l.id == id)
+        gestor.permisos_usuario.some(l => l.permiso.id == id)
     );
 
-    let gestores_invalidos = gestores.filter(gestor => gestor !== gestores_validos);
+    let gestores_invalidos = gestores.filter(gestor =>  !gestores_validos.includes(gestor));
 
     gestores_invalidos.forEach(gestor => {
         let nuevaOpcion = document.createElement("option");
-        nuevaOpcion.value = gestor.id;
-        nuevaOpcion.textContent = gestor.nombre_completo;
+        nuevaOpcion.value = gestor.gestor.id;
+        nuevaOpcion.textContent = gestor.gestor.nombre_completo;
 
         document.getElementById("seleccionGestor").appendChild(nuevaOpcion);
     });
@@ -184,9 +214,13 @@ function datoContenedorPermiso(id){
     document.getElementById("listaGestoresPermiso").innerHTML = "";
 
     gestores_validos.forEach(gestor => {
-        let permisoGestor = gestor.permisos_usuario.find(l => l.id == id);
+        let permisoGestor = gestor.permisos_usuario.find(l => l.permiso.id == id);
+
+        console.log(permisoGestor);
 
         const nuevoGestor = document.createElement("li");
+        nuevoGestor.dataset.estado = permisoGestor.estado;
+        nuevoGestor.dataset.pu = permisoGestor.id;
         
         const nombreGestor = document.createElement("label");
         nombreGestor.textContent = gestor.nombre_completo;
@@ -194,6 +228,8 @@ function datoContenedorPermiso(id){
         const selectNivel = document.createElement("select");
         selectNivel.classList.add("selectNivel");
         selectNivel.classList.add("form-select");
+        selectNivel.dataset.idPU = permisoGestor.id;
+        selectNivel.addEventListener("change", async(e) => await modificarNivelPermisoGestor(e));
 
         const nivel1 = document.createElement("option");
         nivel1.value=1;
@@ -217,6 +253,9 @@ function datoContenedorPermiso(id){
         checkbox.name = `Gestor${gestor.id}Permiso${id}`;
         checkbox.value = "activo";
         checkbox.checked = permisoGestor.estado;
+        checkbox.addEventListener("change", async(e) => await modificarAccesoPermisoGestor(e));
+        checkbox.dataset.idPU = permisoGestor.id;
+        
 
 
         nuevoGestor.appendChild(nombreGestor);
@@ -226,18 +265,40 @@ function datoContenedorPermiso(id){
         document.getElementById("listaGestoresPermiso").appendChild(nuevoGestor);
     });
     
+    document.getElementById("btnActivarPermiso").addEventListener("click", async() => {
+        await funcionBtnActivarPermiso();
+    })
+}
+
+async function funcionBtnActivarPermiso(){
+    if(validar.validarAsignacion()){
+        const id_permiso = document.getElementById("btnActivarPermiso").dataset.idPermiso;
+        funcionPanelMensaje("Asignacion de Permiso", "Esta accion dara acceso a este permiso al siguiente gestor, ¿Desea continar?", "comunicacion", "Aceptar");
+        document.getElementById("btnAccionPanel").onclick = null
+        document.getElementById("btnAccionPanel").addEventListener("click", async() => await recargarListaPermisos(id_permiso));    
+    }else{
+        funcionPanelMensaje("Datos erroneos para la asignacion de Permiso", "Los datos son invalidos para la asignacion de permisos.", "comunicacion", "Aceptar");
+    }
+}
+
+async function recargarListaPermisos(id_permiso){
+    await asignarPermiso(id_permiso)
+    recargarDatos();
+    crearListaPermisosValidos(id_permiso);
 }
 
 function datoContenedorPC(id){
     let persona = personasConfianza.find(l => l.id == id);
 
+
+    document.getElementById("imgPersona").src = `uploads/${persona.imagen}`;
     document.getElementById("nombrePC").textContent = persona.nombre;
     document.getElementById("descripcionPC").textContent = persona.descripcion;
-
 }
 
 function datoContenedorUbicacion(id){
     let ubicacion = ubicaciones.find(l => l.id == id);
+
     let mapa = crearMapa(ubicacion);
     generarPuntos(ubicacion, mapa);
 
@@ -248,13 +309,12 @@ function datoContenedorUbicacion(id){
 
 function crearMapa(elementoUbicacion){
     if (mapaUbicacion) {
-        mapaUbicacion.remove(); // destruye el mapa anterior
+        mapaUbicacion.remove();
         mapaUbicacion = null;
     }
 
-    // Creamos el nuevo mapa
     mapaUbicacion = L.map(document.getElementById("mapaUbicacion"), {
-        center: elementoUbicacion.punto,
+        center: elementoUbicacion.punto.split(",").map(Number),
         zoom: 14,
         zoomControl: false
     });
@@ -277,7 +337,7 @@ function crearMapa(elementoUbicacion){
 }
 
 function generarPuntos(elementoUbicacion, mapa){
-    let area = L.circle(elementoUbicacion.punto, {
+    let area = L.circle(elementoUbicacion.punto.split(",").map(Number), {
         color: "black",
         fillColor: elementoUbicacion.tipo,
         fillOpacity: 0.3,
@@ -332,9 +392,10 @@ function cerrarVentanas(){
         document.getElementById("datosContenedor").classList.remove("abierto");
     });
 
-    document.getElementById("dataPermiso").querySelector("i").addEventListener("click", () => {
+    document.getElementById("dataPermiso").querySelector("i").addEventListener("click", (e) => {
         document.getElementById("dataPermiso").classList.remove("abierto");
         document.getElementById("datosContenedor").classList.remove("abierto");
+        console.log(e.target.dataset.idPermiso);
     });
 
     document.getElementById("dataUbicacion").querySelector("i").addEventListener("click", () => {
@@ -370,6 +431,9 @@ function funcionesMensajes(){
             document.getElementById("crearDatos").classList.remove("abierto");
             document.getElementById("crearDatoPC").classList.remove("abierto");
             funcionPanelMensaje("Creacion de la Persona de Confianza", "Esta accion registrar esta persona de confianza al sistema. ¿Desea continar?", "comunicacion", "Crear");
+            document.getElementById("btnAccionPanel").onclick = null
+            document.getElementById("btnAccionPanel").addEventListener("click", async() => await crearPC());
+            
         }else{
             funcionPanelMensaje("Datos erroneos de la Persona de Confianza", "Los datos son invalidos para la creacion de una persona de confianza.", "comunicacion", "Aceptar");
         }    
@@ -381,19 +445,45 @@ function funcionesMensajes(){
             document.getElementById("crearDatoGestor").classList.remove("abierto");
             funcionPanelMensaje("Registro de nuevo Gestor", "Esta accion registrara al gestor y podra gestionar permisos para el mismo. ¿Desea continar?", "comunicacion", "Registrar");
             document.getElementById("btnAccionPanel").onclick = null
-            document.getElementById("btnAccionPanel").addEventListener("click", async(e) => await recargarPaginaPersonas(e));
-        
+            document.getElementById("btnAccionPanel").addEventListener("click", async() => await crearGestor());
             
         }else{
             funcionPanelMensaje("Datos erroneos del Gestor", "Los datos son invalidos para el registro de un gestor.", "comunicacion", "Aceptar");
         }
     });
+
+    document.getElementById("crearNuevaUbicacion").addEventListener("click", () => {
+        if(validar.validarDatosUbicacion(marcadorSeleccionado)){
+            document.getElementById("crearDatos").classList.remove("abierto");
+            document.getElementById("crearDatoUbicacion").classList.remove("abierto");
+            funcionPanelMensaje("Registro de nueva Ubicacion", "Esta accion registrara Esta accion registrar esta ubicacion al sistema. ¿Desea continar?", "comunicacion", "Crear");
+            document.getElementById("btnAccionPanel").onclick = null
+            document.getElementById("btnAccionPanel").addEventListener("click", async() => await crearUbicacion());
+            
+        }else{
+            funcionPanelMensaje("Datos erroneos de la Ubicacion", "Los datos son invalidos para el registro de una ubicacion.", "comunicacion", "Aceptar");
+        }
+    })
 }
 
-async function recargarPaginaGestor(e){
-    const boton = e.target;
+async function crearPC(){
+    await agregarPC();
+    crearContenedorPC();
     recargarDatos();
 }
+
+async function crearGestor(){
+    await agregarGestor();
+    crearContenedorGestores();
+    recargarDatos();
+}
+
+async function crearUbicacion(){
+    await agregarUbicacion(marcadorSeleccionado);
+    crearContenedorUbicaciones();
+    recargarDatos();
+}
+
 
 function agregarFuncionesCheck(){
     document.getElementById("listaPermisosGestor").querySelectorAll('input[type="checkbox"]').forEach(elemento => {

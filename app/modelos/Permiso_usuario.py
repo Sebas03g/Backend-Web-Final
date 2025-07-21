@@ -7,6 +7,7 @@ class PermisoUsuario(db.Model):
     id_dispositivo = db.Column(db.Integer, db.ForeignKey('Dispositivo.id'), nullable=False)
     id_permiso = db.Column(db.Integer, db.ForeignKey('Permiso.id'), nullable=False)
     nivel = db.Column(db.Integer, nullable=False)
+    estado = db.Column(db.Boolean, default=True)
 
     dispositivo = db.relationship('Dispositivo', back_populates='permisos_usuario')
     permiso = db.relationship('Permiso', back_populates='permisos_usuario')

@@ -56,12 +56,11 @@
                     <label for="contrasena">Correo</label>
                     <input type="email" id="correoUsuario" placeholder="Correo"/>
 
-                    <button class="btn">Aceptar</button>
+                    <button class="btn" id="modificarUsuario">
+                        Aceptar
+                    </button>
                     <button id="btnSalir">
-                        <a href="/seleccionTipo.html">
-                            <i class="bi bi-box-arrow-left"></i>
-                        </a>
-                        
+                         <i class="bi bi-box-arrow-left"></i>
                     </button>
                 </div>
             </div>
@@ -118,8 +117,8 @@
             <div id="contenedorMensaje" class="contenedor slide-up">
                 <button class="botonBajar btn"><i class="bi bi-chevron-compact-down"></i></button>
                 <div class="mb-3">
-                    <label for="miTextarea" class="form-label">Escribe tu mensaje</label>
-                    <textarea class="form-control" id="miTextarea"  placeholder="Tu mensaje aquí..."></textarea>
+                    <label for="mensajeEnviar" class="form-label">Escribe tu mensaje</label>
+                    <textarea class="form-control" id="mensajeEnviar"  placeholder="Tu mensaje aquí..."></textarea>
                 </div>
                 <button type="button" class="btn btn-light" id="btnEnviarMensaje">Enviar</button>
             </div>
@@ -156,9 +155,6 @@
                   </div>
                   <ul class="list-group " id="listaPermisosGestor">
                   </ul>
-                  <button class="btnAceptar">
-                      Aceptar
-                  </button>
                 </div>
             </div>
             <div class="datoContenedor zoom-in" id="dataPermiso">
@@ -250,12 +246,8 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <label for="nombre">Email</label>
-                        <input type="text" id="emailGestor" placeholder="Ingrese el correo"/>
-
                         <label for="correo">Codigo</label>
                         <input type="email" id="codigoGestor" placeholder="Ingrese el codigo"/>
-
                         <button class="btn" id="crearNuevoGestor">Crear</button>
                     </div>
                 </div>
@@ -276,7 +268,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="telefonoCrearPC">Telefono:</label>
+                            <label for="telCrearPC">Telefono:</label>
                             <input type="tel" id="telCrearPC" class="form-control" placeholder="Ingrese el telefono">
                         </div>
 
@@ -314,6 +306,8 @@
                                 <option value="red">Inseguro</option>
                             </select>
                           </div>
+
+                          <button class="btn" id="crearNuevaUbicacion">Crear</button>
                         </div>
                  </div>  
             </div>

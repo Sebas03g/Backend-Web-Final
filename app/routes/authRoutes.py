@@ -69,7 +69,7 @@ def login():
     return jsonify({"message": "Credenciales inválidas"}), 401
 
 
-@auth.route('/logout', methods=['POST'])
+@auth.route('/logout', methods=['GET'])
 def logout():
     if 'user_id' not in session:
         return jsonify({"message": "No hay sesión activa."}), 400

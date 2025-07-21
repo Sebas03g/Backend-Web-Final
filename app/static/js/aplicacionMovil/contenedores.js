@@ -2,6 +2,7 @@ import { eliminarClase } from '../general/utilidades.js'
 import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import { getAllData } from '../fetch/sentenciasFetch.js';
 import { agregarGestor, estadoGestor } from './funcionalidadGestor.js';
+import { mandarMensaje } from './funcionalidadMensaje.js';
 
 let gestores;
 
@@ -14,7 +15,7 @@ async function getPermisos(){
     permisos =  await getAllData("permiso");
 }
 
-function reloadData(){
+function recargarDatos(){
     const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
     gestores = dataUsuario.dispositivos_asignados;
@@ -30,9 +31,11 @@ function crearContenedores(){
     crearContenedorPC();
     crearContenedorPermisos();
     crearContenedorUbicaciones();
+    contenedorMensaje();
 }
 
-function crearContenedorGestores(){
+export function crearContenedorGestores(){
+    recargarDatos();
     crearListaGestores(gestores);
     document.getElementById("busquedaGestor").addEventListener("keyup", (e) => {
         let listaFiltradaGestores = gestores.filter(l => l.nombre_completo.toUpperCase().includes(e.target.value.toUpperCase()));
@@ -66,11 +69,12 @@ function crearListaGestores(listaFiltradaGestores){
 
 async function modificarEstadoGestor(elementoLista){
     const idGestor = elementoLista.dataset.idGestor
-    reloadData()
+    recargarDatos()
     crearContenedorGestores()
 }
 
-function crearContenedorPC(){
+export function crearContenedorPC(){
+    recargarDatos();
     crearListaPCs(personasConfianza);
     document.getElementById("busquedaPC").addEventListener("keyup", (e) => {
         let listaFiltradaPC = personasConfianza.filter(l => l.nombre.toUpperCase().includes(e.target.value.toUpperCase()));
@@ -111,6 +115,8 @@ function crearContenedorPermisos(){
         nuevoInput.type = "checkbox";
         nuevoInput.name = `${permiso.id}PermisoCheckBox`
         nuevoInput.checked = permiso.estado;
+        nuevoInput.dataset.idPermiso = permiso.id;
+        nuevoInput.dataset.estado = permiso.estado;
         
         nuevoElementoLista.appendChild(nuevoBoton);
         nuevoElementoLista.appendChild(nuevoInput);
@@ -119,14 +125,22 @@ function crearContenedorPermisos(){
     });
 }
 
-function crearContenedorUbicaciones(){
-    
+export function crearContenedorUbicaciones(){
+    recargarDatos();
     crearListaUbicaciones(ubicaciones);
     document.getElementById("busquedaUbicacion").addEventListener("keyup", (e) => {
         let listaFiltradaUbicaciones = ubicaciones.filter(l => l.nombre_ubicacion.toUpperCase().includes(e.target.value.toUpperCase()));
         crearListaUbicaciones(listaFiltradaUbicaciones);
     });
 
+}
+
+function contenedorMensaje(){
+    document.getElementById("btnEnviarMensaje").addEventListener("click", async() => {
+        await mandarMensaje();
+        document.getElementById("mensajeEnviar").value = "";
+        funcionPanelMensaje("Mensaje enviado", "El mensaje se envio con exito, se ha notificado a los usuarios gestor.", "comunicacion", "Aceptar");
+    });
 }
 
 function crearListaUbicaciones(listaFiltradaUbicaciones){
@@ -171,7 +185,7 @@ function agregarFuncionesCheck(){
 }
 
 document.addEventListener("DOMContentLoaded", async() => {
-    reloadData();
+    recargarDatos();
     await getPermisos();
     crearContenedores();
     agregarFuncionesCheck();

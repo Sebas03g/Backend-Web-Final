@@ -29,6 +29,25 @@ export const loginFunctionality = async (form) => {
     }
 };
 
+export const logoutFunctionality = async() => {
+    const response = await fetch('http://127.0.0.1:5000/logout', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json' 
+        },      
+    });  
+    
+    if (response.ok) {
+         window.location.href = '/';
+     } else {
+        alert(result.message || "Error en el logout");
+    }
+};
+
+export const stateLostMode = async(id) => {
+
+}
+
 
 async function iniciarMonitoreo(id_ubicacion) {
     if ("geolocation" in navigator) {

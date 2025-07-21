@@ -8,4 +8,6 @@ from app.validators.Permiso_usuario import PermisoUsuarioSchema
 controller = PermisoUsuarioController(PermisoUsuario, BaseRepo, PermisoUsuarioSchema)
 permiso_usuario_routes = BaseRoutes('permiso-usuario', controller)
 
+permiso_usuario_routes.agregar_ruta_personalizada("/modify-state/<int:id>", "POST", controller.modifyAllState)
+
 bp = permiso_usuario_routes.get_blueprint()

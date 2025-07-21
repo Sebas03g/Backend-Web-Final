@@ -3,9 +3,8 @@ import {esTelefonoValido} from  '../general/utilidades.js';
 import {validarVacio} from '../general/utilidades.js';
 
 export function validarDatosGestor(){
-    const email = document.getElementById("emailGestor").value;
     const codigo = document.getElementById("codigoGestor").value;
-    return esEmailValido(email) && validarVacio(codigo);
+    return validarVacio(codigo);
 
 }
 
@@ -15,6 +14,14 @@ export function validarDatosPC(){
     return validarVacio(nombre) && esTelefonoValido(telefono);
 }
 
+export function validarDatosUbicacion(punto){
+    const nombre = document.getElementById("nombreCrearUbicacion").value;
+    const descripcion = document.getElementById("descripcionCrearUbicacion").value;
+    const tipo = document.getElementById("miComboboxCrearSeguridad").value;
+
+    return validarVacio(nombre) && validarVacio(descripcion) && validarVacio(tipo) && punto != null; 
+}
+
 export function validarUsuario(){
     const nombre = document.getElementById("nombreUsuario").value;
     const telefono = document.getElementById("telefonoUsuario").value;
@@ -22,4 +29,11 @@ export function validarUsuario(){
 
     return validarVacio(nombre) && esTelefonoValido(telefono) && esEmailValido(email);
 
+}
+
+export function validarAsignacion(){
+    const nivel = document.getElementById("seleccionNivel").value;
+    const id_dispositivo = document.getElementById("seleccionGestor").value
+
+    return validarVacio(nivel) && validarVacio(id_dispositivo)
 }

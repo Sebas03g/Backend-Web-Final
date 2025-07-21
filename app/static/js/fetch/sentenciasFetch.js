@@ -29,11 +29,8 @@ export async function updateData(tipoElemento, data, id) {
         if (!dataUsuarioStr) throw new Error("No se encontró el usuario en sessionStorage");
 
         const dataUsuario = JSON.parse(dataUsuarioStr);
-        console.log("ESTA ES LA DATA USUARIO: ", dataUsuario);
 
         const idUsuario = dataUsuario.id;
-
-        console.log("ID USUARIO: ", idUsuario)
 
         sessionStorage.removeItem("usuario");
         const usuario = await getDataById("usuario", idUsuario);
