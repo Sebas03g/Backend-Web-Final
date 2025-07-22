@@ -1,3 +1,5 @@
+import { recargarDatos } from "../general/recargarDatos.js";
+
 const BASE_URL = 'http://127.0.0.1:5000';
 
 export async function createData(tipoElemento, data) {
@@ -6,11 +8,7 @@ export async function createData(tipoElemento, data) {
             withCredentials: true
         });
 
-        const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
-        const idUsuario = dataUsuario.id;
-        sessionStorage.removeItem("usuario");
-        const usuario = await getDataById("usuario", idUsuario);
-        sessionStorage.setItem("usuario", JSON.stringify(usuario));
+        await recargarDatos();
 
         return response.data.objeto;
     } catch (error) {
@@ -25,16 +23,7 @@ export async function updateData(tipoElemento, data, id) {
             withCredentials: true
         });
 
-        const dataUsuarioStr = sessionStorage.getItem("usuario");
-        if (!dataUsuarioStr) throw new Error("No se encontró el usuario en sessionStorage");
-
-        const dataUsuario = JSON.parse(dataUsuarioStr);
-
-        const idUsuario = dataUsuario.id;
-
-        sessionStorage.removeItem("usuario");
-        const usuario = await getDataById("usuario", idUsuario);
-        sessionStorage.setItem("usuario", JSON.stringify(usuario));
+        await recargarDatos();
 
         return response.data.objeto;
 
@@ -76,11 +65,7 @@ export async function deleteData(tipoElemento, id) {
         const response = await axios.delete(`${BASE_URL}/${tipoElemento}/${id}`, {
             withCredentials: true
         });
-        const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
-        const idUsuario = dataUsuario.id;
-        sessionStorage.removeItem("usuario");
-        const usuario = await getDataById("usuario", idUsuario);
-        sessionStorage.setItem("usuario", JSON.stringify(usuario));
+        await recargarDatos();
         return response.data;
     } catch (error) {
         console.error("Error en deleteData:", error);

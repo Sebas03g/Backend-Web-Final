@@ -38,9 +38,9 @@ class UbicacionUsuarioController(BaseController):
         except Exception as e:
             return jsonify({"error": f"Error al crear ubicación: {str(e)}"}), 400
 
-    def updatePoint(self, id):
+    def updatePoint(self, id, external_data=None):
         try:
-            data = request.json
+            data = external_data if external_data else request.json
             valid_data = PuntoSchema().load(data) if self.validator else data
             
             data_punto = {
@@ -75,9 +75,9 @@ class UbicacionUsuarioController(BaseController):
                  
 
             return jsonify({
-                "id": objeto_modificado.id,
+                "id": usuario.id,
                 "mensaje": f"{self.tipoObjeto.__name__} actualizado",
-                "objeto": objeto_modificado.to_dict()
+                "objeto": usuario.to_dict()
             }), 200
 
         except Exception as e:

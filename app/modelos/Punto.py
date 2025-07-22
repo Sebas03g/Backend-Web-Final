@@ -17,7 +17,7 @@ class Punto(db.Model):
         return {
             "id": self.id,
             "lat": self.lat,
-            "long": self.lng,
+            "lng": self.lng,
             "rutas": [ruta.get_ruta() for ruta in self.ruta_puntos if not ruta.eliminado] if self.ruta_puntos else [],
             "ubicaciones_usuario": [u.to_dict() for u in self.ubicaciones_usuario if not u.eliminado] if self.ubicaciones_usuario else [],
             "ubicaciones": [u.to_dict() for u in self.ubicaciones if not u.eliminado] if self.ubicaciones else [],
@@ -27,7 +27,7 @@ class Punto(db.Model):
         return {
             "id": self.id,
             "lat": self.lat,
-            "long": self.lng,
+            "lng": self.lng,
             "eliminado": self.eliminado,
         }
 

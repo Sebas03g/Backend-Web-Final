@@ -28,64 +28,68 @@ from app.modelos.Ruta_Punto import RutaPunto
 from flask_mail import Mail
 from flask_cors import CORS
 from flask_talisman import Talisman
-
+from flask_socketio import SocketIO
 from flask_migrate import Migrate
+
 mail = Mail()
+socketio_app = SocketIO(cors_allowed_origins="*")
 
 def create_app():
-    app = Flask(__name__)
+    flask_app = Flask(__name__)
 
-    app.secret_key = "RANDOM"
-    db = create_db(app)
-    CORS(app)
-    from flask_talisman import Talisman
+    flask_app.secret_key = "RANDOM"
+    db = create_db(flask_app)
+    CORS(flask_app)
 
-    talisman = Talisman(app, content_security_policy={
+    socketio_app.init_app(flask_app)
+
+    talisman = Talisman(flask_app, content_security_policy={
         'default-src': "'self'",
         'connect-src': "'self' *",
         'style-src': "'self' https://cdn.jsdelivr.net https://unpkg.com https://fonts.googleapis.com 'unsafe-inline'",
-        'script-src': "'self' https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com",
+        'script-src': "'self' https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://cdn.socket.io",
         'font-src': "'self' https://fonts.gstatic.com https://cdn.jsdelivr.net",
-        'img-src': "'self' data: http://localhost:5000/ https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org http://www.w3.org/2000/svg",
+        'img-src': "'self' data: http://localhost:5000/ https://unpkg.com/ https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org http://www.w3.org/2000/svg",
     })
 
 
-    app.config['JWT_SECRET_KEY'] = 'clave-secreta-super-segura'
-    jwt = JWTManager(app)
-    mail = create_mail(app)
+    flask_app.config['JWT_SECRET_KEY'] = 'clave-secreta-super-segura'
+    flask_app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+    flask_app.config["JWT_COOKIE_SECURE"] = False
+    flask_app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 
-    app.register_blueprint(ubicacion_routes.get_blueprint())
-    app.register_blueprint(punto_routes.get_blueprint())
-    app.register_blueprint(plan_routes.get_blueprint())
-    app.register_blueprint(ruta_routes.get_blueprint())
-    app.register_blueprint(caracteristica_routes.get_blueprint())
-    app.register_blueprint(caracteristica_plan_routes.get_blueprint())
-    app.register_blueprint(transaccion_routes.get_blueprint())
-    app.register_blueprint(usuario_routes.get_blueprint())
-    app.register_blueprint(caracteristica_usuario_routes.get_blueprint())
-    app.register_blueprint(dispositivo_routes.get_blueprint())
-    app.register_blueprint(permiso_routes.get_blueprint())
-    app.register_blueprint(permiso_usuario_routes.get_blueprint())
-    app.register_blueprint(permiso_confianza_routes.get_blueprint())
-    app.register_blueprint(ubicacion_usuario_routes.get_blueprint())
-    app.register_blueprint(main_routes)
-    app.register_blueprint(mail_routes)
-    app.register_blueprint(codigo_routes)
-    app.register_blueprint(auth)
-    app.register_blueprint(notify)
-    app.register_blueprint(image_routes)
-    app.register_blueprint(paypal_routes)
-    app.register_blueprint(pwa_routes)
+    jwt = JWTManager(flask_app)
+    mail = create_mail(flask_app)
 
-    migrate = Migrate(app, db)
+    flask_app.register_blueprint(ubicacion_routes.get_blueprint())
+    flask_app.register_blueprint(punto_routes.get_blueprint())
+    flask_app.register_blueprint(plan_routes.get_blueprint())
+    flask_app.register_blueprint(ruta_routes.get_blueprint())
+    flask_app.register_blueprint(caracteristica_routes.get_blueprint())
+    flask_app.register_blueprint(caracteristica_plan_routes.get_blueprint())
+    flask_app.register_blueprint(transaccion_routes.get_blueprint())
+    flask_app.register_blueprint(usuario_routes.get_blueprint())
+    flask_app.register_blueprint(caracteristica_usuario_routes.get_blueprint())
+    flask_app.register_blueprint(dispositivo_routes.get_blueprint())
+    flask_app.register_blueprint(permiso_routes.get_blueprint())
+    flask_app.register_blueprint(permiso_usuario_routes.get_blueprint())
+    flask_app.register_blueprint(permiso_confianza_routes.get_blueprint())
+    flask_app.register_blueprint(ubicacion_usuario_routes.get_blueprint())
+    flask_app.register_blueprint(main_routes)
+    flask_app.register_blueprint(mail_routes)
+    flask_app.register_blueprint(codigo_routes)
+    flask_app.register_blueprint(auth)
+    flask_app.register_blueprint(notify)
+    flask_app.register_blueprint(image_routes)
+    flask_app.register_blueprint(paypal_routes)
+    flask_app.register_blueprint(pwa_routes)
 
-    app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
-    app.config["JWT_COOKIE_SECURE"] = False
-    app.config["JWT_COOKIE_CSRF_PROTECT"] = False 
+    migrate = Migrate(flask_app, db)
+
 
     from sqlalchemy import text
 
-    with app.app_context():
+    with flask_app.app_context():
         #db.session.execute(text("DROP SCHEMA public CASCADE"))
         #db.session.execute(text("CREATE SCHEMA public"))
         #db.session.execute(text("GRANT ALL ON SCHEMA public TO postgres"))
@@ -93,5 +97,8 @@ def create_app():
         #db.session.commit()
 
         db.create_all()
+    
+    import app.socket_events.Ubicacion_event
+    import app.socket_events.Modo_alerta
 
-    return app
+    return flask_app

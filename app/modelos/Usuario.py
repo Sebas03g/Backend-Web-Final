@@ -14,6 +14,7 @@ class Usuario(db.Model):
     fecha_nacimiento = db.Column(db.DateTime, nullable=False)
     contrasena_hash = db.Column(db.Text, nullable=False)
     monitoreo = db.Column(db.Boolean, nullable=False)
+    modo_perdida = db.Column(db.Boolean, default=False)
     es_monitoreo = db.Column(db.Boolean, nullable=False)
     imagen = db.Column(db.String(150), nullable=True)
     eliminado = db.Column(db.Boolean, default=False)
@@ -50,6 +51,7 @@ class Usuario(db.Model):
             "cedula": self.cedula,
             "correo_electronico": self.correo_electronico,
             "telefono": self.telefono,
+            "modo_perdida": self.modo_perdida,
             "fecha_nacimiento": self.fecha_nacimiento.isoformat() if self.fecha_nacimiento else None,
             "monitoreo": self.monitoreo,
             "es_monitoreo": self.es_monitoreo,
@@ -77,6 +79,7 @@ class Usuario(db.Model):
             "telefono": self.telefono,
             "fecha_nacimiento": self.fecha_nacimiento.isoformat() if self.fecha_nacimiento else None,
             "imagen": self.imagen,
+            "modo_perdida": self.modo_perdida,
             "eliminado": self.eliminado,
             "rutas": [r.to_dict() for r in self.rutas if not r.eliminado] if self.rutas else [],
             "ruta_activa": self.ruta_activa if self.ruta_activa else None,

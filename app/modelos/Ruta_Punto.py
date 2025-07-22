@@ -11,6 +11,7 @@ class RutaPunto(db.Model):
 
     ruta = db.relationship("Ruta", back_populates="ruta_puntos")
     punto = db.relationship("Punto", back_populates="ruta_puntos")
+    eliminado = db.Column(db.Boolean, default=False)
 
     def get_point(self):
         return {

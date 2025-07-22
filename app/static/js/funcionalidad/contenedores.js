@@ -8,7 +8,10 @@ import { esPantallaPequena } from '../general/utilidades.js'
 import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import { accionBotonContenedorUbicacion } from './funcionalidadUbicaciones.js'
 import { slideDownElementos } from '../general/utilidades.js';
+import { socket } from '../fetch/socketClient.js';
+import { recargarDatos as recargarTodosDatos } from "../general/recargarDatos.js";
 import * as validar from './validacion.js';
+import { stateLostMode } from '../fetch/Credentials.js';
 
 let idDispositivo = null;
 let idUA = null;
@@ -21,10 +24,19 @@ let marcadorSeleccionado = null;
 
 var listaDispositivos;
 
-function recargarDatos(){
+socket.on('modo_perdida', async(data) => {
+    if(listaDispositivos.some(ld => ld.usuario_asignado.id == data.id)){
+        await recargarDatos();
+        const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+        listaDispositivos = dataUsuario.dispositivos_gestionados;
+    }
+});
+
+async function recargarDatos(){
+    
     const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
-    console.log(dataUsuario);
     listaDispositivos = dataUsuario.dispositivos_gestionados;
+    console.log(listaDispositivos);
 }
 
 
@@ -108,14 +120,13 @@ function agregarFuncionesBusqueda(){
     });
 }
 
-export function accionesDispositivos(dispositivos){
-    recargarDatos();
+export async function accionesDispositivos(dispositivos){
+    await recargarDatos();
     dispositivos.forEach(dispositivo => {
-        dispositivo.querySelector(".settingsDispositivo").addEventListener('click',() => {
-            console.log("SI")
+        dispositivo.querySelector(".settingsDispositivo").addEventListener('click',async() => {
             idDispositivo = dispositivo.dataset.idDispositivo;
             idUA = dispositivo.dataset.idAsignado
-            crearContenedores();
+            await crearContenedores();
             agregarFuncionesBusqueda();
 
             document.getElementById("contenedor").classList.toggle("abierto");
@@ -126,6 +137,10 @@ export function accionesDispositivos(dispositivos){
             
             document.getElementById("botonPerdida").addEventListener("click", () => {
                 funcionPanelMensaje("Modo Alarma", "Al activar el modo alarma se notificara al usuario, y podra utilizar permisos de nivel 3.",  "eliminar", "Activar");
+                document.getElementById("btnAccionPanel").onclick = null
+                document.getElementById("btnAccionPanel").addEventListener("click", async() => {
+                    await activarModoPerdida(idUA);
+                });
             });
 
             if(esPantallaPequena()){
@@ -135,6 +150,22 @@ export function accionesDispositivos(dispositivos){
 
         });
     });
+}
+
+async function activarModoPerdida(idUA){
+    const boton = document.getElementById("botonPerdida");
+    await stateLostMode(idUA);
+    const datosUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+    const persona = datosUsuario.dispositivos_gestionados.find(dg => dg.usuario_asignado.id == idUA);
+    if(persona.usuario_asignado.modo_perdida){
+        funcionPanelMensaje("Modo Perdida", "Se activo el modo de perdida", "informacion", "Aceptar");
+        boton.disabled = true;
+        boton.textContent = "Activado";
+     }else{
+        funcionPanelMensaje("Modo Perdida", "Se desactivo el modo de perdida", "informacion", "Aceptar");
+        boton.disabled = false;
+        boton.textContent = "Modo Perdida";
+    }
 }
 
 function crearContenedorInformacion(){
@@ -425,7 +456,10 @@ function crearMapa(elementoUbicacion) {
 
 function crearContenedorRuta() {
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
-    const listaRutas = persona?.usuario_asignado?.ruta || [];
+
+    console.log(persona?.usuario_asignado?.rutas);
+
+    const listaRutas = persona?.usuario_asignado?.rutas || [];
     const listaBotonesRutas = document.getElementById("listaRutas");
     listaBotonesRutas.innerHTML = "";
 
@@ -447,9 +481,15 @@ function crearCartaRuta(padre,elemento, elementoRuta){
     eliminarClase(padre.querySelectorAll(".elementoLista"), "seleccionado");
     elemento.classList.add("seleccionado");
 
+    console.log(elementoRuta.puntos[0].fecha);
+    console.log(document.getElementById("puntoInicialRuta"));
+
+    const fechaInicial = new Date(elementoRuta.puntos[0].fecha);
+    const fechaFinal = new Date(elementoRuta.puntos[elementoRuta.puntos.length - 1].fecha);
+
     document.getElementById("nombreRuta").value = elementoRuta.nombre;
-    document.getElementById("puntoInicialRuta").value = elementoRuta.puntos[0].hora;
-    document.getElementById("puntoFinalRuta").value = elementoRuta.puntos[elementoRuta.puntos.length - 1].hora;
+    document.getElementById("horaInicialRuta").value = `${fechaInicial.getHours().toString().padStart(2, '0')}:${fechaInicial.getMinutes().toString().padStart(2, '0')}`;
+    document.getElementById("horaFinalRuta").value = `${fechaFinal.getHours().toString().padStart(2, '0')}:${fechaFinal.getMinutes().toString().padStart(2, '0')}`;
 
     document.getElementById("botonEliminarRuta").style.display = "inline";
 
@@ -467,6 +507,10 @@ function crearCartaRuta(padre,elemento, elementoRuta){
 
 function crearRuta(elementoRuta) {
 
+    console.log("Elemento")
+    console.log(elementoRuta)
+    console.log(elementoRuta.puntos)
+
     let puntoRuta;
     let puntosRuta = [];
 
@@ -474,8 +518,9 @@ function crearRuta(elementoRuta) {
         mapaRuta.remove();
         mapaRuta = null;
     }
+    console.log([elementoRuta.puntos[0].punto.lat, elementoRuta.puntos[0].punto.lng])
     mapaRuta = L.map(document.getElementById("mapaRuta"), {
-        center: elementoRuta.puntos[0].ubicacion,
+        center: [elementoRuta.puntos[0].punto.lat, elementoRuta.puntos[0].punto.lng],
         zoom: 14,
         zoomControl: false
     });
@@ -501,14 +546,14 @@ function crearRuta(elementoRuta) {
         iconAnchor: [5, 10],
     });
 
-    elementoRuta.ruta_puntos.slice(1, -1).forEach(rp => {
+    elementoRuta.puntos.slice(1, -1).forEach(rp => {
         puntoRuta = L.marker([rp.punto.lat, rp.punto.lng], { icon: iconoPunto, pane: "punto"}).addTo(mapaRuta);
         puntoRuta.bindPopup(rp.fecha_asignacion);
         puntosRuta.push(puntoRuta);
     });
 
-    L.marker([elementoRuta.ruta_puntos[0].punto.lat, elementoRuta.ruta_puntos[0].punto.lng], { icon: iconoMeta, pane: "punto"}).addTo(mapaRuta);
-    L.marker([elementoRuta.ruta_puntos[elementoRuta.ruta_puntos.length - 1].punto.lat, elementoRuta.ruta_puntos[elementoRuta.ruta_puntos.length - 1].punto.lng]).addTo(mapaRuta);
+    L.marker([elementoRuta.puntos[0].punto.lat, elementoRuta.puntos[0].punto.lng], { icon: iconoMeta, pane: "punto"}).addTo(mapaRuta);
+    L.marker([elementoRuta.puntos[elementoRuta.puntos.length - 1].punto.lat, elementoRuta.puntos[elementoRuta.puntos.length - 1].punto.lng]).addTo(mapaRuta);
 
 
     L.control.zoom({
@@ -584,7 +629,7 @@ function crearCartaPC(padre,elemento, elementoPersonaConfianza){
     });
 }
 
-function crearContenedores(){
+async function crearContenedores(){
     crearContenedorInformacion();
     crearContenedorPermisos();
     crearContenedorUbicacion();
@@ -603,13 +648,13 @@ function crearContenedores(){
         }
     });
 
-    document.getElementById("contenedorRutas").querySelector(".btnModificar").addEventListener("click", (e) => {
+    document.getElementById("contenedorRutas").querySelector(".btnModificar").addEventListener("click", async (e) => {
         
         if(validar.validarUbicacion(marcadorSeleccionado)){
              funcionPanelMensaje("¿Estás seguro de que deseas administrar esta Ubicacion?", "Esta informacion sera registrada y se le informara al usuario de la creacion de estos datos.", "modificar", "Crear");
              document.getElementById("btnAccionPanel").onclick = null
              document.getElementById("btnAccionPanel").onclick = accionBotonContenedorRuta(idRuta, idUA)
-             recargarDatos();
+             await recargarDatos();
              crearContenedorRuta();
         }else{
             funcionPanelMensaje("Datos invalidos", "Los datos ingresados son invalidos.", "modificar", "Aceptar");
@@ -637,7 +682,7 @@ async function recargarPaginaUbicacion(e){
         await eliminarUbicacion(idUbicacion)
     }
 
-    recargarDatos();
+    await recargarDatos();
     crearContenedorUbicacion();
 }
 
@@ -650,18 +695,18 @@ async function recargarPaginaPersonas(e){
         await eliminarPC(idPC)
     }
 
-    recargarDatos();
+    await recargarDatos();
     crearContenedorPersonas();
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", async function() {
     const elementosNav = document.getElementById("listaNavDispositivo").querySelectorAll(".nav-item");
     const botonMenu = document.getElementById("contenedor").querySelector(".botonBajar");
     const dispositivos = document.getElementById("listaDispositivos").querySelectorAll(".elementoDispositivo");   
 
-    recargarDatos();
+    await recargarDatos();
     accionesNavBar(elementosNav);
     accionBotonMenu(botonMenu);
-    accionesDispositivos(dispositivos);
+    await accionesDispositivos(dispositivos);
     modificarIMG();
 });

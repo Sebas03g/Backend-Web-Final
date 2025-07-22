@@ -1,12 +1,14 @@
 import { eliminarClase } from '../general/utilidades.js';
 import { esPantallaPequena } from '../general/utilidades.js';
 import { slideLeftElementos } from '../general/utilidades.js';
+import { recargarDatos as recargarTodosDatos } from '../general/recargarDatos.js';
 
 var idDipositivo;
 
 let dispositivos;
 
-function recargarDatos(){
+async function recargarDatos(){
+    
     const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
     dispositivos = dataUsuario.dispositivos_gestionados;
 }
@@ -30,8 +32,8 @@ function accionMenuBoton(btn){
   });
 }
 
-export function accionListaDispositivos(listaDispositivos){
-  recargarDatos();
+export async function accionListaDispositivos(listaDispositivos){
+  await recargarDatos();
 
   listaDispositivos.querySelectorAll(".elementoDispositivo").forEach(elemento => {
     elemento.querySelector('label').addEventListener("click", ()=>{
@@ -60,8 +62,8 @@ function botonAgregarDispositivo(btn, listaDispositivos){
   });
 }
 
-export function crearDispositivos(listaDispositivos){
-  recargarDatos()
+export async function crearDispositivos(listaDispositivos){
+  await recargarDatos()
   listaDispositivos.innerHTML = "";
   
   eliminarClase(listaDispositivos.querySelectorAll(".elementoDispositivo"), "seleccionado");
@@ -116,16 +118,16 @@ function crearDispositivo(dispositivo, listaDispositivos){
   
 }
 
-document.addEventListener("DOMContentLoaded", function(){ 
+document.addEventListener("DOMContentLoaded", async function(){ 
     const btnMenu = document.getElementById('botonMenu');
     const listaDispositivos = document.getElementById("listaDispositivos");
     const btnAgregarDispositivo = document.getElementById("btn-creacion");
 
-    recargarDatos();
+    await recargarDatos();
 
-    crearDispositivos(listaDispositivos);
+    await crearDispositivos(listaDispositivos);
 
     accionMenuBoton(btnMenu);
-    accionListaDispositivos(listaDispositivos);
+    await accionListaDispositivos(listaDispositivos);
     botonAgregarDispositivo(btnAgregarDispositivo, listaDispositivos);
 });

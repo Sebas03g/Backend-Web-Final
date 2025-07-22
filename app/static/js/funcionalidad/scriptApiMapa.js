@@ -1,10 +1,30 @@
 import { eliminarClase } from '../general/utilidades.js';
 import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
+import { socket, enviarUbicacion } from '../fetch/socketClient.js'
+import { recargarDatos as recargarTodosDatos } from '../general/recargarDatos.js';
 
-let listaMarkers = [];
 let puntosRuta = [];
 let areasCreadas = [];
+let dataGestor;
+let marcadores = {}
 
+let listaDispositivos;
+
+async function recargarDatos(){
+    
+    const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+    listaDispositivos = dataUsuario.dispositivos_gestionados;
+    listaDispositivos = listaDispositivos.filter(l => l.estado)
+    dataGestor = dataUsuario;
+}
+
+socket.on('ubicacion_actualizada', (data) => {
+  const marker = marcadores[data.id];
+  if (marker) {
+    marker.setLatLng([data.lat, data.lng]);
+    marker.bindPopup(data.nombre || "Sin nombre").openPopup();
+  }
+});
 
 function crearIcono(nombre){
   const icono = L.divIcon({
@@ -19,16 +39,14 @@ function crearIcono(nombre){
 }
 
 function crearPopUp(dispositivo){
+  console.log(dispositivo);
   const cadena = `
-  <div id="${dispositivo.id} class="popup">
-    <h6>${dispositivo.nombre}</h6>
-    <p>${dispositivo.estado}</p>
+  <div id="${dispositivo.id}" class="popup">
+    <h6>${dispositivo.nombre_completo}</h6>
+    <p>${dispositivo.estado ? "Activo":"Desactivo"}</p>
     <div class="contenedorIconos">
       <div id="microfonoDispositivo_${dispositivo.id}" class="micDispostivo iconosPoup">
         <i class="bi bi-mic"></i>
-      </div>
-      <div class="iconosPoup">
-        ${dispositivo.bateria}
       </div>
     </div>
   </div>
@@ -37,11 +55,13 @@ function crearPopUp(dispositivo){
 }
 
 
-function crearMarker(mapa, listaDispositivos){
+function crearMarker(mapa){
 
   listaDispositivos.forEach(dispositivo => {
 
-    const marker = L.marker(dispositivo.ubicacion, {icon: crearIcono(dispositivo.nombre), pane: "dispositivo"}).addTo(mapa).bindPopup(crearPopUp(dispositivo), {closeOnClick: false })
+    const punto = dispositivo.usuario_asignado.ubicacion.punto.split(",").map(Number);
+
+    const marker = L.marker(punto, {icon: crearIcono(dispositivo.nombre), pane: "dispositivo"}).addTo(mapa).bindPopup(crearPopUp(dispositivo), {closeOnClick: false })
     
     marker.customId = dispositivo.id;
     marker.on('click', function () {
@@ -54,12 +74,10 @@ function crearMarker(mapa, listaDispositivos){
 
     marker.on('popupopen', function () {
       iconoMicrofono(dispositivo);
-      crearRuta(dispositivo.ruta, mapa);
-      crearAreasPersona(dispositivo.ubicaciones, mapa);
+      crearRuta(dispositivo.usuario_asignado.ruta_activa, mapa);
+      crearAreasPersona(dispositivo.usuario_asignado.ubicaciones_creadas, mapa);
     });
-    
-    listaMarkers.push(marker);
-    
+    marcadores[dispositivo.id] = marker;
 
   });
 
@@ -72,7 +90,7 @@ function crearAreasPersona(areas, mapa){
   areasCreadas = []
 
   areas.forEach(area => {
-    areaCreada = L.circle(area.punto,{
+    areaCreada = L.circle(area.punto.split(",").map(Number),{
       color: "black",
       pane: "zona",
       fillColor: area.tipo,
@@ -80,12 +98,10 @@ function crearAreasPersona(areas, mapa){
       radius: 100
     }).addTo(mapa)
 
-    areaCreada.bindPopup(area.nombre);
+    areaCreada.bindPopup(area.nombre_ubicacion);
 
     areasCreadas.push(areaCreada);
   });
-
-
 
 }
 
@@ -96,35 +112,44 @@ function crearRuta(ruta, mapa) {
 
   const iconoPunto = L.divIcon({
     html: '<i class="bi bi-dot" style="color: blue; font-size: 50px;"></i>',
-    className: '', // evita clases predeterminadas
-    iconSize: [50, 50], // coincide con el tamaño del icono visual
-    iconAnchor: [25, 25], // centro del ícono
+    className: '',
+    iconSize: [50, 50],
+    iconAnchor: [25, 25],
     popupAnchor: [0, -25]
   });
-  ruta.forEach(punto => {
-    puntoCreado = L.marker(punto.ubicacion, { icon: iconoPunto, pane: "punto"}).addTo(mapa);
-    puntoCreado.bindPopup(punto.hora);
-    puntosRuta.push(puntoCreado)
-  });
+  if(ruta){
+    ruta.puntos.forEach(punto => {
+      nuevoPunto = [punto.punto.lat, punto.punto.lng]
+      puntoCreado = L.marker(nuevoPunto, { icon: iconoPunto, pane: "punto"}).addTo(mapa);
+      puntoCreado.bindPopup(punto.fecha);
+      puntosRuta.push(puntoCreado)
+    });
+  }
+  
 }
 
 
-function abrirMarker(listaDispositivos, mapa){
-  listaDispositivos.forEach(dispositivo => {
-    listaMarkers.forEach(m => m.closePopup());
+function abrirMarker(elementoDispositivo, mapa) {
+  elementoDispositivo.forEach(dispositivo => {
     dispositivo.querySelector("label").addEventListener("click", () => {
-      console.log("dispositivo.dataset.idDispositivo")
-      console.log(dispositivo.dataset.idDispositivo)
-      const marker = listaMarkers.find(m => m.customId == dispositivo.dataset.idDispositivo);
-      marker.openPopup();
-      mapa.flyTo(marker.getLatLng(), 18);
-    })
+      Object.values(marcadores).forEach(m => m.closePopup());
+      const marker = marcadores[dispositivo.dataset.idDispositivo];
+      if (marker) {
+        marker.openPopup();
+        mapa.flyTo(marker.getLatLng(), 18);
+      } else {
+        console.warn("No se encontró el marcador para el dispositivo con ID:", dispositivo.dataset.idDispositivo);
+      }
+    });
   });
 }
 
-function crearAreas(mapa, areas){
+
+function crearAreas(mapa){
+  let areas = dataGestor.ubicaciones_creadas
+
   areas.forEach(area => {
-    let areaCirculo = L.circle(area.punto,{
+    let areaCirculo = L.circle(area.punto.split(","),{
       color: "black",
       pane: "zona",
       fillColor: area.tipo,
@@ -185,7 +210,7 @@ function iconoMicrofono(dispositivo){
     document.querySelectorAll(".micDispostivo").forEach(icono => {
       icono.addEventListener("click", () => {
 
-        if(dispositivo.permisos.find(l => l.id == 6)){
+        if(dispositivo.permisos_usuario.find(l => l.permiso.id == 6)){
         
           if (icono.innerHTML === '<i class="bi bi-mic-fill"></i>'){
             icono.innerHTML = '<i class="bi bi-mic"></i>';
@@ -202,47 +227,13 @@ function iconoMicrofono(dispositivo){
     });
 }
 
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", async function(){
     const mapa = creacionMapa();
     const elementosDispositivos = document.querySelectorAll(".elementoDispositivo");
 
-    let listaDispositivos = [
-        {id:"1", nombre: "Sophia", ubicacion:[-2.8918931908671124, -79.03600936098859], estado: "Activo", bateria:'<i class="bi bi-battery-full"></i>', ruta : [
-          {"hora": "11:20 pm", "ubicacion": [-2.882000, -79.036500]},
-          {"hora": "11:25 pm", "ubicacion": [-2.883500, -79.036400]},
-          {"hora": "11:30 pm", "ubicacion": [-2.885000, -79.036300]},
-          {"hora": "11:35 pm", "ubicacion": [-2.886500, -79.036200]},
-          {"hora": "11:40 pm", "ubicacion": [-2.888000, -79.036100]},
-          {"hora": "11:45 pm", "ubicacion": [-2.889500, -79.036050]},
-          {"hora": "11:50 pm", "ubicacion": [-2.890500, -79.036030]},
-          {"hora": "11:55 pm", "ubicacion": [-2.891000, -79.036020]},
-          {"hora": "12:00 am", "ubicacion": [-2.891400, -79.036015]},
-          {"hora": "12:05 am", "ubicacion": [-2.891700, -79.036012]},
-          {"hora": "12:10 am", "ubicacion": [-2.8918931908671124, -79.03600936098859]}
-        ], ubicaciones: [
-          {id:"1", idPersona:"1", punto:[-2.859448, -78.963261], nombre:"Casa", tipo:"green", descripcion:"Case de Sophia"},
-          {id:"2", idPersona:"1",punto:[-2.8913363513451396, -78.97706831779115], nombre:"Casa ex-novio", tipo:"red", descripcion:"Casa del ex-novia abusivo."},
-        ],permisos:[
-          {"id":1, "nivel":"1"},{"id":2, "nivel":"1"},{"id":3, "nivel":"1"},
-          {"id":4, "nivel":"1"},{"id":5, "nivel":"1"},{"id":6, "nivel":"1"},
-          {"id":7, "nivel":"1"},{"id":8, "nivel":"1"},{"id":9, "nivel":"1"}
-        ]
-      }, 
-        {id:"2", nombre:"Kevin", ubicacion:[-2.901802569814168, -79.01013786641367], estado: "Desactivo", bateria:'<i class="bi bi-battery"></i>', ruta: [], ubicaciones: [
-          {id:"3", idPersona:"2", punto:[-2.8913363513451396, -78.97706831779115], nombre:"Casa", tipo:"green", descripcion:"Case de Kevin"},
-          {id:"4", idPersona:"2",punto:[-2.906395, -79.020527], nombre:"Casa padre", tipo:"red", descripcion:"Casa del padre abusivo."}
-        ],permisos:[
-          {"id":1, "nivel":"1"},{"id":2, "nivel":"1"},{"id":9, "nivel":"1"}
-        ]
-      }
-    ]
-    let areas = [
-      {punto:[-2.8918931908671124, -79.03600936098859], nombre:"Zona Segura", tipo:"green"},
-      {punto:[-2.9221155566716095, -79.0415370113893], nombre:"Zona Insegura", tipo:"red"}
-    ]
-
-    crearMarker(mapa, listaDispositivos);
+    await recargarDatos();
+    crearMarker(mapa);
     abrirMarker(elementosDispositivos, mapa); 
-    crearAreas(mapa, areas);
+    crearAreas(mapa);
 
 });

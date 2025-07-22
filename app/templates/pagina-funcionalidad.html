@@ -28,6 +28,7 @@
   <script type="module" src="../static/js/funcionalidad/funcionalidadMobil.js"></script>
   <script type="module" src="../static/js/funcionalidad/menuUbicaciones.js"></script>
   <script type="module" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 
 </head>
 <body>
@@ -184,9 +185,7 @@
         <div class="hijo informacion activo zoom-in" id="contenedorInformacion">
           <div class ="informacionContenido">
             <div class="container carta">
-              <!-- Carta -->
               <div class="card" >
-                  <!-- Contenido de la carta -->
                   <div class="card-body">
                     <div class="iconoMobil d-block d-sm-none">
                       <i class="icono-navbar bi bi-info-circle" id="iconoDispositivoMobil"></i>
@@ -222,9 +221,6 @@
                     <textarea class="form-control" id="mensajeUsuario" rows="4" placeholder="Escribe el mensaje aquí..."></textarea>
                     <input type="" class="btn btn-secondary" value="Enviar" readonly>
                   </form>
-                  <!--<div class="mb-3">
-                    
-                  </div>-->
                 </div>
               </div>
             </div>
@@ -377,8 +373,8 @@
                     <div class="mb-3">
                       <label for="horaInicialRuta" class="form-label">Hora Inicial</label>
                       <input type="time" class="form-control" id="horaInicialRuta" placeholder="00:00">
-                      <label for="horaInicialRuta" class="form-label">Hora Final</label>
-                      <input type="time" class="form-control" id="horaInicialRuta" placeholder="00:00">
+                      <label for="horaFinalRuta" class="form-label">Hora Final</label>
+                      <input type="time" class="form-control" id="horaFinalRuta" placeholder="00:00">
                     </div>
                     <input type="" class="btn btnModificar" value="Aceptar" readonly>
                     <input type="" class="btn eliminados" id="botonEliminarRuta" value="Eliminar" readonly>
@@ -591,7 +587,7 @@
                         <option value="red">Inseguro</option>
                       </select>
                     </div>
-                    <input type="" class="btn btnModificar" value="Aceptar" readonly>
+                    <input type="" class="btn btnModificar" id="botonAccionUbicacionGeneral" value="Aceptar" readonly>
                     <input type="" class="btn eliminados" id="botonEliminarUbicacionGeneral" value="Eliminar" readonly>
                 </div>
                 

@@ -1,3 +1,7 @@
+import { recargarDatos } from "../general/recargarDatos.js";
+import { getDataById } from "./sentenciasFetch.js";
+import { socket, enviarUbicacion, activarModoPerdida } from "./socketClient.js";
+
 export const loginFunctionality = async (form) => {
     const data = {
         correo_electronico: form.mail.value,
@@ -16,10 +20,24 @@ export const loginFunctionality = async (form) => {
         const result = await response.json();
 
         if (response.ok) {
-            sessionStorage.setItem("usuario", JSON.stringify(result.usuario));
-            console.log(result.usuario);
-            iniciarMonitoreo(result.usuario.ubicacion.id);
-            window.location.href = '/user-type';
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    await iniciarMonitoreo(result.usuario.ubicacion.id);
+
+                    const usuario = await getDataById("usuario", result.usuario.id);
+                    sessionStorage.setItem("usuario", JSON.stringify(usuario));
+                    window.location.href = '/user-type';
+                },
+                (error) => {
+                    console.error("El usuario denegó el permiso de ubicación:", error.message);
+                    alert("Se necesita acceso a tu ubicación para continuar.");
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
         } else {
             alert(result.message || "Error en el login");
         }
@@ -38,39 +56,33 @@ export const logoutFunctionality = async() => {
     });  
     
     if (response.ok) {
+        sessionStorage.removeItem("usuario");
          window.location.href = '/';
      } else {
         alert(result.message || "Error en el logout");
     }
 };
 
-export const stateLostMode = async(id) => {
-
-}
-
+export const stateLostMode = async (id) => {
+    try {
+        activarModoPerdida(id);
+        await recargarDatos();
+        return true;
+    } catch (error) {
+        console.error("Error de red en stateLostMode:", error);
+        return false;
+    }
+};
 
 async function iniciarMonitoreo(id_ubicacion) {
     if ("geolocation" in navigator) {
-        const watchId = navigator.geolocation.watchPosition(
-            async (position) => {
+        console.log("Iniciando monitoreo de ubicación");
+        navigator.geolocation.watchPosition(
+            (position) => {
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
-                try {
-                    const response = await fetch(`http://127.0.0.1:5000/ubicacion-usuario/update-point/${id_ubicacion}`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        credentials: "include",
-                        body: JSON.stringify({
-                            lat: lat,
-                            lng: lng
-                        })
-                    });
-                    const data = await response.json();
-                } catch (error) {
-                    console.error("Error al enviar ubicación:", error);
-                }
+
+                enviarUbicacion(lat, lng, id_ubicacion);
             },
             (error) => {
                 console.error("Error al obtener la ubicación:", error.message);
@@ -81,9 +93,10 @@ async function iniciarMonitoreo(id_ubicacion) {
                 maximumAge: 0
             }
         );
-        return watchId;
     } else {
         alert("Geolocalización no disponible.");
     }
 }
+
+
 

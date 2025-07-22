@@ -1,28 +1,48 @@
 from flask import request, jsonify
-from app.repository.DispositivoRepo import DispositivoRepo
-from app.modelos.Dispositivo import Dispositivo
+from app.repository.BaseRepo import BaseRepo
+from app.modelos.Usuario import Usuario
 from app.services.sendMail import enviar_correo
 
-class LostModeController():
+class LostModeController:
+
+    def __init__(self):
+        self.repo = BaseRepo(Usuario)
+
     def activate(self, id):
         try:
-            dispositivo = DispositivoRepo(Dispositivo).getById(id)
-        
-            html = (
-                f"<h2>Permiso Otorgado</h2><br>"
-                f"<p>Su administrador de cuenta {dispositivo.gestor.correo_electronico} "
-                f"Activo el modo perdida esto significa que tendra acceso a todos los permiso de nivel 3.</p><br>"
-            )
+            usuario = self.repo.getById(id)
+
+            if not usuario:
+                return jsonify({"error": "Usuario no encontrado"}), 404
+            
+            lista_correos = [usuario.correo_electronico]
+            for dispositivo in usuario.dispositivos_asignados:
+                if dispositivo.gestor and dispositivo.gestor.correo_electronico not in lista_correos:
+                    lista_correos.append(dispositivo.gestor.correo_electronico)
+
+            nuevo_estado = not usuario.modo_perdida
+            if nuevo_estado:
+                html = (
+                    f"<h2>Modo Pérdida Activado</h2><br>"
+                    f"<p>El modo pérdida ha sido activado para su cuenta.</p><br>"
+                    f"<p>Esto significa que sus administradores tendrán acceso a todos los permisos de nivel 3.</p><br>"
+                )
+            else:
+                html = (
+                    f"<h2>Modo Pérdida Desactivado</h2><br>"
+                    f"<p>El modo pérdida ha sido desactivado para su cuenta.</p><br>"
+                    f"<p>Esto significa que sus administradores perderán acceso a los permisos de nivel 3.</p><br>"
+                )
+            self.repo.update(usuario.id, {"modo_perdida": nuevo_estado})
 
             enviar_correo(
-                to=[
-                    dispositivo.usuario_asignado.correo_electronico,
-                    dispositivo.gestor.correo_electronico
-                ],
-                subject="Activacion modo perdida.",
+                to=lista_correos,
+                subject="Estado del Modo Pérdida actualizado",
                 html=html
             )
-            return jsonify({"mensaje":"Se enscendio el modo de perdida"}), 200
+
+            mensaje_estado = "activado" if nuevo_estado else "desactivado"
+            return jsonify({"mensaje": f"Modo pérdida {mensaje_estado} correctamente."}), 200
 
         except Exception as e:
             return jsonify({"error": str(e)}), 400

@@ -6,6 +6,7 @@ export async function accionBotonContenedorUbicacion(id, id_usuario, marcadorSel
 
     let coordenadas;
 
+
     if(Array.isArray(marcadorSeleccionado)){
         coordenadas = {
             lat: marcadorSeleccionado[0],
@@ -39,13 +40,61 @@ export async function accionBotonContenedorUbicacion(id, id_usuario, marcadorSel
 
 }
 
+export async function accionBotonContenedorUbicacionGeneral(id, id_usuario, marcadorSeleccionado){
+    const boton = document.getElementById("botonAccionUbicacionGeneral");
+
+    let coordenadas;
+
+    console.log(marcadorSeleccionado);
+
+    if(Array.isArray(marcadorSeleccionado)){
+        coordenadas = {
+            lat: marcadorSeleccionado[0],
+            lng: marcadorSeleccionado[1]
+        }
+    }else{
+        coordenadas = marcadorSeleccionado.getLatLng();
+    }
+
+    console.log("AQUII");
+
+    console.log(coordenadas);
+
+
+    const dataUbicacion = {
+        nombre_ubicacion: document.getElementById("nombreUbicacionGeneral").value,
+        descripcion: document.getElementById("descripcionUbicacionGeneral").value,
+        tipo: document.getElementById('miComboboxSeguridadGeneral').value,
+        id_usuario: id_usuario,
+        lat: coordenadas.lat,
+        lng: coordenadas.lng
+    }
+
+    console.log(dataUbicacion);
+
+    try{
+        if(boton.dataset.tipo == "modify"){
+            await actualizarUbicacion(id, dataUbicacion)
+        }else{
+            await crearUbicacion(dataUbicacion)
+        }
+
+        return true
+    }catch(e){
+        console.log(e)
+    }
+
+}
+
 async function crearUbicacion(data){
     await createData("ubicacion", data);
 
 }
 
 async function actualizarUbicacion(id, data){
+    console.log("ACTUALIZANDO")
     await updateData("ubicacion", data, id);
+    console.log("ACTUALIZADO")
 }
 
 export async function eliminarUbicacion(id){
