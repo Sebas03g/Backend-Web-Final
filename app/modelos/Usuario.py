@@ -15,7 +15,7 @@ class Usuario(db.Model):
     contrasena_hash = db.Column(db.Text, nullable=False)
     monitoreo = db.Column(db.Boolean, nullable=False)
     modo_perdida = db.Column(db.Boolean, default=False)
-    es_monitoreo = db.Column(db.Boolean, nullable=False)
+    es_monitor = db.Column(db.Boolean, nullable=False)
     imagen = db.Column(db.String(150), nullable=True)
     eliminado = db.Column(db.Boolean, default=False)
     conectado = db.Column(db.DateTime, default=datetime.utcnow)
@@ -54,7 +54,7 @@ class Usuario(db.Model):
             "modo_perdida": self.modo_perdida,
             "fecha_nacimiento": self.fecha_nacimiento.isoformat() if self.fecha_nacimiento else None,
             "monitoreo": self.monitoreo,
-            "es_monitoreo": self.es_monitoreo,
+            "es_monitor": self.es_monitor,
             "imagen": self.imagen,
             "eliminado": self.eliminado,
             "id_plan": self.id_plan,

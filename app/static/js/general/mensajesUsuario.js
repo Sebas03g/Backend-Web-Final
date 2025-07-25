@@ -3,12 +3,12 @@ function crearMensaje(titulo, mensaje, clase, txtBtn) {
     contenedor.classList.add("mostrar");
     contenedor.innerHTML = `
         <div class="mensaje zoom-in">
-            <i class="bi bi-x-circle-fill"></i>
+            <i class="bi bi-x-circle-fill" id="cerrarPanelMensajes"></i>
             <h4>${titulo}</h4>
             <p>${mensaje}</p>
-            <button class="btn" id="btnAccionPanel" style="background-color: ${clase} !important'">${txtBtn}</button>
-
+            <button class="btn" id="btnAccionPanel" style="background-color: ${clase} !important;">${txtBtn}</button>
         </div>
+
     `;
     const boton = contenedor.querySelector("#btnAccionPanel");
     boton.classList.add(clase);

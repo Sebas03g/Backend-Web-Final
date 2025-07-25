@@ -3,6 +3,7 @@ import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import { getAllData } from '../fetch/sentenciasFetch.js';
 import { agregarGestor, estadoGestor } from './funcionalidadGestor.js';
 import { mandarMensaje } from './funcionalidadMensaje.js';
+import { modificarEstadoTodosPU } from './funcionalidadPermiso.js';
 
 let gestores;
 
@@ -58,6 +59,7 @@ function crearListaGestores(listaFiltradaGestores){
         const nuevoInput = document.createElement("input")
         nuevoInput.type = "checkbox";
         nuevoInput.checked = gestor.estado;
+        nuevoInput.dataset.idGestor = gestor.id;
 
         nuevoElementoLista.appendChild(nuevoBoton);
         nuevoElementoLista.appendChild(nuevoInput);
@@ -114,7 +116,11 @@ function crearContenedorPermisos(){
         const nuevoInput = document.createElement("input")
         nuevoInput.type = "checkbox";
         nuevoInput.name = `${permiso.id}PermisoCheckBox`
-        nuevoInput.checked = permiso.estado;
+
+        nuevoInput.checked = validarPermiso(permiso.id);
+
+        console.log(validarPermiso(permiso.id))
+
         nuevoInput.dataset.idPermiso = permiso.id;
         nuevoInput.dataset.estado = permiso.estado;
         
@@ -124,6 +130,18 @@ function crearContenedorPermisos(){
         listaPermisos.appendChild(nuevoElementoLista);
     });
 }
+
+function validarPermiso(idPermiso) {
+    for (let gestor of gestores) {
+        for (let permiso of gestor.permisos_usuario) {
+            if (permiso.permiso.id == idPermiso) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 
 export function crearContenedorUbicaciones(){
     recargarDatos();
@@ -170,7 +188,13 @@ function agregarFuncionesCheck(){
             }else{
                 funcionPanelMensaje("Desactivar Gestor", "¿Estas seguro que quieres desactivar el siguiente gestor?, esto le quitara acceso a todos los permisos previamente registrados.", "comunicacion", "Desactivar");
             }
+            document.getElementById("btnAccionPanel").onclick = null
+            document.getElementById("btnAccionPanel").addEventListener("click", async() => {
+                await estadoGestor(e.target.idGestor)
+                recargarDatos();
+            });
         });
+        
     });
 
     document.getElementById("contenedorPermisos").querySelectorAll('input[type="checkbox"]').forEach(elemento => {
@@ -180,6 +204,12 @@ function agregarFuncionesCheck(){
             }else{
                 funcionPanelMensaje("Desactivar Permiso", "¿Estas seguro que quieres desactivar el siguiente permiso?, esto le quitara acceso a todos los gestores previamente registrados.", "comunicacion", "Desactivar");
             }
+            document.getElementById("btnAccionPanel").onclick = null
+            document.getElementById("btnAccionPanel").addEventListener("click", async() => {
+                await modificarEstadoTodosPU(e)
+                recargarDatos();
+            });
+            
         });
     });
 }

@@ -13,7 +13,10 @@ class PermisoUsuarioController(BaseController):
         else:
             valid_data = data
         try:
+            print(valid_data)
             nuevo_objeto = self.repositorio.create(valid_data)
+            print(nuevo_objeto)
+            print(nuevo_objeto.to_dict())
 
             html = (
                 f"<h2>Permiso Otorgado</h2><br>"
@@ -81,10 +84,9 @@ class PermisoUsuarioController(BaseController):
             if "id_permiso" not in data or "estado" not in data:
                 return jsonify({"error": "Faltan campos requeridos (id_permiso o estado)"}), 400
 
-            id_permiso = data["id_permiso"]
+            id_permiso = int(data["id_permiso"])
             permisoUsuario = self.repositorio.getAll()
             listaUsuarios = []
-
             puFiltrados = [
                 pu for pu in permisoUsuario 
                 if pu.id_permiso == id_permiso and pu.dispositivo.id_usuario == id

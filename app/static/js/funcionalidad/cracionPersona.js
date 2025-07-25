@@ -10,7 +10,6 @@ import * as validar from './validacion.js';
 
 let idDispositivo = null;
 
-
 let dataGestor;
 
 function recargarDatos(){
@@ -20,7 +19,7 @@ function recargarDatos(){
 
 function accionesDispositivos(dispositivos){
     dispositivos.forEach(dispositivo => {
-        dispositivo.querySelector(".editarDispositivos").addEventListener('click',() => {
+        dispositivo.querySelector(".editarDispositivos").addEventListener('click',async() => {
             idDispositivo = dispositivo.dataset.idDispositivo;
             cartaDispositivos();
             document.getElementById("modificarPersona").classList.toggle("abierto");
@@ -31,7 +30,7 @@ function accionesDispositivos(dispositivos){
                 document.getElementById('contenedorMenu').classList.remove('mostrar');
                 document.getElementById('botonMenu').classList.remove('seleccionado');
             }
-
+        
         });
     });
 
@@ -70,13 +69,12 @@ function crearDispositivo(btn){
     });
 }
 
-async function actualizarListaDispositivos(e, id=null){
+export async function actualizarListaDispositivos(e, id=null){
+
+    console.log(e)
 
     const listaDispositivos = document.getElementById("listaDispositivos");
 
-    console.log("ID")
-    console.log(id)
-    
     if(e.target.id == "btnCrearDispositivo"){
         const id_usuario = dataGestor.id;
         await crearDataDispositivo(id_usuario);

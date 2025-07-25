@@ -1,7 +1,6 @@
 import { eliminarClase } from '../general/utilidades.js'
 import { eliminarPC } from './funcionalidadPC.js';
 import { eliminarUbicacion } from './funcionalidadUbicaciones.js';
-import { eliminarRuta } from './funcionalidadRuta.js';
 import { accionBotonContenedorPC } from './funcionalidadPC.js';
 import { accionBotonContenedorRuta } from './funcionalidadRuta.js';
 import { esPantallaPequena } from '../general/utilidades.js'
@@ -9,9 +8,12 @@ import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import { accionBotonContenedorUbicacion } from './funcionalidadUbicaciones.js'
 import { slideDownElementos } from '../general/utilidades.js';
 import { socket } from '../fetch/socketClient.js';
-import { recargarDatos as recargarTodosDatos } from "../general/recargarDatos.js";
 import * as validar from './validacion.js';
 import { stateLostMode } from '../fetch/Credentials.js';
+import { recargarDatos as recargarTodosDatos } from '../general/recargarDatos.js';
+import { actualizarListaDispositivos } from './cracionPersona.js';
+import { enviarMensaje as enviarMensajeAdmin } from './funcionalidadDispositivos.js';
+import { ValidarPermiso } from './controlPermisos.js';
 
 let idDispositivo = null;
 let idUA = null;
@@ -26,17 +28,29 @@ var listaDispositivos;
 
 socket.on('modo_perdida', async(data) => {
     if(listaDispositivos.some(ld => ld.usuario_asignado.id == data.id)){
-        await recargarDatos();
-        const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
-        listaDispositivos = dataUsuario.dispositivos_gestionados;
+        await recargarTodosDatos();
+        recargarDatos();
     }
 });
 
+socket.on('permiso_modificado', async(data) => {
+    if((data.tipo == "todos" && listaDispositivos.some(ld => ld.usuario_asignado.id == data.id)) || 
+        (data.tipo == "unico" && listaDispositivos.some(ld => ld.id == data.id))){
+        await recargarTodosDatos();
+        recargarDatos();
+    }
+});
+
+socket.on('dispositivo_estado', async(data) => {
+    if(listaDispositivos.some(ld => ld.id == data.id)){
+        await recargarTodosDatos();
+        recargarDatos();
+    }    
+});
+
 async function recargarDatos(){
-    
     const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
     listaDispositivos = dataUsuario.dispositivos_gestionados;
-    console.log(listaDispositivos);
 }
 
 
@@ -53,6 +67,16 @@ function accionesNavBar(elementosNav){
             document.getElementById(boton.dataset.nombreContenedor).classList.add("activo");
             if(boton.dataset.nombreContenedor === "contenedorUbicacion"){
                 let mapa = document.getElementById("mapaUbicacion")._leafletMap;
+                console.log(mapa);
+                if(mapa == undefined){
+                    mapa = crearMapaUbicacion();
+                }
+                mapa.invalidateSize();
+            }else if(boton.dataset.nombreContenedor === "contenedorRutas"){
+                let mapa = document.getElementById("mapaRuta")._leafletMap;
+                if(mapa == undefined){
+                    mapa = crearMapaRuta();
+                }
                 mapa.invalidateSize();
             }
         });
@@ -124,40 +148,46 @@ export async function accionesDispositivos(dispositivos){
     await recargarDatos();
     dispositivos.forEach(dispositivo => {
         dispositivo.querySelector(".settingsDispositivo").addEventListener('click',async() => {
-            idDispositivo = dispositivo.dataset.idDispositivo;
-            idUA = dispositivo.dataset.idAsignado
-            await crearContenedores();
-            agregarFuncionesBusqueda();
+            const persona = listaDispositivos.find(ld => ld.id == dispositivo.dataset.idDispositivo);
+            if(await ValidarPermiso(persona, "Ver Información")){
+                idDispositivo = dispositivo.dataset.idDispositivo;
+                idUA = dispositivo.dataset.idAsignado
+                
+                await crearContenedores();
+                agregarFuncionesBusqueda();
 
-            document.getElementById("contenedor").classList.toggle("abierto");
-            document.getElementById('contenedorMenu').classList.remove("mostrar");
-            document.getElementById('botonMenu').classList.remove('seleccionado');
-            document.getElementById("modificarPersona").classList.remove("abierto");
-            document.getElementById("creacionPersona").classList.remove("abierto");
-            
-            document.getElementById("botonPerdida").addEventListener("click", () => {
-                funcionPanelMensaje("Modo Alarma", "Al activar el modo alarma se notificara al usuario, y podra utilizar permisos de nivel 3.",  "eliminar", "Activar");
-                document.getElementById("btnAccionPanel").onclick = null
-                document.getElementById("btnAccionPanel").addEventListener("click", async() => {
-                    await activarModoPerdida(idUA);
-                });
-            });
-
-            if(esPantallaPequena()){
-                document.getElementById('contenedorMenu').classList.remove('mostrar');
+                document.getElementById("contenedor").classList.toggle("abierto");
+                document.getElementById('contenedorMenu').classList.remove("mostrar");
                 document.getElementById('botonMenu').classList.remove('seleccionado');
-            }
+                document.getElementById("modificarPersona").classList.remove("abierto");
+                document.getElementById("creacionPersona").classList.remove("abierto");
+                
+                document.getElementById("botonPerdida").addEventListener("click", async() => {
+                    if(await ValidarPermiso(dispositivo, "Generar Alarmas")){
+                        funcionPanelMensaje("¿Estás seguro que deseas modificar el modo alarma?", "Al modificar el modo alarma se notificara al usuario, y podra utilizar permisos de nivel 3.",  "eliminar", "Activar");
+                        document.getElementById("btnAccionPanel").onclick = null
+                        document.getElementById("btnAccionPanel").addEventListener("click", async() => {
+                            await activarModoPerdida();
+                        });
+                    }
+                    
+                });
 
+                if(esPantallaPequena()){
+                    document.getElementById('contenedorMenu').classList.remove('mostrar');
+                    document.getElementById('botonMenu').classList.remove('seleccionado');
+                }
+            }
         });
     });
 }
 
-async function activarModoPerdida(idUA){
+async function activarModoPerdida(){
     const boton = document.getElementById("botonPerdida");
     await stateLostMode(idUA);
     const datosUsuario = JSON.parse(sessionStorage.getItem("usuario"));
     const persona = datosUsuario.dispositivos_gestionados.find(dg => dg.usuario_asignado.id == idUA);
-    if(persona.usuario_asignado.modo_perdida){
+    if(!persona.usuario_asignado.modo_perdida){
         funcionPanelMensaje("Modo Perdida", "Se activo el modo de perdida", "informacion", "Aceptar");
         boton.disabled = true;
         boton.textContent = "Activado";
@@ -166,14 +196,23 @@ async function activarModoPerdida(idUA){
         boton.disabled = false;
         boton.textContent = "Modo Perdida";
     }
+    
 }
+
 
 function crearContenedorInformacion(){
 
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
-
+    const boton = document.getElementById("botonPerdida");
     const tiempo = persona.usuario_asignado.ruta_activa!==null ? persona.usuario_asignado.ruta_activa.tiempo : "No esta en ruta"
     
+    if(persona.usuario_asignado.modo_perdida){
+        boton.disabled = true;
+        boton.textContent = "Activado";
+     }else{
+        boton.disabled = false;
+        boton.textContent = "Modo Perdida";
+    }
 
     document.getElementById("nombreDispositivo").textContent = `Nombre Dispositivo: ${persona.nombre_completo}`;
     document.getElementById("nombrePersonaDispositivo").textContent = `Nombre Persona: ${persona.usuario_asignado.nombre_completo}`;
@@ -185,11 +224,27 @@ function crearContenedorInformacion(){
     document.getElementById("timpoViajeDispositivo").textContent = `Tiempo de ultimo viaje: ${tiempo}`;
     document.getElementById("codigoUsuario").textContent = persona.codigo;
     const urlImagen = `http://localhost:5000/uploads/${persona.usuario_asignado.imagen}`;
-    console.log(urlImagen)
     document.getElementById("imagenPersona").src = urlImagen;
 
     document.getElementById("modificarDispositivo").dataset.idDispositivo = idDispositivo;
 
+    enviarMensaje();
+
+}
+
+function enviarMensaje(){
+    const dispositivo = listaDispositivos.find(d => d.id == idDispositivo);
+    document.getElementById("btnEnviarMensaje").addEventListener("click", async() => {
+
+        if(await ValidarPermiso(dispositivo, "Mandar Mensajes")){
+            funcionPanelMensaje("Mandar Mensaje", "Estas seguro que quieres mandar este mensaje al usuario.", "comunicacion", "Enviar");
+            document.getElementById("btnAccionPanel").onclick = null;
+            document.getElementById("btnAccionPanel").addEventListener("click", async(e) => {
+                await enviarMensajeAdmin(idDispositivo)
+                
+            });
+        }      
+    });
 }
 
 function modificarIMG(){
@@ -214,7 +269,9 @@ function crearContenedorPermisos() {
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
     const listaBotonesPermisos = document.getElementById("listaPermisos");
 
-    const listaPermisos = persona?.permisos_usuario || [];
+    let listaPermisos = persona?.permisos_usuario || [];
+
+    listaPermisos = listaPermisos.filter(p => p.estado);
 
     listaBotonesPermisos.innerHTML = "";
 
@@ -233,7 +290,7 @@ function crearContenedorPermisos() {
         const nuevoBoton = document.createElement("button");
         nuevoBoton.classList.add("elementoLista");
         nuevoBoton.textContent = permiso.permiso.nombre;
-        nuevoBoton.dataset.id = permiso.permiso.id;
+        nuevoBoton.dataset.id = permiso.id;
 
         nuevoElementoLista.appendChild(nuevoBoton);
 
@@ -252,8 +309,11 @@ function crearContenedorPermisos() {
     });
 
     const primerPermiso = listaPermisos[0];
+    console.log(primerPermiso.id);
+    console.log(listaBotonesPermisos);
     const botonElemento = Array.from(listaBotonesPermisos.querySelectorAll(".elementoLista"))
         .find(el => parseInt(el.dataset.id) === primerPermiso.id);
+    console.log(botonElemento);
 
     if (botonElemento && primerPermiso.permiso) {
         crearCartaPermiso(listaBotonesPermisos, botonElemento, primerPermiso.permiso, primerPermiso.nivel);
@@ -289,12 +349,13 @@ function crearContenedorUbicacion() {
     const listBotonesUbicaciones = document.getElementById("listaUbicaciones");
     listBotonesUbicaciones.innerHTML = "";
 
-    document.getElementById("crearUbicacion").addEventListener("click", () =>
-        crearUbicacion(Array.from(listBotonesUbicaciones.querySelectorAll(".elementoLista")))
-    );
+    document.getElementById("crearUbicacion").addEventListener("click", async() =>{ 
+        if(await ValidarPermiso(persona, "Registrar Ubicaciones")){
+            crearUbicacion(Array.from(listBotonesUbicaciones.querySelectorAll(".elementoLista")))
+        }
+    });
 
     funcionalidadBusquedaLista(listaUbicaciones, crearCartaUbicacion, listBotonesUbicaciones, "nombre_ubicacion");
-
 
     if (listaUbicaciones.length > 0) {
         const primerElemento = Array.from(listBotonesUbicaciones.querySelectorAll(".elementoLista"))
@@ -312,7 +373,7 @@ function crearUbicacion(listaBotones){
     idUbicacion = null;
 
     document.getElementById("nombreUbicacion").value = "";
-    document.getElementById("descripcionUbicacion").textContent = "";
+    document.getElementById("descripcionUbicacion").value = "";
     document.getElementById("miComboboxSeguridad").value = "";
     eliminarClase(listaBotones, "seleccionado");
 
@@ -344,6 +405,49 @@ function crearUbicacion(listaBotones){
     funcionalidadMapa();
 }
 
+function crearMapaUbicacion(){
+    mapaUbicacion = L.map(document.getElementById("mapaUbicacion"), {
+        center: [-2.8918931908671124, -79.03600936098859],
+        zoom: 14,
+        zoomControl: false
+    });
+
+    document.getElementById("mapaUbicacion")._leafletMap = mapaUbicacion;
+
+    L.control.zoom({
+        position: 'bottomright'
+    }).addTo(mapaUbicacion);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(mapaUbicacion);
+
+    mapaUbicacion.invalidateSize();
+    funcionalidadMapa();
+    return mapaUbicacion;
+}
+
+function crearMapaRuta(){
+    mapaRuta = L.map(document.getElementById("mapaRuta"), {
+        center: [-2.8918931908671124, -79.03600936098859],
+        zoom: 14,
+        zoomControl: false
+    });
+
+    document.getElementById("mapaRuta")._leafletMap = mapaRuta;
+
+    L.control.zoom({
+        position: 'bottomright'
+    }).addTo(mapaRuta);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(mapaRuta);
+
+    mapaRuta.invalidateSize();
+    return mapaRuta;
+}
+
 function funcionalidadMapa(){
     const mapa = document.getElementById("mapaUbicacion")._leafletMap;
 
@@ -360,7 +464,6 @@ function funcionalidadMapa(){
                                     color: 'black'
                                     }).addTo(mapa);
         marcadorSeleccionado.bindPopup("Nueva Area").openPopup();
-        console.log(marcadorSeleccionado);
 
         mapa.invalidateSize();
     });
@@ -380,7 +483,7 @@ function crearCartaUbicacion(padre,elemento, elementoUbicacion){
     marcadorSeleccionado = elementoUbicacion.punto.split(",").map(Number);
 
     document.getElementById("nombreUbicacion").value = elementoUbicacion.nombre_ubicacion;
-    document.getElementById("descripcionUbicacion").textContent = elementoUbicacion.descripcion;
+    document.getElementById("descripcionUbicacion").value = elementoUbicacion.descripcion;
     document.getElementById("miComboboxSeguridad").value = elementoUbicacion.tipo;
 
     document.getElementById("botonEliminarUbicacion").style.display = "inline";
@@ -411,18 +514,33 @@ function generarPuntos(elementoUbicacion, mapa){
 
 function eliminarDispositivo(){
     document.getElementById("navEliminar").addEventListener("click", () => {
-        document.getElementById("btnEliminarDispositivo").addEventListener("click", () => {
-            funcionPanelMensaje("¿Estás seguro de que deseas eliminar a esta persona?", "Esta acción no se puede deshacer. Toda la información relacionada será permanentemente eliminada.", "eliminar", "Eliminar");
-        });
+        btnEliminarDispositivo();
     });
 
     document.getElementById("navEliminarMobil").addEventListener("click", () => {
-        document.getElementById("btnEliminarDispositivo").addEventListener("click", () => {
-            funcionPanelMensaje("¿Estás seguro de que deseas eliminar a esta persona?", "Esta acción no se puede deshacer. Toda la información relacionada será permanentemente eliminada.", "eliminar", "Eliminar");
+        btnEliminarDispositivo();
+    });
+}
+
+function btnEliminarDispositivo(){
+    document.getElementById("btnEliminarDispositivo").addEventListener("click", () => {
+        funcionPanelMensaje("¿Estás seguro de que deseas eliminar a esta persona?", "Esta acción no se puede deshacer. Toda la información relacionada será permanentemente eliminada.", "eliminar", "Eliminar");
+        document.getElementById("btnAccionPanel").onclick = null
+        document.getElementById("btnAccionPanel").addEventListener("click", async(e) => {
+            await eliminacionDisitivo(e);
         });
     });
 }
 
+async function eliminacionDisitivo(e){
+    document.getElementById("creacionPersona").classList.remove("abierto");
+    document.getElementById("contenedor").classList.remove("abierto");
+    document.getElementById("modificarPersona").classList.remove("abierto");
+
+    await actualizarListaDispositivos(e, idDispositivo);
+
+    recargarDatos();
+}
 
 function crearMapa(elementoUbicacion) {
 
@@ -457,8 +575,6 @@ function crearMapa(elementoUbicacion) {
 function crearContenedorRuta() {
     const persona = listaDispositivos.find(l => l.id == idDispositivo);
 
-    console.log(persona?.usuario_asignado?.rutas);
-
     const listaRutas = persona?.usuario_asignado?.rutas || [];
     const listaBotonesRutas = document.getElementById("listaRutas");
     listaBotonesRutas.innerHTML = "";
@@ -481,13 +597,11 @@ function crearCartaRuta(padre,elemento, elementoRuta){
     eliminarClase(padre.querySelectorAll(".elementoLista"), "seleccionado");
     elemento.classList.add("seleccionado");
 
-    console.log(elementoRuta.puntos[0].fecha);
-    console.log(document.getElementById("puntoInicialRuta"));
-
     const fechaInicial = new Date(elementoRuta.puntos[0].fecha);
     const fechaFinal = new Date(elementoRuta.puntos[elementoRuta.puntos.length - 1].fecha);
 
     document.getElementById("nombreRuta").value = elementoRuta.nombre;
+    document.getElementById("descripcionRuta").value = elementoRuta.descripcion;
     document.getElementById("horaInicialRuta").value = `${fechaInicial.getHours().toString().padStart(2, '0')}:${fechaInicial.getMinutes().toString().padStart(2, '0')}`;
     document.getElementById("horaFinalRuta").value = `${fechaFinal.getHours().toString().padStart(2, '0')}:${fechaFinal.getMinutes().toString().padStart(2, '0')}`;
 
@@ -498,7 +612,6 @@ function crearCartaRuta(padre,elemento, elementoRuta){
 
     });
     
-    
     setTimeout(() => {
         mapa.invalidateSize();
     }, 200);
@@ -507,10 +620,6 @@ function crearCartaRuta(padre,elemento, elementoRuta){
 
 function crearRuta(elementoRuta) {
 
-    console.log("Elemento")
-    console.log(elementoRuta)
-    console.log(elementoRuta.puntos)
-
     let puntoRuta;
     let puntosRuta = [];
 
@@ -518,7 +627,7 @@ function crearRuta(elementoRuta) {
         mapaRuta.remove();
         mapaRuta = null;
     }
-    console.log([elementoRuta.puntos[0].punto.lat, elementoRuta.puntos[0].punto.lng])
+
     mapaRuta = L.map(document.getElementById("mapaRuta"), {
         center: [elementoRuta.puntos[0].punto.lat, elementoRuta.puntos[0].punto.lng],
         zoom: 14,
@@ -526,6 +635,8 @@ function crearRuta(elementoRuta) {
     });
 
     mapaRuta.createPane("punto");
+
+    document.getElementById("mapaRuta")._leafletMap = mapaRuta;
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "© OpenStreetMap contributors"
@@ -575,9 +686,11 @@ function crearContenedorPersonas() {
     const listBotonesPersonas = document.getElementById("listaPersonas");
     listBotonesPersonas.innerHTML = "";
 
-    document.getElementById("crearPC").addEventListener("click", () =>
-        crearPC(Array.from(listBotonesPersonas.querySelectorAll(".elementoLista")))
-    );
+    document.getElementById("crearPC").addEventListener("click", async() =>{
+        if(await ValidarPermiso(persona, "Registrar Personas")){
+            crearPC(Array.from(listBotonesPersonas.querySelectorAll(".elementoLista")))
+        }
+    });
 
     funcionalidadBusquedaLista(listaPersonasConfianza, crearCartaPC, listBotonesPersonas);
 
@@ -705,6 +818,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     const dispositivos = document.getElementById("listaDispositivos").querySelectorAll(".elementoDispositivo");   
 
     await recargarDatos();
+    
     accionesNavBar(elementosNav);
     accionBotonMenu(botonMenu);
     await accionesDispositivos(dispositivos);

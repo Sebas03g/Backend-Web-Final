@@ -75,8 +75,9 @@ class DispositivoController(BaseController):
             if dispositivo:
                 self.repositorio.update( dispositivo.id, {
                     "id_usuario":id_usuario,
-                    "estado":True
-                    })
+                    "estado":True,
+                    "monitoreo":True
+                })
 
             html = (
                 f"<h2>Dispositivo agregado</h2><br>"

@@ -22,9 +22,19 @@ export const loginFunctionality = async (form) => {
         if (response.ok) {
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
-                    await iniciarMonitoreo(result.usuario.ubicacion.id);
-
+                    if(result.usuario.monitoreo){
+                        iniciarMonitoreo(result.usuario.ubicacion.id);
+                    }
+                    
                     const usuario = await getDataById("usuario", result.usuario.id);
+
+                    if (usuario.ubicacion.id_punto == null && usuario.monitoreo){
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+
+                        enviarUbicacion(lat, lng, usuario.ubicacion.id);
+                    }
+
                     sessionStorage.setItem("usuario", JSON.stringify(usuario));
                     window.location.href = '/user-type';
                 },
@@ -65,8 +75,8 @@ export const logoutFunctionality = async() => {
 
 export const stateLostMode = async (id) => {
     try {
-        activarModoPerdida(id);
         await recargarDatos();
+        activarModoPerdida(id);
         return true;
     } catch (error) {
         console.error("Error de red en stateLostMode:", error);

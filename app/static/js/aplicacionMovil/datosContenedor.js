@@ -6,7 +6,6 @@ import { crearContenedorGestores, crearContenedorPC, crearContenedorUbicaciones 
 import { agregarPC } from './funcionalidadPC.js';
 import { agregarUbicacion } from './funcionalidadUbicacion.js';
 import { asignarPermiso, modificarEstadoPU, modificarNivel } from './funcionalidadPermiso.js';
-import { modificarEstadoDispositivo } from '../fetch/agregarDispositivo.js';
 
 let mapaUbicacion = null;
 let marcadorSeleccionado = null;
@@ -136,7 +135,7 @@ function datoContenedorGestor(id){
         const selectNivel = document.createElement("select");
         selectNivel.classList.add("selectNivel");
         selectNivel.dataset.idPU = permiso.id;
-        selectNivel.addEventListener("change", async(e) => await modificarNivelPermisoGestor(e));
+        selectNivel.addEventListener("change", async(e) => await modificarNivelPermisoGestor(gestor.id, e));
 
         const nivel1 = document.createElement("option");
         nivel1.value=1;
@@ -161,6 +160,7 @@ function datoContenedorGestor(id){
         checkbox.value = "activo";
         checkbox.checked = permiso.estado;
         checkbox.dataset.idPU = permiso.id;
+        checkbox.dataset.idGestor = gestor.id
         checkbox.addEventListener("change", async(e) => await modificarAccesoPermisoGestor(e));
         
         nuevoElementoLista.appendChild(nuevaLabel);
@@ -172,18 +172,28 @@ function datoContenedorGestor(id){
 
 }
 
-async function modificarNivelPermisoGestor(elemento){ 
+async function modificarNivelPermisoGestor(id, elemento){ 
     funcionPanelMensaje("Gestion Permiso", "Esta accion modificara el nivel del permiso del gestor, ¿Desea continar?", "comunicacion", "Aceptar");
     document.getElementById("btnAccionPanel").onclick = null
-    document.getElementById("btnAccionPanel").addEventListener("click", async() => await modificarNivel(elemento));  
+    document.getElementById("btnAccionPanel").addEventListener("click", async() => await modificarNivel(id, elemento));  
     recargarDatos();
 }
 
-async function modificarAccesoPermisoGestor(elemento){
+async function modificarAccesoPermisoGestor(e){
     funcionPanelMensaje("Gestion Permiso", "Esta accion modificara el acceso al permiso del gestor, ¿Desea continar?", "comunicacion", "Aceptar");
+
+    if(e.target.checked){
+            funcionPanelMensaje("Activar Gestor", "¿Estas seguro que quieres activar el siguiente gestor?, esto le dara acceso a al permiso actual.", "comunicacion", "Activar");  
+    }else{
+        funcionPanelMensaje("Desactivar Gestor", "¿Estas seguro que quieres desactivar el siguiente gestor?, esto le quitara acceso a el permiso actual.", "comunicacion", "Desactivar");
+    }
     document.getElementById("btnAccionPanel").onclick = null
-    document.getElementById("btnAccionPanel").addEventListener("click", async() => await modificarEstadoPU(elemento));
-    recargarDatos();  
+    document.getElementById("btnAccionPanel").addEventListener("click", async() => {
+        await modificarEstadoPU(e)
+        recargarDatos();
+    });
+    
+    
 }
 
 function datoContenedorPermiso(id){
@@ -205,7 +215,7 @@ function crearListaPermisosValidos(id){
 
     gestores_invalidos.forEach(gestor => {
         let nuevaOpcion = document.createElement("option");
-        nuevaOpcion.value = gestor.gestor.id;
+        nuevaOpcion.value = gestor.id;
         nuevaOpcion.textContent = gestor.gestor.nombre_completo;
 
         document.getElementById("seleccionGestor").appendChild(nuevaOpcion);
@@ -215,9 +225,6 @@ function crearListaPermisosValidos(id){
 
     gestores_validos.forEach(gestor => {
         let permisoGestor = gestor.permisos_usuario.find(l => l.permiso.id == id);
-
-        console.log(permisoGestor);
-
         const nuevoGestor = document.createElement("li");
         nuevoGestor.dataset.estado = permisoGestor.estado;
         nuevoGestor.dataset.pu = permisoGestor.id;
@@ -248,6 +255,10 @@ function crearListaPermisosValidos(id){
 
         selectNivel.value = permisoGestor.nivel;
 
+        console.log("ESTADO");
+        console.log(permisoGestor);
+        console.log(permisoGestor.estado);
+
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.name = `Gestor${gestor.id}Permiso${id}`;
@@ -255,6 +266,7 @@ function crearListaPermisosValidos(id){
         checkbox.checked = permisoGestor.estado;
         checkbox.addEventListener("change", async(e) => await modificarAccesoPermisoGestor(e));
         checkbox.dataset.idPU = permisoGestor.id;
+        checkbox.dataset.idGestor = gestor.id;
         
 
 
@@ -289,7 +301,6 @@ async function recargarListaPermisos(id_permiso){
 
 function datoContenedorPC(id){
     let persona = personasConfianza.find(l => l.id == id);
-
 
     document.getElementById("imgPersona").src = `uploads/${persona.imagen}`;
     document.getElementById("nombrePC").textContent = persona.nombre;
@@ -395,7 +406,6 @@ function cerrarVentanas(){
     document.getElementById("dataPermiso").querySelector("i").addEventListener("click", (e) => {
         document.getElementById("dataPermiso").classList.remove("abierto");
         document.getElementById("datosContenedor").classList.remove("abierto");
-        console.log(e.target.dataset.idPermiso);
     });
 
     document.getElementById("dataUbicacion").querySelector("i").addEventListener("click", () => {
@@ -493,6 +503,13 @@ function agregarFuncionesCheck(){
             }else{
                 funcionPanelMensaje("Desactivar Permiso", "¿Estas seguro que quieres desactivar el siguiente permiso?, esto le quitara acceso a la informacion previamente mencionada.", "comunicacion", "Desactivar");
             }
+
+            document.getElementById("btnAccionPanel").onclick = null
+            document.getElementById("btnAccionPanel").addEventListener("click", async() => {
+                console.log(e)
+                await modificarEstadoPU(e)
+                recargarDatos();
+            });
         });
     });
 
@@ -500,9 +517,16 @@ function agregarFuncionesCheck(){
         elemento.addEventListener("change", (e) => {
             if(e.target.checked){
                 funcionPanelMensaje("Activar Gestor", "¿Estas seguro que quieres activar el siguiente gestor?, esto le dara acceso a al permiso actual.", "comunicacion", "Activar");
+                
             }else{
                 funcionPanelMensaje("Desactivar Gestor", "¿Estas seguro que quieres desactivar el siguiente gestor?, esto le quitara acceso a el permiso actual.", "comunicacion", "Desactivar");
             }
+
+            document.getElementById("btnAccionPanel").onclick = null
+            document.getElementById("btnAccionPanel").addEventListener("click", async() => {
+                await modificarEstadoPU(e)
+                recargarDatos();
+            });
         });
     });
 }

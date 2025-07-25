@@ -12,6 +12,9 @@ class LostModeController:
         try:
             usuario = self.repo.getById(id)
 
+            print("ENTRO LOSTMODE")
+            print(id)
+
             if not usuario:
                 return jsonify({"error": "Usuario no encontrado"}), 404
             
@@ -21,6 +24,9 @@ class LostModeController:
                     lista_correos.append(dispositivo.gestor.correo_electronico)
 
             nuevo_estado = not usuario.modo_perdida
+
+            print(nuevo_estado)
+
             if nuevo_estado:
                 html = (
                     f"<h2>Modo Pérdida Activado</h2><br>"

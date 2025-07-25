@@ -1,5 +1,6 @@
 import { modifyAllState } from "../fetch/estadoPU.js";
 import { createData, updateData } from "../fetch/sentenciasFetch.js";
+import { modificarPermisos } from "../fetch/socketClient.js";
 
 export async function asignarPermiso(id_permiso){
     const data = {
@@ -19,16 +20,17 @@ export async function modificarEstadoPU(e){
     }
 
     await updateData("permiso-usuario", data, elemento.dataset.idPU);
-
+    modificarPermisos(elemento.dataset.idGestor, "unico");
 }
 
-export async function modificarNivel(e){
+export async function modificarNivel(id, e){
     const elemento = e.target;
     const data = {
         nivel: elemento.value
     }
 
     await updateData("permiso-usuario", data, elemento.dataset.idPU);
+    modificarPermisos(id, "unico");
 }
 
 export async function modificarEstadoTodosPU(e){

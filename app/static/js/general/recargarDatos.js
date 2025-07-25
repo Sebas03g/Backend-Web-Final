@@ -10,6 +10,5 @@ export async function recargarDatos(){
 
     sessionStorage.removeItem("usuario");
     const usuario = await getDataById("usuario", idUsuario);
-    console.log(usuario);
     sessionStorage.setItem("usuario", JSON.stringify(usuario));
 }

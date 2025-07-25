@@ -5,13 +5,36 @@ import * as validar from './validacion.js';
 import { actualizarDatosUsuario, actualizarImagen } from './funcionalidadUsuario.js';
 import { logoutFunctionality, stateLostMode } from '../fetch/Credentials.js';
 import { socket } from '../fetch/socketClient.js'
+import { recargarDatos as recargarTodosDatos } from '../general/recargarDatos.js';
+
 
 let datosUsuario = JSON.parse(sessionStorage.getItem("usuario"));
 
+const imgUsuario = document.getElementById("agregarIMG").querySelector("img");
+imgUsuario.src = `uploads/${datosUsuario.imagen}`;
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('../../sw.js')
+    .then(reg => console.log("✅ Service Worker registrado", reg))
+    .catch(err => console.error("❌ Error al registrar SW", err));
+}
+
 socket.on('modo_perdida', async(data) => {
     if(datosUsuario.id == data.id){
-        await actualizarDatosUsuario();
+        await recargarTodosDatos();
         datosUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+        
+        const boton = document.getElementById("botonEmergencia").querySelector("button");
+        if(datosUsuario.modo_perdida){
+            funcionPanelMensaje("Modo Perdida", "Se activo el modo de perdida", "informacion", "Aceptar");
+            boton.textContent = "Desactivar";
+        }else{
+            funcionPanelMensaje("Modo Perdida", "Se desactivo el modo de perdida", "informacion", "Aceptar");
+            boton.textContent = "Activar";
+        }
+
+        console.log("DATOS");
+        console.log(datosUsuario);
     }
 });
 
@@ -116,18 +139,9 @@ async function activarModoPerdida(){
     const boton = document.getElementById("botonEmergencia").querySelector("button");
     await stateLostMode(idUsuario);
     datosUsuario = JSON.parse(sessionStorage.getItem("usuario"));
-    if(datosUsuario.modo_perdida){
-        funcionPanelMensaje("Modo Perdida", "Se activo el modo de perdida", "informacion", "Aceptar");
-        boton.textContent = "Desactivar";
-    }else{
-        funcionPanelMensaje("Modo Perdida", "Se desactivo el modo de perdida", "informacion", "Aceptar");
-        boton.textContent = "Activar";
-    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const imgUsuario = document.getElementById("agregarIMG").querySelector("img");
-    imgUsuario.src = `uploads/${datosUsuario.imagen}`;
 
     const botonAlarma = document.getElementById("botonEmergencia");
     botonAlarma.querySelector("button").textContent = datosUsuario.modo_perdida ? "Desactivar" : "Activar";
@@ -137,11 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const iconoUsuario = document.getElementById("iconoUsuario").querySelector("i");
     const menuUsuario = document.getElementById("menuUsuario");
 
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('../../sw.js')
-        .then(reg => console.log("✅ Service Worker registrado", reg))
-        .catch(err => console.error("❌ Error al registrar SW", err));
-    }
+    
 
     accionBotonAlarma(botonAlarma);
     abrirContenedores(opciones);

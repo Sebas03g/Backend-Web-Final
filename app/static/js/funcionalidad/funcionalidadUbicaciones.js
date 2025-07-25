@@ -45,8 +45,6 @@ export async function accionBotonContenedorUbicacionGeneral(id, id_usuario, marc
 
     let coordenadas;
 
-    console.log(marcadorSeleccionado);
-
     if(Array.isArray(marcadorSeleccionado)){
         coordenadas = {
             lat: marcadorSeleccionado[0],
@@ -56,11 +54,6 @@ export async function accionBotonContenedorUbicacionGeneral(id, id_usuario, marc
         coordenadas = marcadorSeleccionado.getLatLng();
     }
 
-    console.log("AQUII");
-
-    console.log(coordenadas);
-
-
     const dataUbicacion = {
         nombre_ubicacion: document.getElementById("nombreUbicacionGeneral").value,
         descripcion: document.getElementById("descripcionUbicacionGeneral").value,
@@ -69,8 +62,6 @@ export async function accionBotonContenedorUbicacionGeneral(id, id_usuario, marc
         lat: coordenadas.lat,
         lng: coordenadas.lng
     }
-
-    console.log(dataUbicacion);
 
     try{
         if(boton.dataset.tipo == "modify"){
@@ -92,9 +83,7 @@ async function crearUbicacion(data){
 }
 
 async function actualizarUbicacion(id, data){
-    console.log("ACTUALIZANDO")
     await updateData("ubicacion", data, id);
-    console.log("ACTUALIZADO")
 }
 
 export async function eliminarUbicacion(id){

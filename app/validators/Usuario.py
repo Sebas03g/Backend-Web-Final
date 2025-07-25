@@ -47,7 +47,7 @@ class UsuarioSchema(Schema):
     )
 
     monitoreo = fields.Boolean(required=True)
-    es_monitoreo = fields.Boolean(required=True)
+    es_monitor = fields.Boolean(required=True)
 
     imagen = fields.String(
         required=True,

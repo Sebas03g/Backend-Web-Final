@@ -3,6 +3,7 @@ from app.modelos.Usuario import Usuario
 from app.modelos.Punto import Punto
 from flask import request, jsonify, session
 from app.services.sendMail import enviar_correo
+from app.validators.Punto import PuntoSchema
 
 class UbicacionController(BaseController):
     def __init__(self, objeto, repositorio, validator, repoPunto):
@@ -52,7 +53,6 @@ class UbicacionController(BaseController):
                 html=html
             )
             
-
             return jsonify({
                 "id": nuevo_objeto.id,
                 "mensaje": f"{self.tipoObjeto.__name__} creado",
@@ -60,8 +60,8 @@ class UbicacionController(BaseController):
             }), 201
         except Exception as e:
             return jsonify({"error": str(e)}), 400
-        
-    def updatePoint(self, id):
+    
+    def update(self, id):
         data = request.json
         if self.validator != None:
             valid_data = self.validator().load(data)
@@ -72,10 +72,15 @@ class UbicacionController(BaseController):
                 "lat": valid_data["lat"],
                 "lng": valid_data["lng"]
             })
+
             data_ubicacion = {
+                "nombre_ubicacion": valid_data["nombre_ubicacion"],
+                "descripcion": valid_data["descripcion"],
+                "tipo": valid_data["tipo"],
                 "id_usuario": valid_data["id_usuario"],
-                "id_punto": valid_data["id_punto"],
+                "id_punto": punto.id
             }
+
             objeto_modificado = self.repositorio.update(id, data_ubicacion)
             return jsonify({
                 "id": objeto_modificado.id,

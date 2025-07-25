@@ -2,6 +2,7 @@ import { eliminarClase } from '../general/utilidades.js';
 import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import { socket, enviarUbicacion } from '../fetch/socketClient.js'
 import { recargarDatos as recargarTodosDatos } from '../general/recargarDatos.js';
+import { ValidarPermiso } from './controlPermisos.js';
 
 let puntosRuta = [];
 let areasCreadas = [];
@@ -9,9 +10,9 @@ let dataGestor;
 let marcadores = {}
 
 let listaDispositivos;
+const mapa = creacionMapa();
 
-async function recargarDatos(){
-    
+function recargarDatos(){
     const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
     listaDispositivos = dataUsuario.dispositivos_gestionados;
     listaDispositivos = listaDispositivos.filter(l => l.estado)
@@ -39,7 +40,6 @@ function crearIcono(nombre){
 }
 
 function crearPopUp(dispositivo){
-  console.log(dispositivo);
   const cadena = `
   <div id="${dispositivo.id}" class="popup">
     <h6>${dispositivo.nombre_completo}</h6>
@@ -57,27 +57,34 @@ function crearPopUp(dispositivo){
 
 function crearMarker(mapa){
 
-  listaDispositivos.forEach(dispositivo => {
+  listaDispositivos.forEach(async(dispositivo) => {
 
-    const punto = dispositivo.usuario_asignado.ubicacion.punto.split(",").map(Number);
+    const permisoUbicacion = await ValidarPermiso(dispositivo, "Ver Ubicación en vivo")
 
-    const marker = L.marker(punto, {icon: crearIcono(dispositivo.nombre), pane: "dispositivo"}).addTo(mapa).bindPopup(crearPopUp(dispositivo), {closeOnClick: false })
-    
-    marker.customId = dispositivo.id;
-    marker.on('click', function () {
-      mapa.flyTo(marker.getLatLng(), 18);
-      document.getElementById("contenedor").classList.remove("abierto");
-      document.getElementById("modificarPersona").classList.remove("abierto");
-      document.getElementById("creacionPersona").classList.remove("abierto");
-      abrirMenuDispositivos(dispositivo.id);
-    });
+    if(permisoUbicacion){
+      const punto = dispositivo.usuario_asignado.ubicacion.punto.split(",").map(Number);
 
-    marker.on('popupopen', function () {
-      iconoMicrofono(dispositivo);
-      crearRuta(dispositivo.usuario_asignado.ruta_activa, mapa);
-      crearAreasPersona(dispositivo.usuario_asignado.ubicaciones_creadas, mapa);
-    });
-    marcadores[dispositivo.id] = marker;
+      const marker = L.marker(punto, {icon: crearIcono(dispositivo.nombre), pane: "dispositivo"}).addTo(mapa).bindPopup(crearPopUp(dispositivo), {closeOnClick: false })
+      
+      marker.customId = dispositivo.id;
+      marker.on('click', function () {
+        mapa.flyTo(marker.getLatLng(), 18);
+        document.getElementById("contenedor").classList.remove("abierto");
+        document.getElementById("modificarPersona").classList.remove("abierto");
+        document.getElementById("creacionPersona").classList.remove("abierto");
+        abrirMenuDispositivos(dispositivo.id);
+      });
+
+      marker.on('popupopen', async function () {
+        iconoMicrofono(dispositivo);
+        const permisoRuta = await ValidarPermiso(dispositivo, "Ver ruta");
+        if(permisoRuta){
+          crearRuta(dispositivo.usuario_asignado.ruta_activa, mapa);
+        }
+        crearAreasPersona(dispositivo.usuario_asignado.ubicaciones_creadas, mapa);
+      });
+      marcadores[dispositivo.id] = marker;
+    }
 
   });
 
@@ -104,6 +111,8 @@ function crearAreasPersona(areas, mapa){
   });
 
 }
+
+
 
 function crearRuta(ruta, mapa) {
   let puntoCreado;
@@ -145,8 +154,14 @@ function abrirMarker(elementoDispositivo, mapa) {
 }
 
 
-function crearAreas(mapa){
+export function crearAreas(){
+  recargarDatos();
   let areas = dataGestor.ubicaciones_creadas
+  mapa.eachLayer(function (layer) {
+    if (layer instanceof L.Circle) {
+      mapa.removeLayer(layer);
+    }
+  });
 
   areas.forEach(area => {
     let areaCirculo = L.circle(area.punto.split(","),{
@@ -157,7 +172,7 @@ function crearAreas(mapa){
       radius: 100
     }).addTo(mapa)
 
-    areaCirculo.bindPopup(area.nombre);
+    areaCirculo.bindPopup(area.nombre_ubicacion);
   });
 }
 
@@ -206,32 +221,25 @@ function abrirMenuDispositivos(id) {
 }
 
 function iconoMicrofono(dispositivo){
-
     document.querySelectorAll(".micDispostivo").forEach(icono => {
       icono.addEventListener("click", () => {
-
-        if(dispositivo.permisos_usuario.find(l => l.permiso.id == 6)){
-        
+        if(ValidarPermiso(dispositivo, "Escuchar audio en vivo")){
           if (icono.innerHTML === '<i class="bi bi-mic-fill"></i>'){
             icono.innerHTML = '<i class="bi bi-mic"></i>';
-    
           }else{
             icono.innerHTML = '<i class="bi bi-mic-fill"></i>';
           }
-
         }else{
           funcionPanelMensaje("No tiene permiso", "Esta acción requiere permisos que el gestor aún no tiene. Pide al usuario que te otorgue acceso para continuar.", "comunicacion", "Solicitar");
         }
-  
       });
     });
 }
 
 document.addEventListener("DOMContentLoaded", async function(){
-    const mapa = creacionMapa();
     const elementosDispositivos = document.querySelectorAll(".elementoDispositivo");
 
-    await recargarDatos();
+    recargarDatos();
     crearMarker(mapa);
     abrirMarker(elementosDispositivos, mapa); 
     crearAreas(mapa);

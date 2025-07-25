@@ -8,6 +8,7 @@ controller = LostModeController()
 @socketio_app.on('activar_modo_alerta')
 def handle_ubicacion(data):
     try:
+        print(data)
         id_usuario = data['id_usuario']
 
         controller.activate(id_usuario)

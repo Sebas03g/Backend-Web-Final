@@ -4,6 +4,7 @@ import { funcionPanelMensaje } from '../general/mensajesUsuario.js';
 import * as validar from './validacion.js';
 import { accionBotonContenedorUbicacionGeneral } from './funcionalidadUbicaciones.js'
 import { eliminarUbicacion } from './funcionalidadUbicaciones.js';
+import { crearAreas } from './scriptApiMapa.js';
 
 let mapaUbicacion = null;
 let marcadorSeleccionado = null;
@@ -75,7 +76,7 @@ function crearCartaUbicacion(padre,elemento, elementoUbicacion){
     marcadorSeleccionado = elementoUbicacion.punto.split(",").map(Number);
 
     document.getElementById("nombreUbicacionGeneral").value = elementoUbicacion.nombre_ubicacion;
-    document.getElementById("descripcionUbicacionGeneral").textContent = elementoUbicacion.descripcion;
+    document.getElementById("descripcionUbicacionGeneral").value = elementoUbicacion.descripcion;
     document.getElementById("miComboboxSeguridadGeneral").value = elementoUbicacion.tipo;
     document.getElementById("botonEliminarUbicacionGeneral").style.display = "inline";
     document.getElementById("botonAccionUbicacionGeneral").dataset.tipo = "modify";
@@ -111,6 +112,7 @@ async function recargarPaginaUbicacion(e){
     }
 
     recargarDatos();
+    crearAreas();
     crearContenedorUbicacion();
 }
 
@@ -133,8 +135,6 @@ function crearMapa(elementoUbicacion) {
         mapaUbicacion.remove();
         mapaUbicacion = null;
     }
-
-    console.log(elementoUbicacion);
 
     mapaUbicacion = L.map(document.getElementById("mapaUbicacionGeneral"), {
         center: elementoUbicacion.punto.split(",").map(Number),
@@ -184,17 +184,16 @@ function crearContenedorUbicacion(){
 function crearUbicacion(listaBotones){
 
     document.getElementById("nombreUbicacionGeneral").value = "";
-    document.getElementById("descripcionUbicacionGeneral").textContent = "";
+    document.getElementById("descripcionUbicacionGeneral").value = "";
     document.getElementById("miComboboxSeguridadGeneral").value = "";
     document.getElementById("botonAccionUbicacionGeneral").dataset.tipo = "create";
     eliminarClase(listaBotones, "seleccionado");
 
     if (mapaUbicacion) {
-        mapaUbicacion.remove(); // destruye el mapa anterior
+        mapaUbicacion.remove();
         mapaUbicacion = null;
     }
 
-    // Creamos el nuevo mapa
     mapaUbicacion = L.map(document.getElementById("mapaUbicacionGeneral"), {
         center: [-2.8918931908671124, -79.03600936098859],
         zoom: 14,
@@ -218,10 +217,8 @@ function crearUbicacion(listaBotones){
 
 function funcionalidadMapa(){
     const mapa = document.getElementById("mapaUbicacionGeneral")._leafletMap;
-    console.log(mapa);
     mapa.on('click', function(e) {
         const { lat, lng } = e.latlng;
-        console.log(marcadorSeleccionado);
         if (marcadorSeleccionado !== null) {
             mapa.removeLayer(marcadorSeleccionado);
             marcadorSeleccionado = null;

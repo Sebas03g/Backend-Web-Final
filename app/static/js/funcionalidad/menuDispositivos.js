@@ -2,6 +2,7 @@ import { eliminarClase } from '../general/utilidades.js';
 import { esPantallaPequena } from '../general/utilidades.js';
 import { slideLeftElementos } from '../general/utilidades.js';
 import { recargarDatos as recargarTodosDatos } from '../general/recargarDatos.js';
+import { ValidarPermiso } from './controlPermisos.js';
 
 var idDipositivo;
 
@@ -44,7 +45,6 @@ export async function accionListaDispositivos(listaDispositivos){
       document.getElementById("creacionPersona").classList.remove("abierto");
       document.getElementById("btn-creacion").classList.remove("seleccionado");
       idDipositivo = elemento.dataset.idDispositivo;
-
     });
   });
 }
@@ -84,6 +84,7 @@ function crearDispositivo(dispositivo, listaDispositivos){
     div.className = 'elementoDispositivo';
     div.setAttribute('data-id-dispositivo', parseInt(dispositivo.id));
     div.setAttribute('data-id-asignado', parseInt(dispositivo.usuario_asignado.id));
+
     const btnSettings = document.createElement('button');
     btnSettings.className = 'settingsDispositivo iconos';
     btnSettings.innerHTML = '<i class="bi bi-gear"></i>';

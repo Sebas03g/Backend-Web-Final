@@ -27,13 +27,15 @@ def handle_ubicacion(data):
         controller.updatePoint(id_ubicacion, data_punto)
 
         # Puedes evitar esta consulta si no necesitas el nombre
-        ubicacion = controller.getById(id_ubicacion)
-        if ubicacion:
+        response, status = controller.getById(id_ubicacion)
+
+        ubicacion = response.get_json()
+
+        if ubicacion["id"]:
             emit('ubicacion_actualizada', {
-                'id': ubicacion.id,
+                'id': ubicacion["id"],
                 'lat': lat,
-                'lng': lng,
-                'nombre': getattr(ubicacion, "nombre", "")
+                'lng': lng
             }, broadcast=True)
     except Exception as e:
         print("Error al manejar ubicacion:", e)

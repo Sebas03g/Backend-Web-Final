@@ -100,5 +100,6 @@ def create_app():
     
     import app.socket_events.Ubicacion_event
     import app.socket_events.Modo_alerta
+    import app.socket_events.Permisos_event
 
     return flask_app
