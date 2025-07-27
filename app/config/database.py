@@ -1,13 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
+import os
 
 db = SQLAlchemy()
+load_dotenv()
 
 def create_db(app):
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:applejack@localhost:5432/trabajo_web_final'
-    #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:0106853740@localhost:5432/trabajo_web_final'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_URL')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)

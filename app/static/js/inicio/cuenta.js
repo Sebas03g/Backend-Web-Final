@@ -1,9 +1,9 @@
-import { loginFunctionality } from "../fetch/Credentials.js";
+import { loginFunctionality, logoutFunctionality } from "../fetch/Credentials.js";
 
 const logout_button = document.getElementById("logout");
 
 logout_button.addEventListener("click", function () {
-  loginFunctionality();
+  logoutFunctionality();
 })
 
 

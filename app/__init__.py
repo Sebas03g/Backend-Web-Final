@@ -1,4 +1,6 @@
 from flask import Flask
+from dotenv import load_dotenv
+import os
 from flask_jwt_extended import JWTManager
 from app.config.database import create_db, db
 from app.config.mail import create_mail
@@ -31,6 +33,7 @@ from flask_talisman import Talisman
 from flask_socketio import SocketIO
 from flask_migrate import Migrate
 
+load_dotenv()
 mail = Mail()
 socketio_app = SocketIO(cors_allowed_origins="*")
 
@@ -53,7 +56,7 @@ def create_app():
     })
 
 
-    flask_app.config['JWT_SECRET_KEY'] = 'clave-secreta-super-segura'
+    flask_app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
     flask_app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
     flask_app.config["JWT_COOKIE_SECURE"] = False
     flask_app.config["JWT_COOKIE_CSRF_PROTECT"] = False
