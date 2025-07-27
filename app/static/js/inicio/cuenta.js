@@ -1,4 +1,5 @@
 import { loginFunctionality, logoutFunctionality } from "../fetch/Credentials.js";
+import { updateData } from "../fetch/sentenciasFetch.js";
 
 const logout_button = document.getElementById("logout");
 
@@ -61,7 +62,20 @@ function validateForm() {
   return true;
 }
 
-save_button.addEventListener("click", function () {
+function UpdateUserData(){
+  const name = document.getElementById('name');
+  const email = document.getElementById('email');
+  const phone = document.getElementById('phone');
+
+  console.log("BIEN");
+  console.log(dataUsuario);
+
+  name.textContent  = dataUsuario.nombre_completo;
+  email.textContent  = dataUsuario.correo_electronico;
+  phone.textContent  = dataUsuario.telefono;
+}
+
+save_button.addEventListener("click", async function () {
     
     if (!validateForm()) {
         return;
@@ -77,11 +91,34 @@ save_button.addEventListener("click", function () {
           input.replaceWith(span);
     });
 
+    actualizarDatos();
+
     edit_button.style.display = "";
     save_button.style.display = "none";
     change_pass.style.display = "";
+
 });
+
+const actualizarDatos = async() => {
+    const name = document.getElementById('name');
+    const email = document.getElementById('email');
+    const phone = document.getElementById('phone');
+
+    const data = {
+      nombre_completo: name.textContent,
+      correo_electronico: email.textContent,
+      telefono: phone.textContent
+    }
+
+    await updateData("usuario", data, dataUsuario.id);
+}
 
 change_pass.addEventListener("click", function () {
     window.location.href = "../password-recovery-email";
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+  UpdateUserData();
+  console.log("HOLA");
+});
+
