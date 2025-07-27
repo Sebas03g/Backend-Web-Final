@@ -53,7 +53,7 @@ submit_button.addEventListener("click", function () {
     } else if (!isValidExpiryDate(expiry)) {
         alert('Fecha de expiración inválida');
     } else {
-        window.location.href = "metodos-pago.html";
+        window.location.href = "/payment-dashboard";
     }
     
 });

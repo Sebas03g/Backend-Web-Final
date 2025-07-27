@@ -23,5 +23,5 @@ change_pass.addEventListener("click", function (e) {
   if(!validateForm()){
     return;
   }
-  window.location.href = "cuenta.html";
+  window.location.href = "../account-dashboard";
 });

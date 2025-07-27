@@ -1,3 +1,8 @@
+import { loginFunctionality, logoutFunctionality } from "../fetch/Credentials.js";
+const logout_button = document.getElementById("logout");
+logout_button.addEventListener("click", function () {
+  logoutFunctionality();
+})
 const plan_buttons = document.querySelectorAll('.choose-plan');
 
 plan_buttons.forEach(button => {

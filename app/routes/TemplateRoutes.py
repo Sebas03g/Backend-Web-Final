@@ -42,3 +42,15 @@ def password_recovery_code():
 @main_routes.route('/password-recovery-new')
 def password_recovery_new():
     return render_template('recuperar-contraseña-nueva.html')
+
+@main_routes.route('/home')
+def home():
+    return render_template('pagina-inicio.html')
+
+@main_routes.route('/payment-dashboard')
+def payment_dashoard():
+    return render_template('metodos-pago.html')
+
+@main_routes.route('/plan-dashboard')
+def plan_dashboard():
+    return render_template('planes.html')
