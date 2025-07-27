@@ -2,6 +2,8 @@ import { loginFunctionality, logoutFunctionality } from "../fetch/Credentials.js
 
 const logout_button = document.getElementById("logout");
 
+const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+
 logout_button.addEventListener("click", function () {
   logoutFunctionality();
 })
