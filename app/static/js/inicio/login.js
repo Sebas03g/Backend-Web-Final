@@ -4,7 +4,7 @@ const signup_button = document.getElementById("signup");
 
 signup_button.addEventListener("click", function () {
 
-    window.location.href = "registrarse.html";
+    window.location.href = "../sign-up";
     
 });
 

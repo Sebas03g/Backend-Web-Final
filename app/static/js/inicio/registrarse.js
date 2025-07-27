@@ -36,7 +36,48 @@ sign_up_button.addEventListener("click", function (e) {
     e.preventDefault()
 
     if (validateForm()) {
-        window.location.href = "iniciar-sesion.html";
+      const userData = {
+        cedula: "1105661902",
+        nombre_completo: document.getElementById("inputName").value,
+        correo_electronico: document.getElementById("inputEmail").value,
+        telefono: document.getElementById("inputPhone").value,
+        fecha_nacimiento: document.getElementById("inputBirthdate").value + "T00:00:00",
+        contrasena_hash: document.getElementById("inputPassword").value,
+        monitoreo: true,
+        es_monitor: false,
+        imagen: "default.jpg",
+        eliminado: false,
+        id_plan: 1
+      };
+      if (signupUser(userData)) {
+        window.location.href = "../";
+      }
     }
     
 });
+
+function signupUser(userData) {
+  fetch("http://127.0.0.1:5000/signup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(userData)
+  })
+    .then(response => {
+      if (!response.ok) {
+        console.log(response.json())
+        throw new Error(`Error: ${response.status}`);
+      }
+    })
+    .then(data => {
+      console.log("Signup successful:", data);
+      alert("Registro exitoso!");
+      return true;
+    })
+    .catch(error => {
+      console.error("Signup failed:", error);
+      alert("Error en el registro.");
+      return false;
+    });
+}

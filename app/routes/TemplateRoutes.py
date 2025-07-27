@@ -26,3 +26,7 @@ def account_dashboard():
 @main_routes.route('/')
 def login():
     return render_template('iniciar-sesion.html')
+
+@main_routes.route('/sign-up')
+def signup():
+    return render_template('registrarse.html')
