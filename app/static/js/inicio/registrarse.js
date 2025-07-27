@@ -57,7 +57,7 @@ sign_up_button.addEventListener("click", function (e) {
 });
 
 function signupUser(userData) {
-  fetch("http://127.0.0.1:5000/signup", {
+  fetch("https://127.0.0.1:5000/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

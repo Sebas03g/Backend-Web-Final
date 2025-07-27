@@ -1,7 +1,21 @@
-from app import create_app, socketio_app
+import eventlet
+import ssl
+from app import create_app
 
-flask_app = create_app()
-flask_app.debug = True
+try:
+    app = create_app()
+except Exception as e:
+    print(f"Error al crear la app: {e}")
+    exit(1)
 
-if __name__ == '__main__':
-    socketio_app.run(flask_app, host='0.0.0.0', port=5000, use_reloader=False)
+if __name__ == "__main__":
+    print("Servidor HTTPS iniciado...")
+    eventlet.wsgi.server(
+        eventlet.wrap_ssl(
+            eventlet.listen(('0.0.0.0', 5000)),
+            certfile='127.0.0.1+1.pem',
+            keyfile='127.0.0.1+1-key.pem',
+            server_side=True
+        ),
+        app
+    )

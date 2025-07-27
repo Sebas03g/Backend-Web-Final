@@ -49,7 +49,7 @@ async function updatePassword() {
   console.log(JSON.stringify(updatedUser))
 
   try {
-    const response = await fetch(`http://127.0.0.1:5000/usuario/${user_id}`, {
+    const response = await fetch(`https://127.0.0.1:5000/usuario/${user_id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

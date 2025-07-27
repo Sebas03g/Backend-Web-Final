@@ -39,7 +39,7 @@ def create_app():
 
     flask_app.secret_key = "RANDOM"
     db = create_db(flask_app)
-    CORS(flask_app,origins=["http://localhost:5000","http://127.0.0.1:5000"])
+    CORS(flask_app,origins=["https://localhost:5000","https://127.0.0.1:5000"])
 
     socketio_app.init_app(flask_app)
 

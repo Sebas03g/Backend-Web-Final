@@ -1,7 +1,7 @@
 import { recargarDatos } from "../general/recargarDatos.js";
 import { modificarPermisos } from "./socketClient.js";
 
-const BASE_URL = 'http://127.0.0.1:5000/permiso-usuario/modify-state/';
+const BASE_URL = 'https://127.0.0.1:5000/permiso-usuario/modify-state/';
 
 export async function modifyAllState(id, data){
     try {

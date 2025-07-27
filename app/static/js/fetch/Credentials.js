@@ -9,7 +9,7 @@ export const loginFunctionality = async (form) => {
     };
 
     try {
-        const response = await fetch('http://127.0.0.1:5000/login', {
+        const response = await fetch('https://127.0.0.1:5000/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json' 
@@ -58,7 +58,7 @@ export const loginFunctionality = async (form) => {
 };
 
 export const logoutFunctionality = async() => {
-    const response = await fetch('http://127.0.0.1:5000/logout', {
+    const response = await fetch('https://127.0.0.1:5000/logout', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json' 
