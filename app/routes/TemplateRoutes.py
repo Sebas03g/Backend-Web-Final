@@ -30,3 +30,15 @@ def login():
 @main_routes.route('/sign-up')
 def signup():
     return render_template('registrarse.html')
+
+@main_routes.route('/password-recovery-email')
+def password_recovery_email():
+    return render_template('recuperar-contraseña-correo.html')
+
+@main_routes.route('/password-recovery-code')
+def password_recovery_code():
+    return render_template('recuperar-contraseña-codigo.html')
+
+@main_routes.route('/password-recovery-new')
+def password_recovery_new():
+    return render_template('recuperar-contraseña-nueva.html')

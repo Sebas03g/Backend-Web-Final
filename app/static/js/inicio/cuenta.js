@@ -1,3 +1,12 @@
+import { loginFunctionality } from "../fetch/Credentials.js";
+
+const logout_button = document.getElementById("logout");
+
+logout_button.addEventListener("click", function () {
+  loginFunctionality();
+})
+
+
 const ids = ["name", "email", "phone"];
 const edit_button = document.getElementById("edit");
 const save_button = document.getElementById("save");
@@ -72,5 +81,5 @@ save_button.addEventListener("click", function () {
 });
 
 change_pass.addEventListener("click", function () {
-    window.location.href = "cambiar-contraseña.html";
+    window.location.href = "../password-recovery-email";
 });

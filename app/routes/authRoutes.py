@@ -8,6 +8,7 @@ from app.services.sendMail import enviar_correo
 from app.validators.Usuario import UsuarioSchema
 from app.repository.BaseRepo import BaseRepo
 from app.controller.UsuarioController import UsuarioController 
+import random
 
 auth = Blueprint('auth', __name__)
 
@@ -76,3 +77,22 @@ def logout():
 
     session.clear()
     return jsonify({"message": "Logout exitoso."}), 200
+
+@auth.route('/send-code', methods=['POST'])
+def send_code():
+    code = random.randint(100000, 999999)
+    data = request.json
+
+    correo_electronico = data.get('correo_electronico')
+    try:
+        enviar_correo(
+            to=[correo_electronico],
+            subject="Código de recuperación",
+            body=f"Tu código de recuperación es: {code}",
+            html=f"<p><strong>Código de recuperación:</strong> {code}</p>"
+        )
+
+        return jsonify({"message": "Correo Enviado Exitosamente",
+                        "code":str(code)}), 201
+    except Exception as e:
+        return jsonify({"error": f"Error al crear usuario: {str(e)}"}), 400

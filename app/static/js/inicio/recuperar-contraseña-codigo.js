@@ -9,7 +9,22 @@ validate_button.addEventListener("click", function (e) {
         alert('Campo no puede estar vacío.');
         return;
     }
-
-    window.location.href = "recuperar-contraseña-nueva.html";
-    
+    verifyCode()
 });
+
+function verifyCode() {
+  const enteredCode = document.getElementById('inputCode').value.trim();
+  const storedCode = localStorage.getItem('recoveryCode');
+
+  if (!storedCode) {
+    alert("No existe código registrado.");
+    return;
+  }
+
+  if (enteredCode === storedCode) {
+    alert("Código verificado correctamente.");
+    window.location.href = "../password-recovery-new";
+  } else {
+    alert("Código incorrecto.");
+  }
+}
