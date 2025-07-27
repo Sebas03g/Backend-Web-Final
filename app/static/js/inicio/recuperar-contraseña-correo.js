@@ -16,7 +16,7 @@ send_button.addEventListener("click",async function (e) {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/usuario'); // Replace with actual endpoint
+      const response = await fetch('https://127.0.0.1:5000/usuario'); // Replace with actual endpoint
       if (!response.ok) throw new Error('Failed to fetch users');
 
       const users = await response.json();
@@ -39,7 +39,7 @@ async function sendRecoveryCode(email) {
   
   // Send POST request
   try {
-    const response = await fetch('http://127.0.0.1:5000/send-code', {
+    const response = await fetch('https://127.0.0.1:5000/send-code', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

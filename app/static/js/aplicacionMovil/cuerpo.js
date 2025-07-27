@@ -33,8 +33,6 @@ socket.on('modo_perdida', async(data) => {
             boton.textContent = "Activar";
         }
 
-        console.log("DATOS");
-        console.log(datosUsuario);
     }
 });
 

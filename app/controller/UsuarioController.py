@@ -44,7 +44,7 @@ class UsuarioController(BaseController):
                 to=[data["correo_electronico"]],
                 subject="Modificacion datos cuenta Ubikme",
                 body="",
-                html='<h2>Datos de Cuenta Modificados Exitosamente</h2></br><h3>Datos modificados existosamente</h3></br><p>Inicia sesión en este enlace: </p><a></a><a href="http://127.0.0.1:5000">Enlace aquí</a>'
+                html='<h2>Datos de Cuenta Modificados Exitosamente</h2></br><h3>Datos modificados existosamente</h3></br><p>Inicia sesión en este enlace: </p><a></a><a href="https://127.0.0.1:5000">Enlace aquí</a>'
             )
 
             return jsonify({"id": objeto_modificado.id, "mensaje": f"{self.tipoObjeto.__name__} actualizado", "objeto": objeto_modificado.to_dict()}), 200

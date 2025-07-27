@@ -30,7 +30,7 @@ def signup():
                 <h2>Cuenta Creada Exitosamente</h2>
                 <h3>¡Te damos la bienvenida a Ubikame!</h3>
                 <p>Inicia sesión en este enlace:</p>
-                <a href="http://127.0.0.1:5000">Haz clic aquí</a>
+                <a href="https://127.0.0.1:5000">Haz clic aquí</a>
             """
         )
 
