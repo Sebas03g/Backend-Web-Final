@@ -4,6 +4,10 @@ from paypalcheckoutsdk.core import PayPalHttpClient, SandboxEnvironment
 from app.controller.TransaccionController import TransaccionController
 from app.modelos.Transaccion import Transaccion
 from app.repository.BaseRepo import BaseRepo
+from app.modelos.Usuario import Usuario
+from app.routes.BaseRoutes import BaseRoutes
+from app.validators.Usuario import UsuarioSchema
+from app.controller.UsuarioController import UsuarioController
 import configparser
 import os
 
@@ -27,6 +31,7 @@ class PagoController:
         data = request.get_json()
         amount = data.get("amount")
         currency = data.get("currency", "USD")
+        id_plan = data.get("id_plan")
 
         if not amount:
             return jsonify({"error": "El campo 'amount' es obligatorio"}), 400
@@ -45,7 +50,7 @@ class PagoController:
                     }
                 ],
                 "application_context": {
-                    "return_url": "https://127.0.0.1:5000/account-dashboard",
+                    "return_url": f"https://127.0.0.1:5000/plan-purchased/{id_plan}",
                     "cancel_url": "https://127.0.0.1:5000/account-dashboard"
                 }
             })
@@ -88,6 +93,7 @@ class PagoController:
                 }
                 if "id_plan" in data:
                     transaccion["id_plan"] = data["id_plan"]
+
                 if "caracteristicas_usuario" in data:
                     transaccion["caracteristicas_usuario"] = data["caracteristicas_usuario"]
 

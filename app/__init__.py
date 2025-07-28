@@ -32,10 +32,13 @@ from flask_cors import CORS
 from flask_talisman import Talisman
 from flask_socketio import SocketIO
 from flask_migrate import Migrate
+from apscheduler.schedulers.background import BackgroundScheduler
+from app.services.RouteSchedule import limpiar_rutas_expiradas
 
 load_dotenv()
 mail = Mail()
 socketio_app = SocketIO(cors_allowed_origins="*")
+scheduler = BackgroundScheduler()
 
 def create_app():
     flask_app = Flask(__name__)
@@ -50,7 +53,7 @@ def create_app():
         'default-src': "'self'",
         'connect-src': "'self' *",
         'style-src': "'self' https://cdn.jsdelivr.net https://unpkg.com https://fonts.googleapis.com 'unsafe-inline'",
-        'script-src': "'self' https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://cdn.socket.io",
+        'script-src': "'self' https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://cdn.socket.io 'unsafe-inline'",
         'font-src': "'self' https://fonts.gstatic.com https://cdn.jsdelivr.net",
         'img-src': "'self' data: http://localhost:5000/ https://unpkg.com/ https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org http://www.w3.org/2000/svg",
     })
@@ -63,6 +66,12 @@ def create_app():
 
     jwt = JWTManager(flask_app)
     mail = create_mail(flask_app)
+
+    @flask_app.before_first_request
+    def start_scheduler():
+        if not scheduler.running:
+            scheduler.add_job(func=limpiar_rutas_expiradas, trigger="interval", hours=10)
+            scheduler.start()
 
     flask_app.register_blueprint(ubicacion_routes.get_blueprint())
     flask_app.register_blueprint(punto_routes.get_blueprint())

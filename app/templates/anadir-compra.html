@@ -58,10 +58,13 @@
                             <span class="text-success fw-bold">$5.00</span>
                             <input class="form-check-input" type="checkbox" 
                             value="1"
+                            data-caracteristica=3
                             data-id="ruta"
                             data-name="Historial de ruta de 48 horas"
                             data-description="Registra el historial de ruta por 48 horas"
-                            data-price="5.00">
+                            data-price=5.00
+                            data-value=48
+                            >
                         </div>
                         </label>
                     </div>
@@ -76,9 +79,12 @@
                             <input class="form-check-input" type="checkbox" 
                             value="1"
                             data-id="escuchar"
+                            data-caracteristica=6
                             data-name="10 minutos extra de escuchar el entorno"
                             data-description="Permite escuchar el entorno del dispositivo por 10 minutos más"
-                            data-price="5.00">
+                            data-price=5.00
+                            data-value=0.166667
+                            >
                             </div>
                             </label>
                     </div>
@@ -98,7 +104,9 @@
                                 data-id="dispositivo"
                                 data-name="Dispositivo Extra"
                                 data-description="Agregar Dispositivo para Monitoreo"
-                                data-price="5.00">
+                                data-price="5.00"
+                                id="cantidadDispositivo"
+                                >
                                 <span class="text-success fw-bold">$5.00</span>
                             </div>
                         </div>
@@ -124,8 +132,10 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="../static/js/inicio/bootstrap.min.js"></script>
-    <script src="../static/js/inicio/planes.js"></script>
+    <!-- <script type="module" src="../static/js/inicio/planes.js"></script> -->
     <script src="../static/js/inicio/holder.min.js"></script>
-    <script src="../static/js/inicio/anadir-compra.js"></script>
+    <script type="module" src="../static/js/inicio/anadir-compra.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
   </body>
 </html>

@@ -12,7 +12,6 @@ class UsuarioController(BaseController):
     def create(self, data=None):
         if data is None:
             data = request.json
-        print(data)
         if self.validator != None:
             valid_data = self.validator().load(data)
         else:
@@ -27,8 +26,9 @@ class UsuarioController(BaseController):
         except Exception as e:
             return jsonify({"error": str(e)}), 400
     
-    def update(self, id):
-        data = request.json
+    def update(self, id, data=None):
+        if data is None:
+            data = request.json
         if self.validator != None:
             valid_data = self.validator().load(data, partial=True)
         else:

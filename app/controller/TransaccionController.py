@@ -53,6 +53,7 @@ class TransaccionController(BaseController):
                 raise Exception("Usuario no autenticado en la sesión")
 
             usuario_creador = self.repoUsuario.getById(int(id_usuario_sesion))
+            self.repoUsuario.update(id = int(id_usuario_sesion), data = {"id_plan":valid_data["id_plan"]})
 
             plan = self.repoPlan.getById(valid_data["id_plan"]) if "id_plan" in valid_data else None
 

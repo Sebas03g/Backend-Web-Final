@@ -54,3 +54,19 @@ def payment_dashoard():
 @main_routes.route('/plan-dashboard')
 def plan_dashboard():
     return render_template('planes.html')
+
+@main_routes.route('/add-purchase')
+def agregar_compra():
+    return render_template('anadir-compra.html')
+
+@main_routes.route('/plan-purchased/<int:id>')
+def compra_realizada(id):
+    match id:
+        case 1:
+            return render_template('planes-1.html')
+        case 2:
+            return render_template('planes-2.html')
+        case 3:
+            return render_template('planes-3.html')
+        case _:
+            return "Plan no encontrado", 404

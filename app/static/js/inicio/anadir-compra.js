@@ -1,3 +1,8 @@
+import { crear_orden } from "../fetch/realizarCompra.js";
+
+let listaValores = []
+const dataUsuario = JSON.parse(sessionStorage.getItem("usuario"));
+
 function updateTotal() {
   let total = 0;
   document.querySelectorAll('.carrito-compra li').forEach(item => {
@@ -8,9 +13,17 @@ function updateTotal() {
 }
 
 
-function addOrUpdateCartItem(id, name, description, price, quantity) {
+function addOrUpdateCartItem(id, name, description, price, quantity, caracteristica) {
   const cartList = document.querySelector('.carrito-compra');
   let existing = cartList.querySelector(`li[data-id="${id}"]`);
+
+  if(!name.includes('Plan') && name != "Dispositivo Extra"){
+
+    listaValores.push({
+      valor: quantity,
+      id_caracteristica: caracteristica,
+    });
+  }
 
   if (!existing) {
     existing = document.createElement('li');
@@ -71,11 +84,14 @@ document.querySelectorAll('.form-check-input').forEach(checkbox => {
     const name = checkbox.dataset.name;
     const description = checkbox.dataset.description;
     const price = checkbox.dataset.price;
+    const quantity = parseInt(checkbox.value) || 0;
+    const caracteristica = parseInt(checkbox.dataset.caracteristica);
 
     if (checkbox.checked) {
-      addOrUpdateCartItem(id, name, description, price,1);
+      addOrUpdateCartItem(id, name, description, price, quantity, caracteristica);
     } else {
       removeFromCart(id);
+      listaValores = listaValores.filter(e => e.id_caracteristica != id);
     }
   });
 });
@@ -89,43 +105,57 @@ document.querySelectorAll('.form-control').forEach(input => {
     const quantity = parseInt(input.value) || 0;
 
     if (quantity > 0) {
-      addOrUpdateCartItem(id, name, description, price, quantity);
+      addOrUpdateCartItem(id, name, description, price, quantity, 1);
     } else {
       removeFromCart(id);
     }
   });
 });
 
-function saveCartToSession() {
-  const cartItems = [];
-  const cartList = document.querySelectorAll('.carrito-compra li');
+async function generarDataTransaccion() {
+  const total = parseFloat(document.getElementById('total-price').textContent.split("$")[1]);
+  const plan = parseInt(sessionStorage.getItem('plan_id'));
+  const valor = parseInt(document.getElementById("cantidadDispositivo").value);
 
-  cartList.forEach(item => {
-    const name = item.querySelector('h6')?.textContent || '';
-    const quantityMatch = name.match(/x(\d+)$/);
-    const quantity = quantityMatch ? parseInt(quantityMatch[1]) : 1;
-    const cleanName = name.replace(/ x\d+$/, '').trim();
+  const caracteristicas_usuario = []
 
-    const description = item.querySelector('small')?.textContent || '';
-    const value = parseFloat(item.getAttribute('data-price')) || 0;
+  if(valor != 0){
+    const dict = {
+      id_caracteristica: 1,
+      valor: valor
+    }
+    caracteristicas_usuario.push(dict);
+  }
 
-    cartItems.push({
-      name: cleanName,
-      quantity,
-      description,
-      value
-    });
-  });
+  for(const elemento of listaValores){
+    const dict = {
+      id_caracteristica: elemento.id_caracteristica,
+      valor: elemento.valor
+    }
+    caracteristicas_usuario.push(dict);
+  }
 
-  sessionStorage.setItem('cart', JSON.stringify(cartItems));
-  console.log('Cart saved:', cartItems);
+  let data_transaccion;
+
+  if(caracteristicas_usuario.length > 0){
+    data_transaccion = {
+      id_usuario: dataUsuario.id,
+      caracteristicas_usuario: caracteristicas_usuario
+    }
+  }else{
+    data_transaccion = {
+      id_usuario: dataUsuario.id
+    }
+  }
+
+  await crear_orden(total, plan, data_transaccion);
+
 }
 
 const checkout_button = document.getElementById("checkout");
 
-checkout_button.addEventListener("click", function () {
-    saveCartToSession()
-    window.location.href = "escoger-metodo-pago.html";
+checkout_button.addEventListener("click", async function () {
+    await generarDataTransaccion()
 });
 
 

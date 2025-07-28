@@ -39,7 +39,6 @@ export async function getAllData(tipoElemento) {
         const response = await axios.get(`${BASE_URL}/${tipoElemento}`, {
             withCredentials: true
         });
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error("Error en getAllData:", error);
@@ -52,7 +51,6 @@ export async function getDataById(tipoElemento, id) {
         const response = await axios.get(`${BASE_URL}/${tipoElemento}/${id}`, {
             withCredentials: true
         });
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error("Error en getDataById:", error);
